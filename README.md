@@ -68,15 +68,15 @@ npm run build
 
 Open the Codex Desktop custom MCP setup form, choose **STDIO**, and fill in the fields as follows. The exact menu labels can vary between Codex Desktop versions.
 
-| Form field | Value |
-| --- | --- |
-| **Name** | `etsySellerAssistant` |
-| **Type** | **STDIO** |
-| **Command to launch** | `node` |
-| **Arguments** | Add one argument: the absolute path to `dist/src/index.js` in your clone |
-| **Environment variables** | Leave empty |
-| **Environment variable passthrough** | Leave empty |
-| **Working directory** | The absolute path to the repository root, `etsySellerAssistant` |
+| Form field                           | Value                                                                    |
+| ------------------------------------ | ------------------------------------------------------------------------ |
+| **Name**                             | `etsySellerAssistant`                                                    |
+| **Type**                             | **STDIO**                                                                |
+| **Command to launch**                | `node`                                                                   |
+| **Arguments**                        | Add one argument: the absolute path to `dist/src/index.js` in your clone |
+| **Environment variables**            | Leave empty                                                              |
+| **Environment variable passthrough** | Leave empty                                                              |
+| **Working directory**                | The absolute path to the repository root, `etsySellerAssistant`          |
 
 Example entry-point paths (replace the sample user and folder with your own):
 
@@ -115,14 +115,14 @@ If the repository path changes, update **Arguments** and **Working directory** i
 
 ## Troubleshooting
 
-| What you see | What to check |
-| --- | --- |
-| `node` is not found | Confirm `node --version` works in a terminal. Restart Codex Desktop after installing Node, or use the full executable path for **Command to launch**. |
-| The server does not start | Run `npm ci` and `npm run build` from the repository root. Confirm the argument points to the resulting `dist/src/index.js`. |
-| The configured path is rejected | Use an absolute path in the operating system's native format. Check for typos and confirm the file exists. |
-| The working directory is invalid | Set it to the cloned repository root, the folder containing `package.json`. |
-| Running `npm start` in a terminal seems to wait | This is expected. The STDIO MCP server waits for a client such as Codex Desktop. Stop the process with Ctrl+C. |
-| The tool is missing in Codex | Confirm the configuration was saved, restart Codex Desktop, and check that the server's command, argument, and working directory are correct. |
+| What you see                                    | What to check                                                                                                                                         |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node` is not found                             | Confirm `node --version` works in a terminal. Restart Codex Desktop after installing Node, or use the full executable path for **Command to launch**. |
+| The server does not start                       | Run `npm ci` and `npm run build` from the repository root. Confirm the argument points to the resulting `dist/src/index.js`.                          |
+| The configured path is rejected                 | Use an absolute path in the operating system's native format. Check for typos and confirm the file exists.                                            |
+| The working directory is invalid                | Set it to the cloned repository root, the folder containing `package.json`.                                                                           |
+| Running `npm start` in a terminal seems to wait | This is expected. The STDIO MCP server waits for a client such as Codex Desktop. Stop the process with Ctrl+C.                                        |
+| The tool is missing in Codex                    | Confirm the configuration was saved, restart Codex Desktop, and check that the server's command, argument, and working directory are correct.         |
 
 ## Project documentation
 
