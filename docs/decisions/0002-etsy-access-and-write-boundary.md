@@ -5,7 +5,9 @@
 
 ## Decision
 
-The initial foundation does not connect to Etsy. Etsy app registration, callback behavior, app approval, and minimum scopes must be confirmed before OAuth implementation. The first Etsy-enabled release will be read-only. Any future listing mutation requires a separate stakeholder-approved design and explicit per-change confirmation.
+The initial foundation does not connect to Etsy. The first Etsy-enabled release will be read-only. Any future listing mutation requires a separate stakeholder-approved design and explicit per-change confirmation.
+
+On 2026-10-31 the product owner approved a bounded sequencing refinement: after OAuth and security design review, an offline-tested local verification harness may be implemented to resolve the remaining callback and authorization questions in T-007. Live credential handling, owner consent, and live Etsy requests require explicit authorization for the concrete step. Production MCP shop-reading tools remain disabled until T-007 evidence and the T-008 security design are accepted. The approved Seller App and persisted callback do not establish a successful OAuth round trip.
 
 ## Context
 

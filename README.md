@@ -4,7 +4,14 @@ A local-first MCP assistant for Etsy sellers to review listings and draft improv
 
 ## Current status
 
-This repository contains the project foundation and a status-only MCP tool. It does **not** connect to Etsy, request credentials, read shop data, or change listings. The only available tool, `get_setup_status`, reports that Etsy access is not configured.
+The default MCP server remains status-only. A separate **private Mac alpha** entry point provides
+read-only listing tools after local setup and owner authorization. A bounded live Mac smoke test
+successfully verified the configured shop and read one active listing; Codex Desktop acceptance and
+Windows verification remain open. No listing mutation tools are exposed.
+
+The alpha's separate entry point is `dist/src/alpha.js` after `npm run build`. See the
+[Mac alpha review and test plan](docs/mac-alpha-review.md) before using it. Etsy documentation MCP
+and this project's local shop-connected MCP server are separate connections.
 
 ## Supported platforms
 
@@ -12,7 +19,9 @@ This repository contains the project foundation and a status-only MCP tool. It d
 - macOS (Apple Silicon or Intel)
 - Node.js 24 or 26 LTS with npm 10 or later
 
-Both Windows and macOS are supported development and runtime platforms. Use the path format and Node installation available on the computer where Codex Desktop runs.
+Both Windows and macOS are supported development and runtime targets. This alpha has been live-tested
+only on macOS; its Windows credential store, browser handoff, and live behavior remain unverified.
+Use the path format and Node installation available on the computer where the MCP client runs.
 
 ## How it works today
 
@@ -127,6 +136,8 @@ If the repository path changes, update **Arguments** and **Working directory** i
 ## Project documentation
 
 - [Architecture, data boundaries, and future design](docs/architecture.md)
+- [Seller App registration and OAuth verification (T-007)](docs/etsy-registration-verification.md)
+- [Approved next phase plan and remaining gates](docs/next-phase-plan.md)
 - [Development guide](docs/development.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)

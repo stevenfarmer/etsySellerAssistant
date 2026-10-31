@@ -1,6 +1,6 @@
 {
   "name": "etsySellerAssistant",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "A local-first MCP assistant for Etsy sellers.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -11,15 +11,17 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "npm run build && node dist/src/index.js",
+    "local": "npm run build && node dist/src/local/cli-main.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "npm run build && node --test tests/status.test.mjs",
+    "test": "npm run build && node --import ./tests/offline-network.mjs --test",
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm test"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.4.0",
+    "@napi-rs/keyring": "2.1.2",
     "zod": "4.6.7"
   },
   "devDependencies": {
