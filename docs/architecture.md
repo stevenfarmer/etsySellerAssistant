@@ -2,7 +2,10 @@
 
 ## Current implementation
 
-The first increment is a local MCP process for Codex Desktop over STDIO. It exposes one status tool and makes no network calls. It does not connect to Etsy, request credentials, read listings, or mutate a shop.
+The default entry point is a local MCP process over STDIO with one status tool and no Etsy network
+calls. The separate `dist/src/alpha.js` entry point exposes bounded read-only listing tools for one
+locally configured, owner-authorized shop. On the Mac, an owner-authorized listing and detail smoke
+test passed. Windows is a supported development target but remains unverified for this alpha.
 
 ```mermaid
 flowchart LR
@@ -14,13 +17,16 @@ flowchart LR
   process -. "Not implemented; no request is sent" .-> api[(Etsy Open API)]
 ```
 
-The MCP SDK owns protocol framing. Application/domain logic stays separate from MCP schemas so future Etsy behavior can be tested without launching a desktop client.
+The diagram shows the default status-only entry point. The MCP SDK owns protocol framing;
+application/domain logic stays separate from MCP schemas and can be tested without a desktop client.
 
-## Planned Etsy boundary
+## Etsy boundary
 
-Etsy access is gated on confirming the app registration and OAuth callback requirements against current Etsy documentation and the live developer portal. When approved, the first Etsy integration will be read-only and limited to the configured, seller-authorized shop. The app will use Etsy's official Open API and minimum required scopes.
+The alpha uses Etsy's official Open API and `listings_r` authorization, restricted to the configured,
+seller-authorized shop. The owner-authorized Mac OAuth round trip and bounded live read succeeded.
 
-The following diagram describes a **planned design only**. None of these Etsy or OAuth components are implemented in the current release.
+The read-only path is implemented in the alpha. The dotted mutation path remains a future design and
+is not implemented or authorized.
 
 ```mermaid
 flowchart LR
@@ -46,7 +52,9 @@ Future write features require a separate stakeholder decision. Any such feature 
 
 Windows and macOS are supported targets. Use Node's platform-neutral path APIs, avoid hard-coded drive letters or home directories, and resolve per-machine folders from explicit local configuration. CI must run on both platforms.
 
-Credential storage should use the operating system's protected credential manager where practical: Windows Credential Manager or macOS Keychain. If a protected store cannot be used, provide a narrowly permissioned local-file fallback with clear backup and revocation guidance.
+Credentials use macOS Keychain or Windows Credential Manager through a protected-store adapter;
+Windows behavior is unverified. If the protected store is unavailable, setup fails closed. A
+plaintext or file-based fallback would require a separate approved decision.
 
 A future mutation audit trail is append-only JSON Lines stored under the operator's configured local Google Drive sync root at `github/etsySellerAssistant/auditTrail`. The absolute sync path differs by operating system and machine; store it only in ignored local configuration. Do not put audit records in Git or log secrets, prompts, or buyer data. A synced folder is a backup/synchronization location, not tamper-proof storage.
 
@@ -60,7 +68,9 @@ A future mutation audit trail is append-only JSON Lines stored under the operato
 
 ## Testing boundary
 
-Unit and integration tests use fabricated data or mocked Etsy responses. CI does not require Etsy credentials and never sends Etsy write requests. A live read-only smoke test, if added later, is an explicit manual verification step.
+Unit and integration tests use fabricated data or mocked Etsy responses. CI does not require Etsy
+credentials and never contacts Etsy. A bounded read-only live smoke test was separately authorized
+and performed manually on the Mac.
 
 ## Development and review workflow
 

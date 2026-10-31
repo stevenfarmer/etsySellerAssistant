@@ -5,7 +5,7 @@ import { getSetupStatus } from '../dist/src/status.js';
 test('setup status clearly reports that Etsy access is not configured', () => {
   assert.deepEqual(getSetupStatus(), {
     application: 'etsySellerAssistant',
-    version: '0.1.0',
+    version: '0.1.0-alpha.1',
     etsyAccess: 'not_configured',
     readOnly: true,
   });
