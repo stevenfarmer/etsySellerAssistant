@@ -152,15 +152,15 @@ test('a preexisting empty lock directory is preserved for manual recovery', asyn
 
 test('failed owner initialization leaves the claimed directory for manual recovery', async () => {
   await withTempDirectory(async (directory) => {
-    let chmodCalls = 0;
     const failingFileSystem = {
       mkdir: (...args) => fs.mkdir(...args),
-      chmod: async () => {
-        chmodCalls += 1;
-        if (chmodCalls > 1) throw new Error('fabricated initialization failure');
-      },
+      chmod: (...args) => fs.chmod(...args),
       lstat: (...args) => fs.lstat(...args),
-      open: (...args) => fs.open(...args),
+      open: (...args) => {
+        if (path.basename(args[0]) === 'owner.json')
+          throw new Error('fabricated initialization failure');
+        return fs.open(...args);
+      },
       rename: (...args) => fs.rename(...args),
       rm: (...args) => fs.rm(...args),
     };
