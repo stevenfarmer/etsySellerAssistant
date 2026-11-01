@@ -13,6 +13,8 @@ Reviewed on 1 November 2026. The development candidate is `0.1.0-alpha.2`, not a
 
 ## Remaining acceptance and release work
 
+The [v1 delivery plan](v1-delivery-plan.md) defines the next milestones and decision gates. It proposes no automatic waiver of the open criteria below.
+
 - The [isolated recovery drill](mac-recovery-acceptance.md) passed offline and owner-authorized test-only Keychain modes on the Mac, with cleanup verified; the owner accepted these isolated results on 1 November 2026. T-008 remains In Progress for its broader criteria: live revocation/reauthorization, interactive CLI recovery, and recovery of the healthy connection were not tested or accepted by this drill. Do not reset, revoke, or remove credentials from a healthy connection to fill an evidence checkbox.
 - Review the alpha.2 candidate diff, run validation and audit, and obtain its own CI/security results. Earlier checks are baseline evidence only.
 - Reconcile release materials and record the exact candidate in the [release checklist](release-checklist.md#v010-alpha2-candidate). Publication requires explicit owner authorization after the candidate is concrete.
