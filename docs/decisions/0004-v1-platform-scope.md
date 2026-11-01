@@ -4,6 +4,10 @@
 - Date: 2026-10-31
 - Supersedes: ADR 0001 platform scope and cross-platform acceptance requirements in the earlier phase plan.
 
+The read-only-only v1 feature sequencing below was superseded on 1 November 2026 by
+[ADR 0005](0005-v1-intelligence-and-guarded-edits.md). Platform/client sequencing remains accepted;
+this historical record does not defer guarded editing out of the current v1 scope.
+
 ## Decision
 
 v1 targets macOS with Codex Desktop only, using the existing local STDIO MCP server. Windows has not been manually tested and is deferred to v2 or later. Linux is exploratory, with no committed release. After v1, first package and document local STDIO installation for other agents, apps, and IDEs, and verify those clients on macOS; then address additional operating systems.

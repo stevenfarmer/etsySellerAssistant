@@ -23,21 +23,21 @@ are not detected until a listing read or restart. The default scaffold's status 
 
 The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
 
-## Next release candidate
+## Work toward v1
 
-The development version is `1.0.0` (an unpublished release candidate); it has not been published. It contains the read-only v1 features, recovery fixes, actionable diagnostics and session connection confirmation. See the [candidate release notes](docs/releases/v1.0.0.md) and [candidate checklist](docs/release-checklist.md#v100-candidate). Alpha.2 was an unpublished intermediate milestone. Installation instructions for the published alpha.1 remain below; candidate installation uses the exact commit recorded in the release PR.
+The development version still reads `1.0.0`, but the current read-only build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). No write capability or broader permissions have been implemented or enabled. Published alpha.1 installation remains below.
 
 For the staged path from this candidate to stable v1, see the [v1 delivery plan](docs/v1-delivery-plan.md).
 
 ## Version roadmap
 
-- **v1:** macOS with Codex Desktop, local STDIO, owner-authorized read-only listing review, Keychain storage, repeatable setup and recovery.
+- **v1:** macOS with Codex Desktop, local STDIO, owner-authorized listing reads, evidence-based recommendations, guarded approved title/description/tag edits, local audit history, Keychain storage, and repeatable setup/recovery. Reads are delivered; the expanded intelligence/editing workflow remains to be built and reviewed.
 - **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.
 - **Exploratory:** Linux, subject to a credential-store design and explicit platform acceptance; no version commitment.
 
-The server already uses standard MCP over STDIO. Other clients need installation and compatibility acceptance work. Existing Windows adapters and CI remain regression coverage, not a support claim. This roadmap does not authorize Etsy writes or broader scopes. See [ADR 0004](docs/decisions/0004-v1-platform-scope.md).
+The server already uses standard MCP over STDIO. Other clients need installation and compatibility acceptance work. Existing Windows adapters and CI remain regression coverage, not a support claim. The editing requirement does not authorize live writes or credential changes; scope and security/design review must precede implementation of write access. [ADR 0004](docs/decisions/0004-v1-platform-scope.md) retains the platform decision; ADR 0005 changes the v1 feature boundary.
 
 ## First-time Mac alpha setup
 

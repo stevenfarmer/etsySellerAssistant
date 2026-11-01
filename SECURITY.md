@@ -2,6 +2,12 @@
 
 The local, opt-in alpha server authenticates to Etsy and reads listings from one configured, owner-authorized shop. The default server is status-only. Neither server exposes listing changes, orders, buyer data, or arbitrary Etsy requests. v1 targets macOS with Codex Desktop. The alpha was tested live on that target; Windows credential storage and browser authorization are unverified future work (v2 or later). Linux is exploratory. It is a prerelease, not a production security assurance.
 
+The owner now requires guarded title/description/tag edits and intelligent recommendations in v1;
+these are planned, not enabled. [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md)
+requires detailed API/terms/security review before write-access implementation. Live/credential
+changes need concrete authorization; existing read-only risk acceptance is not a write-use waiver.
+The current read-only build is not a complete stable-v1 candidate.
+
 ## Reporting a vulnerability
 
 Do not publish credentials, access tokens, private shop data, or exploitable vulnerability details in a public issue. Use GitHub's private vulnerability reporting for this repository when available. Otherwise contact the maintainer through GitHub and request a private channel.
