@@ -3,6 +3,7 @@ import * as defaultFs from 'node:fs/promises';
 import type { FileHandle } from 'node:fs/promises';
 import * as defaultPath from 'node:path';
 import { randomBytes } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 
 const LOCK_DIRECTORY_NAME = 'refresh.lock';
 const OWNER_FILENAME = 'owner.json';
@@ -59,7 +60,10 @@ export interface RefreshLockOptions {
   readonly platform?: NodeJS.Platform;
   readonly path?: Pick<typeof defaultPath, 'isAbsolute' | 'join' | 'resolve'>;
   readonly fileSystem?: RefreshCoordinationFileSystem;
+  /** Wall clock for non-secret owner metadata only. */
   readonly now?: () => number;
+  /** Elapsed-time clock for bounded waits; injected only by deterministic tests. */
+  readonly monotonicNow?: () => number;
 }
 
 interface LockOwner {
@@ -340,6 +344,7 @@ export async function acquireRefreshLock(options: RefreshLockOptions): Promise<R
   const fileSystem = options.fileSystem ?? defaultFs;
   const platform = options.platform ?? process.platform;
   const now = options.now ?? Date.now;
+  const monotonicNow = options.monotonicNow ?? (() => performance.now());
   const waitTimeoutMs = options.waitTimeoutMs ?? 0;
   const retryIntervalMs = options.retryIntervalMs ?? 50;
   if (
@@ -349,14 +354,22 @@ export async function acquireRefreshLock(options: RefreshLockOptions): Promise<R
     waitTimeoutMs < 0 ||
     !Number.isSafeInteger(retryIntervalMs) ||
     retryIntervalMs < 1 ||
-    typeof now !== 'function'
+    typeof now !== 'function' ||
+    typeof monotonicNow !== 'function'
   ) {
     throw new RefreshCoordinationError('invalid_input');
   }
   const directory = pathApi.resolve(options.directory);
   await ensureDirectory(directory, platform, fileSystem);
   const lockDirectory = pathApi.join(directory, LOCK_DIRECTORY_NAME);
-  const deadline = now() + waitTimeoutMs;
+  const elapsedNow = (): number => {
+    const value = monotonicNow();
+    if (!Number.isFinite(value) || value < 0) {
+      throw new RefreshCoordinationError('invalid_input');
+    }
+    return value;
+  };
+  const deadline = elapsedNow() + waitTimeoutMs;
   while (true) {
     const nonce = randomBytes(32).toString('hex');
     const owner: LockOwner = {
@@ -381,13 +394,12 @@ export async function acquireRefreshLock(options: RefreshLockOptions): Promise<R
         (error.code !== 'busy' && error.code !== 'recovery_required')
       )
         throw error;
-      if (now() >= deadline) {
+      const remainingMs = deadline - elapsedNow();
+      if (remainingMs <= 0) {
         if (error.code === 'recovery_required') throw error;
         throw new RefreshCoordinationError(waitTimeoutMs === 0 ? 'busy' : 'timeout');
       }
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.min(retryIntervalMs, deadline - now())),
-      );
+      await new Promise((resolve) => setTimeout(resolve, Math.min(retryIntervalMs, remainingMs)));
     }
   }
 }
