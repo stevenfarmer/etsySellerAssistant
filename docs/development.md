@@ -2,7 +2,7 @@
 
 ## Supported setup
 
-Use Node.js 24 LTS for the baseline development environment. Node.js 26 LTS is also tested. Both Windows and macOS are first-class supported platforms.
+Use Node.js 24 LTS for the baseline development environment. Node.js 26 LTS is also tested. v1 supports macOS with Codex Desktop. Windows runtime acceptance is deferred to v2 or later; other local STDIO clients come first, and Linux remains exploratory.
 
 Install Node.js using the official distribution or a trusted version manager for your operating system. Confirm that both `node` and `npm` are available in the terminal used by Codex Desktop.
 
@@ -32,7 +32,7 @@ Use that machine's native path format. Do not copy a Windows path into the Mac c
 - Add tests with each behavior change. Prefer deterministic unit tests and mocked external responses.
 - Run `npm run validate` before opening a pull request.
 - Keep the test suite offline from Etsy.
-- Confirm CI on both Windows and macOS.
+- Confirm the configured CI checks. Windows CI remains regression coverage, not Windows live acceptance or a v1 manual-test requirement.
 - If an environment prevents a check from running, say so explicitly in the pull request instead of claiming success.
 
 The default MCP server is status-only; the separate alpha entry point connects the read-client
@@ -87,8 +87,7 @@ Refresh coordination uses a per-user lock and a non-secret state file. If a proc
 incomplete lock requires manual recovery; never remove it while an owner process might be active.
 An interrupted refresh reports recovery required and is not retried automatically, because the
 server may already have rotated the token. Partial setup can leave credentials in protected storage;
-do not remove or overwrite them without deliberate recovery. Cross-platform native behavior,
-recovery procedures, and connection integration still require review before live use.
+do not remove or overwrite them without deliberate recovery. Mac recovery procedures and connection integration still require v1 review. Windows native behavior and live acceptance are deferred; retained Windows guidance is for future development.
 
 For a stale lock, first stop every instance of the local CLI and MCP server on that computer and
 verify that none is still running. The app's local support folder is `~/Library/Application
@@ -98,6 +97,19 @@ age or PID, since a slow process or a reused PID can make that unsafe. A `token-
 marked `refreshing` means the outcome of a refresh may be unknown; removing the lock does not fix
 it. Keep the state and credentials intact until the owner deliberately completes a reviewed
 reauthorization and cleanup procedure. Do not paste the support folder contents into chat.
+
+## Listing-read recovery
+
+The alpha now distinguishes a busy local operation from a connection requiring recovery. Busy or timed-out lock acquisition means wait for the other operation to finish; never delete its lock. Other refresh-coordination failures stop listing retries and direct the operator here. These messages contain no token values, shop identifiers, or local paths. Unexpected errors retain the generic sanitized response.
+
+For interrupted refresh, revoked authorization, partial credential writes, or an invalid token state:
+
+1. Stop every local MCP server and connection CLI instance. Keep existing credentials and state intact while investigating; do not retry a possibly rotated refresh token.
+2. If a stale `refresh.lock` prevents local commands, verify that no app instance remains before deliberately removing only that lock directory as described above. Removing the lock alone does not repair token state.
+3. If reauthorization is needed, deliberately run `npm run local -- reset` and confirm `RESET` locally. This removes app credentials, tokens, token state, and the shop setting on this computer. A partial reset reports failure; resolve protected-store access and repeat reset before setup. It does not revoke Etsy-side authorization.
+4. Run `npm run local -- guided` with locally entered credentials, then `npm run local -- connect` and complete owner consent. These steps require explicit authorization for the lookup, token exchange, and identity check. Restart the MCP server after recovery; a later listing-detail request requires listing the page again in that server session.
+
+Do not reset a healthy connection as an acceptance test. Use fabricated stores and temporary directories for automated failure drills. The failed Windows/Node 24 main run was traced to lock-directory rename during release; its underlying OS error was sanitized, so the cause is unconfirmed. A deterministic regression verifies that a failed release preserves ownership and keeps contenders blocked. That safety check does not establish Windows support or prove the CI issue fixed.
 
 ## Troubleshooting
 

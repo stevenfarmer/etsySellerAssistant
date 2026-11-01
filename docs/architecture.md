@@ -5,7 +5,7 @@
 The default entry point is a local MCP process over STDIO with one status tool and no Etsy network
 calls. The separate `dist/src/alpha.js` entry point exposes bounded read-only listing tools for one
 locally configured, owner-authorized shop. On the Mac, an owner-authorized listing and detail smoke
-test passed. Windows is a supported development target but remains unverified for this alpha.
+test passed. v1 targets macOS with Codex Desktop. Windows is deferred to v2 or later; Linux is exploratory.
 
 ```mermaid
 flowchart LR
@@ -53,7 +53,7 @@ Future write features require a separate stakeholder decision. Any such feature 
 
 ## Platform and local data design
 
-Windows and macOS are supported targets. Use Node's platform-neutral path APIs, avoid hard-coded drive letters or home directories, and resolve per-machine folders from explicit local configuration. CI must run on both platforms.
+v1 supports macOS with Codex Desktop. Later releases verify other local STDIO clients, then Windows (v2 or later); Linux remains exploratory. Use Node's platform-neutral path APIs and explicit local configuration. Existing Windows CI and adapters remain regression coverage and future groundwork, not evidence of runtime support.
 
 Credentials use macOS Keychain or Windows Credential Manager through a protected-store adapter;
 Windows behavior is unverified. If the protected store is unavailable, setup fails closed. A
