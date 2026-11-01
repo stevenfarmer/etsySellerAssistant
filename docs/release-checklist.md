@@ -19,13 +19,12 @@ Complete this checklist for every release, including prereleases. A release is b
 ## v1.0.0 candidate
 
 - Runtime baseline: PR #17, `6dc9c3b`, identical to reviewed head `c26ba1c`; all five PR/main checks passed. Fresh exported checkout on the existing Mac passed locked install, build and validation with 200 offline tests.
-- Documentation reconciliation changes the full repository candidate. Its PR/T-012 record the exact merged target and required checks. Runtime/version remain unchanged; previous publication-target wording is superseded.
-- Requirements/use cases/acceptance: [single current matrix](requirements-and-acceptance.md). Task execution states must match the connected tracker under the [every-change process](project-tracking.md).
-- Implementation and verification of M1–M5 are recorded; M4 is a worked demonstration, with owner usefulness acceptance still pending. Scoped isolated recovery is accepted; live/interactive limitations remain explicit.
-- Last actual audit: production-only exited 0 with zero findings; full audit exited 1 with 11 moderate development findings and no high/critical findings. Remediation is T-021/Backlog; no fix or waiver is claimed.
-- Security, guides, diagrams, ADRs, versions and final notes are reconciled; historical phase/alpha.2/rc.1 records are explicitly historical. Neither intermediate version was published.
-- Final owner product/limits acceptance and exact-commit publication authorization remain pending. No v1 tag/release exists; published alpha.1 remains unchanged.
-- Candidate publication must use the exact reconciled target and its checks, never an obsolete SHA merely because the runtime is unchanged.
+- **Publication hold:** the owner now requires intelligent review and guarded title/description/tag edits in v1. The read-only-only recommendation is superseded by [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). No stable publication target is selected.
+- Requirements/use cases/acceptance: [current matrix](requirements-and-acceptance.md) and [review requirements](intelligent-listing-review.md). T-011 design/security review, T-023 intelligent review, T-024 guarded implementation and T-025 measurement/usefulness remain incomplete; T-012 is In Progress.
+- Existing read/setup/recovery acceptance remains valid within its documented limits. Prior runtime evidence does not verify planned write or intelligence features.
+- Last actual audit: production-only exited 0 with zero findings; full audit exited 1 with 11 moderate development findings and no high/critical findings. Remediation is T-021/Backlog; no fix or waiver claimed.
+- Before the next candidate: complete the detailed write security/API/terms review; verify approval binding, stale/replay handling, audit-before-write, uncertain outcomes and recovery; evaluate recommendation quality using fabricated cases and obtain owner usefulness acceptance. Any live/credential step requires concrete authorization.
+- Reconcile exact implementation, version, docs and connected records again, run all required checks and prepare replacement release notes before requesting publication authorization. No v1 tag/release exists; published alpha.1 remains unchanged.
 
 ## Historical candidate milestones
 

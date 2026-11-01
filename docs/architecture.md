@@ -27,8 +27,9 @@ The read-server status displays only allowlisted identity and time from a comple
 The alpha uses Etsy's official Open API and `listings_r` authorization, restricted to the configured,
 seller-authorized shop. The owner-authorized Mac OAuth round trip and bounded live read succeeded.
 
-The read-only path is implemented in the alpha. The dotted mutation path remains a future design and
-is not implemented or authorized.
+The read-only path is implemented in the alpha. The dotted mutation path is a v1 requirement
+under ADR 0005, pending detailed security/design review. It is not implemented; live writes
+are not authorized by this planning decision.
 
 ```mermaid
 flowchart LR
@@ -43,7 +44,7 @@ flowchart LR
   readTools --> api[(Etsy Open API)]
   api --> allowlist[Allowlisted listing fields]
   allowlist --> codex
-  mcp -. "Future write path requires a separate approved design" .-> preview[Exact change preview]
+  mcp -. "Planned v1 write path: detailed review required" .-> preview[Exact change preview]
   preview --> confirm[Explicit seller confirmation]
   confirm --> stale[Recheck listing state]
   stale --> audit[Append audit record before write]
@@ -51,7 +52,7 @@ flowchart LR
   write --> verify[Verify API result]
 ```
 
-Future write features require a separate stakeholder decision. Any such feature must be limited to approved listing fields, show exact before/after values, require explicit confirmation for the selected listing, check for stale data, verify the API result, and write a local audit record before mutation. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is permitted by default.
+The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md); detailed write-access design/security review remains required before implementation. Any such feature must be limited to approved listing fields, show exact before/after values, require explicit confirmation for the selected listing, check for stale data, verify the API result, and write a local audit record before mutation. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is permitted by default.
 
 ## Platform and local data design
 
@@ -61,7 +62,7 @@ Credentials use macOS Keychain or Windows Credential Manager through a protected
 Windows behavior is unverified. If the protected store is unavailable, setup fails closed. A
 plaintext or file-based fallback would require a separate approved decision.
 
-A future mutation audit trail is append-only JSON Lines stored under the operator's configured local Google Drive sync root at `github/etsySellerAssistant/auditTrail`. The absolute sync path differs by operating system and machine; store it only in ignored local configuration. Do not put audit records in Git or log secrets, prompts, or buyer data. A synced folder is a backup/synchronization location, not tamper-proof storage.
+The planned v1 mutation audit trail is append-only JSON Lines stored under the operator's configured local Google Drive sync root at `github/etsySellerAssistant/auditTrail`. The absolute sync path differs by operating system and machine; store it only in ignored local configuration. Do not put audit records in Git or log secrets, prompts, or buyer data. A synced folder is a backup/synchronization location, not tamper-proof storage.
 
 ## Data boundaries
 
@@ -95,3 +96,11 @@ flowchart LR
 CI must remain offline from Etsy and must not require production credentials. Keep screenshots, generated outputs, tokens, and machine-specific configuration out of source control.
 
 Before publishing, complete the [release checklist](release-checklist.md) and reconcile all project materials with the candidate.
+
+## Recommendation intelligence (planned)
+
+Codex Desktop supplies reasoning using bounded listing facts, an owner brief, dated Etsy guidance
+and optional owner-provided aggregate Stats. The local server enforces validation and edit safety;
+no hosted model service or OpenAI API key is added. Repeatable review, fabricated evaluations and
+measurement requirements are defined in [intelligent listing review](intelligent-listing-review.md).
+No new data reads, tools or permissions are enabled by the planning decision.

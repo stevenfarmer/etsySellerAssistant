@@ -1,6 +1,6 @@
 # Current v1 readiness
 
-Updated 1 November 2026. The development version is `1.0.0`, an **unpublished candidate**.
+Updated 1 November 2026. The development version is `1.0.0`, **unpublished and incomplete for the expanded v1 scope**.
 The published release remains `v0.1.0-alpha.1`. No final v1 product acceptance or publication
 authorization has been given.
 
@@ -29,16 +29,19 @@ build and `npm run validate` with **200 offline tests**. Production audit: zero 
 full audit: 11 moderate development entries, no high/critical findings.
 This was a fresh checkout on the existing Mac, not a new clean-machine/live OAuth test.
 
-## Current remaining decisions
+## Work still required for v1
 
-T-007 owner registration verification is Done from accepted owner-path evidence. T-008 is
-In Review for final disclosed-limits acceptance, with implementation and isolated recovery
-already complete. T-012 is In Review for usefulness, final product/limits acceptance and the
-separate exact-commit publication decision.
+The owner confirmed editing and intelligent sales-oriented recommendations are expected in v1.
+[ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) supersedes the read-only-only
+release recommendation. T-023 (intelligent review), T-011 (guarded-write design/security review),
+T-024 (guarded edits after review) and T-025 (measurement/usefulness) are active v1 work.
+Their [requirements](intelligent-listing-review.md) distinguish planned capabilities from the
+existing read-only implementation. No write tools/scopes have been enabled.
 
-The documentation reconciliation changes the full repository commit while leaving runtime and
-version unchanged. Its PR records the current candidate SHA, its own checks and the relationship
-to the reusable runtime evidence above. Use that reconciled target for any publication decision.
+T-007 remains Done; accepted read/setup/recovery evidence is retained. T-008 remains In Review
+for disclosed recovery limits. T-012 is In Progress, pending the expanded features and final
+product/limits acceptance, then exact-candidate checks and separate publication authorization.
+There is no stable publication target now; do not publish the previous read-only build as v1.
 
 ## Disclosed limitations and backlog
 
@@ -48,7 +51,7 @@ to the reusable runtime evidence above. Use that reconciled target for any publi
 - Persisted expiry still uses wall time and post-transport anchoring: T-020/Backlog.
 - Moderate development dependency advisory remediation is T-021/Backlog; no fix is claimed.
 - Existing Etsy terms uncertainty retains the previously recorded owner decision.
-- Delegated access is T-016/P3 backlog, outside v1. Writes and other clients remain deferred.
+- Delegated access is T-016/P3 backlog, outside v1. Guarded editing is now planned for v1; other clients remain deferred.
 
 There is no demonstrated missing website/domain setup requirement for the already approved,
 successfully owner-authorized installation. The earlier request for extra checks was a historical

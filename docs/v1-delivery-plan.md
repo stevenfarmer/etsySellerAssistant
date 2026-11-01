@@ -1,32 +1,30 @@
-# Current delivery status to v1
+# Current delivery plan to v1
 
-Updated 1 November 2026. The plan has reached final candidate review; it is no longer a list
-of unimplemented product features. Use the [current requirements/use cases/acceptance matrix](requirements-and-acceptance.md)
-for feature details and the [tracking process](project-tracking.md) for every change.
+Updated 1 November 2026. The owner confirmed editing and intelligent sales-oriented recommendations
+are expected in v1. The prior read-only publication recommendation is superseded by
+[ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). Use the
+[current matrix](requirements-and-acceptance.md) for acceptance and the
+[tracking process](project-tracking.md) for every change.
 
-| Stage                                            | Current state                                             | Evidence / remaining action                                                                                                                                                                      |
-| ------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Owner-only v1 boundary                           | Decided                                                   | macOS/Codex Desktop, local STDIO, one owner-authorized shop, read-only. Delegated access is T-016/P3 backlog with no target date.                                                                |
-| Listing, authorization and safety implementation | Complete                                                  | Accepted historical Mac owner OAuth/list/detail/restart checks; fixed scopes/endpoints and read-only inventory. T-007/T-009/T-010 Done.                                                          |
-| Recovery and focused diagnostics/status fixes    | Implemented and verified                                  | Isolated Mac recovery accepted; monotonic retry wait, actionable diagnostics and session identity implemented. T-018/T-019 Done; T-008 final limits review pending.                              |
-| Useful review demonstration                      | Demonstrated                                              | Fabricated facts and worked suggestions are recorded; usefulness acceptance is part of T-012 final review.                                                                                       |
-| Candidate install/build/test and reconciliation  | Runtime rehearsal complete; documentation reconciled here | PR #17 runtime baseline passed a fresh-checkout install/build and 200 offline tests, plus five PR/main checks. This docs-only change has its own required checks and updated publication target. |
-| Final acceptance and publication                 | In Review — T-012                                         | Owner accepts usefulness and disclosed limits, then separately authorizes the named version/commit. No v1 tag or release exists.                                                                 |
+| Stage                                        | State            | Next deliverable                                                                                                                                                                |
+| -------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mac/Codex owner read foundation              | Delivered        | Retain accepted OAuth/list/detail/restart and isolated recovery evidence. T-007/T-009/T-010/T-018/T-019 Done; T-008 final disclosed-limits review remains.                      |
+| Intelligent recommendation workflow — T-023  | Next / P1        | Repeatable client workflow using facts, owner brief and dated Etsy guidance; prioritized exact drafts with reasons/uncertainty; fabricated evaluation and validation.           |
+| Guarded-write design/security review — T-011 | In Progress / P1 | Review API/scope and permitted use, tool contracts, approval binding, stale/concurrent edits, audit durability and uncertain outcomes before write-access implementation.       |
+| Guarded-edit implementation — T-024          | Next / P1        | After T-011 review: title/description/tags prepare/approve/apply/verify, audit-before-write, recovery guidance and offline failure-path tests.                                  |
+| Measurement and usefulness — T-025           | Next / P1        | Optional owner-supplied aggregate Stats baseline/comparison, fabricated examples and owner review of useful recommendations. No sales-uplift guarantee or mandatory sales wait. |
+| Exact candidate and publication — T-012      | In Progress / P1 | After expanded M4/M6/M7 delivery/acceptance: reconcile exact source/version/docs, validate, review limits, obtain separate publication authorization.                           |
 
-Development version is `1.0.0`, unpublished. Alpha.2 and rc.1 were intermediate source milestones,
-never published; publishing them is not required. Published `v0.1.0-alpha.1` remains unchanged.
+## Immediate work
 
-## Next action
+Start the intelligent review workflow and detailed editing design. The
+[review requirements](intelligent-listing-review.md) define inputs, outputs and acceptance.
+Develop using fabricated data and temporary directories; keep the healthy connection intact.
+The product owner judges usefulness and business fit; the maintainer owns technical review.
+Live tests, credential/scope changes and publication need concrete authorization when ready.
 
-Finish the final review using the [candidate notes](releases/v1.0.0.md) and current evidence.
-Do not restart implementation already verified, revive speculative website checks, require
-destructive live recovery, or add a new feature gate from a supporting engineering idea.
-
-Tracked engineering follow-ups are T-020 (expiry reliability), T-021 (development advisory),
-and T-022 (additional isolated terminal recovery coverage). They remain Backlog/P2.
-T-011 writes/audit and T-015 other clients/platforms remain Deferred. Scope changes require
-the existing authorization and design/review boundaries.
-
-The owner is being asked to judge usefulness and explained limits, not certify source code.
-The maintainer owns technical review, truthful evidence and exact-candidate consistency.
-Publication remains a separate explicit decision after this documentation reconciliation.
+Development version still reads `1.0.0`; that unpublished literal is not a completed v1 release.
+No stable publication target is selected. Published `v0.1.0-alpha.1` remains unchanged.
+T-020 expiry reliability, T-021 development advisory and T-022 extra terminal recovery coverage
+remain Backlog/P2 with disclosed limits. T-016 delegated access stays Backlog/P3 outside v1.
+No website/setup detour or destructive recovery exercise is introduced by this scope change.

@@ -10,7 +10,11 @@ active listing, and the product owner confirmed it was expected. A subsequent ex
 one-listing list-and-detail smoke check also passed on the Mac. No listing contents or identifiers
 were recorded in project materials. The isolated Mac recovery drill was subsequently accepted; final candidate product/limits acceptance and publication remain pending. Windows live platform checks are deferred to v2 or later, outside v1 acceptance.
 
-## Current v1 candidate follow-up
+## Read-only baseline follow-up
+
+The owner subsequently required intelligent review and guarded edits for v1; see
+[ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). The read-only build below is
+reusable baseline evidence, not a completed v1 or current publication recommendation.
 
 The unpublished `1.0.0` candidate includes the offline-tested recovery/error fixes, actionable diagnostics and session identity confirmation. Alpha.2 was an unpublished intermediate milestone. The prior live alpha.1 evidence remains accepted; it is not a live test of alpha.2. T-010 restart/setup-status acceptance is Done. Scoped isolated Mac recovery acceptance is complete; final disclosed-limits acceptance remains pending; no reset or reauthorization is required merely to prepare this prerelease. See [candidate release notes](releases/v1.0.0.md).
 
