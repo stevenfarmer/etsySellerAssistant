@@ -4,6 +4,8 @@ import { createInterface } from 'node:readline';
 import process from 'node:process';
 import { clearTimeout, setTimeout } from 'node:timers';
 import test from 'node:test';
+import { readFile } from 'node:fs/promises';
+import { URL } from 'node:url';
 
 async function readInventory(entry) {
   const child = spawn(process.execPath, ['--import', './tests/offline-network.mjs', entry]);
@@ -33,9 +35,20 @@ async function readInventory(entry) {
       clientInfo: { name: 'offline-test', version: '1.0.0' },
     });
     assert.ok(initialized.result);
+    const manifest = JSON.parse(
+      await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+    );
+    const lock = JSON.parse(
+      await readFile(new URL('../package-lock.json', import.meta.url), 'utf8'),
+    );
+    assert.equal(initialized.result.serverInfo.version, manifest.version);
+    assert.equal(lock.version, manifest.version);
+    assert.equal(lock.packages[''].version, manifest.version);
     child.stdin.write(
       `${JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' })}\n`,
     );
+    const status = await request(3, 'tools/call', { name: 'get_setup_status', arguments: {} });
+    assert.equal(JSON.parse(status.result.content[0].text).version, manifest.version);
     const inventory = await request(2, 'tools/list', {});
     return inventory.result.tools.map((tool) => tool.name).sort();
   } finally {

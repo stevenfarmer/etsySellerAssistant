@@ -1,5 +1,7 @@
 # Next phase proposal: verified access and a read-only listing MVP
 
+> **Current delivery checkpoint — 1 November 2026:** Owner-authorized Mac OAuth, listing/detail reads, and restart/setup-status acceptance passed (T-009/T-010 Done). PR #8 recovery hardening is merged. The next candidate is unpublished `0.1.0-alpha.2`; see [readiness](v1-readiness.md) and [draft release notes](releases/v0.1.0-alpha.2.md). T-008 owner recovery acceptance and T-007 delegated authorization remain open. The plan below records the earlier implementation proposal; it does not reopen completed work or authorize live credential actions.
+
 > **Scope superseded on 31 October 2026:** [ADR 0004](decisions/0004-v1-platform-scope.md) makes v1 macOS/Codex Desktop only. Earlier cross-platform requirements below are historical. Other local STDIO clients follow v1; Windows is deferred to v2 or later, and Linux is exploratory. Windows manual acceptance does not block v1. Existing code and CI coverage are retained.
 
 - Status: Approved by product owner on 2026-10-31 for offline implementation and bounded delegation; live credential handling and live Etsy requests remain separately gated.

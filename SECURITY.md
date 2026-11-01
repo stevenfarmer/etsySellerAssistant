@@ -1,6 +1,6 @@
 # Security policy
 
-The local, opt-in `0.1.0-alpha.1` server authenticates to Etsy and reads listings from one configured, owner-authorized shop. The default server is status-only. Neither server exposes listing changes, orders, buyer data, or arbitrary Etsy requests. v1 targets macOS with Codex Desktop. The alpha was tested live on that target; Windows credential storage and browser authorization are unverified future work (v2 or later). Linux is exploratory. It is a prerelease, not a production security assurance.
+The local, opt-in alpha server authenticates to Etsy and reads listings from one configured, owner-authorized shop. The default server is status-only. Neither server exposes listing changes, orders, buyer data, or arbitrary Etsy requests. v1 targets macOS with Codex Desktop. The alpha was tested live on that target; Windows credential storage and browser authorization are unverified future work (v2 or later). Linux is exploratory. It is a prerelease, not a production security assurance.
 
 ## Reporting a vulnerability
 
@@ -16,3 +16,5 @@ Do not publish credentials, access tokens, private shop data, or exploitable vul
 - An interrupted token refresh can require manual recovery. Do not delete a refresh lock while an app process may still be running, or assume removing the lock resolves an uncertain refresh.
 
 The product owner has accepted the currently unresolved Etsy terms interpretation risk for this alpha. That acceptance is not a legal determination or approval of additional uses. Review the terms and permitted use again when capabilities or distribution change.
+
+The unpublished `0.1.0-alpha.2` candidate preserves primary operation errors across lock cleanup, reports cleanup-only failures, and requires recovery for malformed owner metadata. It does not add scopes or tools. Clock/expiry assumptions and deliberate recovery limits are documented in the [development guide](docs/development.md#refresh-failure-and-cleanup-diagnostics).
