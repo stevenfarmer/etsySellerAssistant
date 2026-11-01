@@ -37,6 +37,7 @@ function fakeTransport({
   failAt,
   wrongDetailId = false,
   detailExtraField = false,
+  extraTools = [],
 } = {}) {
   const calls = [];
   let closed = false;
@@ -54,6 +55,7 @@ function fakeTransport({
         if (method === 'tools/list')
           return {
             tools: [
+              ...extraTools,
               { name: 'get_setup_status' },
               {
                 name: 'get_listing',
@@ -240,4 +242,36 @@ test('CLI accepts only one explicit detail flag', () => {
   assert.deepEqual(parseAlphaSmokeArgs(['--detail']), { detail: true });
   assert.equal(parseAlphaSmokeArgs(['--detail', '--detail']), undefined);
   assert.equal(parseAlphaSmokeArgs(['--other']), undefined);
+});
+
+test('smoke accepts optional read-only guidance without invoking it, but rejects unsafe or unknown tools', async () => {
+  for (const [extraTools, status] of [
+    [
+      [
+        {
+          name: 'get_review_guidance',
+          annotations: { readOnlyHint: true, destructiveHint: false },
+        },
+      ],
+      'passed',
+    ],
+    [
+      [
+        {
+          name: 'get_review_guidance',
+          annotations: { readOnlyHint: false, destructiveHint: false },
+        },
+      ],
+      'failed',
+    ],
+    [[{ name: 'unapproved_tool' }], 'failed'],
+    [[{ name: 'get_setup_status' }], 'failed'],
+  ]) {
+    const fake = fakeTransport({ extraTools });
+    assert.equal((await runAlphaSmoke({ transportFactory: fake.factory })).status, status);
+    assert.equal(
+      fake.calls.some((c) => c.method === 'tools/call' && c.params.name === 'get_review_guidance'),
+      false,
+    );
+  }
 });

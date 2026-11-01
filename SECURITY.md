@@ -1,6 +1,6 @@
 # Security policy
 
-The local, opt-in alpha server authenticates to Etsy and reads listings from one configured, owner-authorized shop. The default server is status-only. Neither server exposes listing changes, orders, buyer data, or arbitrary Etsy requests. v1 targets macOS with Codex Desktop. The alpha was tested live on that target; Windows credential storage and browser authorization are unverified future work (v2 or later). Linux is exploratory. It is a prerelease, not a production security assurance.
+The local, opt-in alpha server authenticates to Etsy and reads listings from one configured, owner-authorized shop. The default server is status-only. Neither server exposes listing changes, orders, buyer data, or arbitrary Etsy requests. The development alpha also exposes explicit read-only review guidance, generic by default. v1 targets macOS with Codex Desktop. The alpha was tested live on that target; Windows credential storage and browser authorization are unverified future work (v2 or later). Linux is exploratory. It is a prerelease, not a production security assurance.
 
 The owner now requires guarded title/description/tag edits and intelligent recommendations in v1;
 these are planned, not enabled. [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md)
@@ -33,13 +33,16 @@ Confirmation is cleared by the next pending/failed read or restart; it does not 
 current authorization or detect external reset/revocation. Keep real identity output out of
 repository artifacts and public reports.
 
-## Planned private guidance
+## Private guidance
 
 [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md) separates the
 public generic template from a private customized playbook outside the repository. Chunk 1A implements the explicit bounded read-only storage loader and generic template,
-with no startup/status/CLI/MCP integration or write path. [The storage contract](docs/private-playbooks.md)
+with no write path. Chunk 1B adds explicit MCP guidance delivery; startup/status do not load it. [The storage contract](docs/private-playbooks.md)
 describes boundary/link/permission/UTF-8/size checks and sanitized typed errors; actual private
-files are not accessed by this change. MCP delivery remains T-027/chunk 1B. Private content stays
+files are not accessed during development. Private mode requires explicit client settings; default
+generic mode performs no private I/O. The tool takes no paths/arguments, labels source and
+returns no fallback for invalid private files. Guidance is validated/bounded and error messages
+contain no private paths/content. Private content stays
 out of logs/errors, fixtures, PRs or connected project documents. Custom guidance cannot confer write approval or
 bypass enforced restrictions. When used, the chosen AI client/provider receives the guidance;
 local/Git exclusion is not copy protection or a guarantee about that provider's data handling.

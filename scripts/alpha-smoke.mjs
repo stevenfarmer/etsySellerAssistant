@@ -213,12 +213,16 @@ export async function runAlphaSmoke(options = {}) {
         .map((tool) => tool.name);
       const expectedNames = ['get_listing', 'get_setup_status', 'list_active_listings'];
       if (
-        names.length !== expectedNames.length ||
+        names.length !== inventory.tools.length ||
+        new Set(names).size !== names.length ||
+        names.some((name) => ![...expectedNames, 'get_review_guidance'].includes(name)) ||
         expectedNames.some((name) => !names.includes(name)) ||
         inventory.tools.some(
           (tool) =>
             !isRecord(tool) ||
-            ((tool.name === 'list_active_listings' || tool.name === 'get_listing') &&
+            ((tool.name === 'list_active_listings' ||
+              tool.name === 'get_listing' ||
+              tool.name === 'get_review_guidance') &&
               (!isRecord(tool.annotations) ||
                 tool.annotations.readOnlyHint !== true ||
                 tool.annotations.destructiveHint !== false)),

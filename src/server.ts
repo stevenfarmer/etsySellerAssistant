@@ -2,11 +2,16 @@ import { McpServer } from '@modelcontextprotocol/server';
 import { z } from 'zod/v4';
 import { getSetupStatus, getReadSetupStatus } from './status.js';
 import { registerReadOnlyListingTools, type ReadOnlyListingService } from './mcp/read-tools.js';
+import { registerGuidanceTool } from './mcp/guidance-tool.js';
+import type { ReviewGuidanceService } from './guidance/review-guidance.js';
 
 const emptyInput = z.object({});
 
 export function createServer(
-  options: { readonly readService?: ReadOnlyListingService } = {},
+  options: {
+    readonly readService?: ReadOnlyListingService;
+    readonly guidanceService?: ReviewGuidanceService;
+  } = {},
 ): McpServer {
   const server = new McpServer({
     name: 'etsySellerAssistant',
@@ -38,6 +43,7 @@ export function createServer(
   );
 
   if (options.readService) registerReadOnlyListingTools(server, options.readService);
+  if (options.guidanceService) registerGuidanceTool(server, options.guidanceService);
 
   return server;
 }

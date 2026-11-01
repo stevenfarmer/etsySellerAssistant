@@ -4,7 +4,8 @@
 
 The default entry point is a local MCP process over STDIO with one status tool and no Etsy network
 calls. The separate `dist/src/alpha.js` entry point exposes bounded read-only listing tools for one
-locally configured, owner-authorized shop. On the Mac, an owner-authorized listing and detail smoke
+locally configured, owner-authorized shop, plus explicit review guidance (generic by default,
+private only by opt-in client configuration). On the Mac, an owner-authorized listing and detail smoke
 test passed. v1 targets macOS with Codex Desktop. Windows is deferred to v2 or later; Linux is exploratory.
 
 ```mermaid
@@ -44,6 +45,12 @@ flowchart LR
   readTools --> api[(Etsy Open API)]
   api --> allowlist[Allowlisted listing fields]
   allowlist --> codex
+  mcp --> guidance[get_review_guidance]
+  guidance --> generic[Compiled generic template]
+  guidance -->|Only if private mode explicitly selected| private[Bounded private file reader]
+  generic --> labeled[Labeled guidance and fixed safety notice]
+  private --> labeled
+  labeled --> codex
   mcp -. "Planned v1 write path: detailed review required" .-> preview[Exact change preview]
   preview --> confirm[Explicit seller confirmation]
   confirm --> stale[Recheck listing state]
@@ -110,5 +117,9 @@ a tracked generic template and a separately configured private local file outsid
 explicitly supplied through a bounded read-only MCP contract. Keep delivery client-neutral;
 verify supported-client invocation instead of assuming automatic prompt loading. No arbitrary
 path argument or startup/status private read. The [storage foundation](private-playbooks.md) is implemented in chunk 1A as an inert reader
-and path resolver with a separate generic template; there is no runtime integration yet.
-Chunk 1B adds MCP delivery in the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
+and path resolver with a separate generic template.
+Chunk 1B adds explicit `get_review_guidance` MCP delivery (generic by default; private via trusted
+client environment settings, never a model-selected path). Discovery/status do not read content,
+and invalid private guidance never falls back. The default scaffold stays status-only.
+Client restart/acceptance remains separate from actual STDIO tests. See the guide and T-027
+for current evidence. Delivery follows in the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
