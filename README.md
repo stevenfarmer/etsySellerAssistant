@@ -1,147 +1,72 @@
 # etsySellerAssistant
 
-A local-first MCP assistant for Etsy sellers to review listings and draft improvements. It is designed for Codex Desktop over local STDIO, with read-only access first and explicit approval required for any future edits.
+A local-first MCP assistant for reviewing listings in one owner-authorized Etsy shop. Codex Desktop communicates with the local server over STDIO. No listing changes are available in the read-only alpha.
 
-## Current status
+## Current release
 
-The default MCP server remains status-only. A separate **private Mac alpha** entry point provides
-read-only listing tools after local setup and owner authorization. A bounded live Mac smoke test
-successfully verified the configured shop and read one active listing; Codex Desktop acceptance and
-Windows verification remain open. No listing mutation tools are exposed.
+[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a public GitHub prerelease of a local, single-shop tool. The shop owner completed OAuth on a Mac; an owner-confirmed Codex Desktop listing read and a separate bounded list-and-detail check passed. CI tested macOS and Windows with Node 24 and 26, but Windows live credential storage and browser authorization remain unverified. Production readiness and broader client compatibility remain open.
 
-The alpha's separate entry point is `dist/src/alpha.js` after `npm run build`. See the
-[Mac alpha review and test plan](docs/mac-alpha-review.md) before using it. Etsy documentation MCP
-and this project's local shop-connected MCP server are separate connections.
+There are two server entry points:
 
-## Supported platforms
+| Entry point         | Behavior                                                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                               |
+| `dist/src/alpha.js` | Opt-in read-only alpha; status, bounded active-listing pages, and listing detail for IDs returned in the same server session. |
 
-- Windows 10/11 (x64)
-- macOS (Apple Silicon or Intel)
-- Node.js 24 or 26 LTS with npm 10 or later
+The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
 
-Both Windows and macOS are supported development and runtime targets. This alpha has been live-tested
-only on macOS; its Windows credential store, browser handoff, and live behavior remain unverified.
-Use the path format and Node installation available on the computer where the MCP client runs.
+## First-time Mac alpha setup
 
-## How it works today
+1. Install Git and Node.js 24 or 26 with npm 10 or later. Verify with `git --version`, `node --version`, and `npm --version`.
+2. Clone the project and select the prerelease:
 
-Codex Desktop starts the MCP server as a local process and exchanges messages over standard input/output (STDIO). The current server only reports setup status; there is no Etsy network connection.
+   ```sh
+   git clone https://github.com/stevenfarmer/etsySellerAssistant.git
+   cd etsySellerAssistant
+   git checkout v0.1.0-alpha.1
+   npm ci
+   npm run validate
+   npm run build
+   ```
 
-```mermaid
-flowchart LR
-  seller[You] --> codex[Codex Desktop]
-  codex <-->|MCP over local STDIO| server[etsySellerAssistant process]
-  server --> status[get_setup_status]
-  status --> result[Etsy access: not configured]
-  server -. "No Etsy API calls in current release" .-> etsy[(Etsy Open API)]
-```
+   Validation uses fabricated data and makes no Etsy requests. The checkout points to a fixed tag; use a separate branch for development. The published tag has its own historical documentation; current corrections and release process are on the main branch.
 
-## First-time setup
+3. Register an Etsy Seller App using an eligible account and configure the callback shown in the [registration guide](docs/etsy-registration-verification.md). Use the approved app for the intended shop. Never share keys, secrets, tokens, callback query strings, or shop details in project materials or chat.
+4. Run `npm run local -- guided` in an interactive terminal. Enter the shop URL or name and app credentials at the hidden prompts. Input, including pasted text, is not displayed. Type `LOOKUP` when prompted to permit one read-only shop search. Setup stores credentials in the OS credential store and the shop setting locally. No email is required.
+5. Run `npm run local -- connect`. Type `CONNECT` at the hidden prompt, then complete Etsy consent using the shop owner’s account. This requests `listings_r` and verifies the owner and configured shop. Do not share the authorization or callback URL. If either command fails, see [development and recovery](docs/development.md).
+6. Add one local server in Codex Desktop using STDIO:
 
-### 1. Install prerequisites
+   | Field                                 | Value                                                               |
+   | ------------------------------------- | ------------------------------------------------------------------- |
+   | Name                                  | `etsySellerAssistant`                                               |
+   | Command                               | `node` (or the full Node executable path)                           |
+   | Arguments                             | One argument: the absolute path to `dist/src/alpha.js` in the clone |
+   | Working directory                     | The absolute path to the repository root                            |
+   | Environment variables and passthrough | Leave empty                                                         |
 
-Install Git and Node.js 24 or 26 LTS from a trusted source or version manager. The same terminal commands work in PowerShell, Command Prompt, and macOS Terminal:
+   Use separate command and argument fields. If Codex cannot find Node, run `command -v node` and use the resulting executable path. Restart Codex if Node was installed while it was open.
 
-```sh
-git --version
-node --version
-npm --version
-```
+7. Open a fresh chat and confirm `get_setup_status`, `list_active_listings`, and `get_listing` are available. After owner authorization, request a small active-listing page and check it locally. To get details, use a listing returned in the same server session. The status tool alone does not prove a live shop connection.
 
-Confirm Node reports version 24.x or 26.x and npm reports version 10 or later. Codex Desktop needs to be able to start the same Node installation. If you install Node while Codex is open, restart Codex Desktop before configuring the server.
+Windows is a supported development and runtime target, but the live alpha flow on Windows has not yet been accepted. For a status-only setup use `dist/src/index.js` as the server argument; it needs no Etsy credentials or OAuth.
 
-### 2. Clone the repository
+## Updating, troubleshooting, and cleanup
 
-Choose a folder where you keep development projects, then run:
+For development updates, switch to the intended branch, pull its changes, and run `npm ci`, `npm run validate`, and `npm run build`. Rebuild after changes and update the MCP path if the checkout moves. A Git checkout at a release tag will not follow later documentation corrections automatically.
 
-```sh
-git clone https://github.com/stevenfarmer/etsySellerAssistant.git
-cd etsySellerAssistant
-```
+To correct a shop selection or repeat setup, stop local app instances and follow the deliberate `npm run local -- reset` procedure in the [development guide](docs/development.md). Reset deletes this computer’s stored app credentials, tokens, and shop setting; it does not delete the Seller App or revoke Etsy authorization. Do not reset merely to retry a successful connection. For a stuck refresh or lock, follow the recovery guidance before removing anything.
 
-### 3. Install, validate, and build
-
-Run these commands from the repository root:
-
-```sh
-npm ci
-npm run validate
-npm run build
-```
-
-- `npm ci` installs exactly the dependency versions recorded in `package-lock.json`.
-- `npm run validate` checks formatting, lint, TypeScript types, and automated tests. It does not connect to Etsy.
-- `npm run build` creates the JavaScript entry point Codex will launch at `dist/src/index.js`.
-
-### 4. Add the server in Codex Desktop
-
-Open the Codex Desktop custom MCP setup form, choose **STDIO**, and fill in the fields as follows. The exact menu labels can vary between Codex Desktop versions.
-
-| Form field                           | Value                                                                    |
-| ------------------------------------ | ------------------------------------------------------------------------ |
-| **Name**                             | `etsySellerAssistant`                                                    |
-| **Type**                             | **STDIO**                                                                |
-| **Command to launch**                | `node`                                                                   |
-| **Arguments**                        | Add one argument: the absolute path to `dist/src/index.js` in your clone |
-| **Environment variables**            | Leave empty                                                              |
-| **Environment variable passthrough** | Leave empty                                                              |
-| **Working directory**                | The absolute path to the repository root, `etsySellerAssistant`          |
-
-Example entry-point paths (replace the sample user and folder with your own):
-
-- Windows: `C:\Users\YOUR_USER\source\etsySellerAssistant\dist\src\index.js`
-- macOS: `/Users/YOUR_USER/code/etsySellerAssistant/dist/src/index.js`
-
-Enter the executable and the script path in separate fields: put `node` in **Command to launch**, then add the script path as a single **Argument**. Do not paste the whole command into one field.
-
-If Codex cannot find `node`, find its full path in a terminal and use that path for **Command to launch**:
-
-- PowerShell: `(Get-Command node).Source`
-- macOS Terminal: `command -v node`
-
-The screenshot shows where these fields appear in the custom MCP form. Its visible command is placeholder text; do not copy it.
-
-![Codex Desktop custom MCP form with STDIO selected; the visible command is placeholder text and should not be copied.](docs/images/codex-stdio-setup.png)
-
-### 5. Confirm it is connected
-
-Save the configuration, then start or reopen a Codex chat and inspect the available tools for `etsySellerAssistant`. Call `get_setup_status`. A successful response should say Etsy access is not configured.
-
-No Etsy API key, OAuth setup, OpenAI API key, hosted service, or environment variable is needed for this scaffold.
-
-## Updating or removing the server
-
-To update your local checkout:
-
-```sh
-git pull
-npm ci
-npm run validate
-npm run build
-```
-
-If the repository path changes, update **Arguments** and **Working directory** in the Codex Desktop server entry. To remove the integration, open Codex Desktop's MCP/custom server settings and remove the `etsySellerAssistant` entry. The settings location and button labels can vary by app version.
-
-## Troubleshooting
-
-| What you see                                    | What to check                                                                                                                                         |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `node` is not found                             | Confirm `node --version` works in a terminal. Restart Codex Desktop after installing Node, or use the full executable path for **Command to launch**. |
-| The server does not start                       | Run `npm ci` and `npm run build` from the repository root. Confirm the argument points to the resulting `dist/src/index.js`.                          |
-| The configured path is rejected                 | Use an absolute path in the operating system's native format. Check for typos and confirm the file exists.                                            |
-| The working directory is invalid                | Set it to the cloned repository root, the folder containing `package.json`.                                                                           |
-| Running `npm start` in a terminal seems to wait | This is expected. The STDIO MCP server waits for a client such as Codex Desktop. Stop the process with Ctrl+C.                                        |
-| The tool is missing in Codex                    | Confirm the configuration was saved, restart Codex Desktop, and check that the server's command, argument, and working directory are correct.         |
+If the server does not start, check the Node path, working directory and selected entry point, then run `npm ci` and `npm run build`. An STDIO server started manually waits for a client; stop it with Ctrl-C. Remove the local server using the client’s MCP settings when no longer needed.
 
 ## Project documentation
 
-- [Architecture, data boundaries, and future design](docs/architecture.md)
-- [Seller App registration and OAuth verification (T-007)](docs/etsy-registration-verification.md)
-- [Approved next phase plan and remaining gates](docs/next-phase-plan.md)
-- [Development guide](docs/development.md)
-- [Contributing](CONTRIBUTING.md)
-- [Security reporting](SECURITY.md)
-- [Architecture decisions](docs/decisions/)
+- [Architecture and diagrams](docs/architecture.md)
+- [Seller App registration and OAuth verification](docs/etsy-registration-verification.md)
+- [Mac alpha review and test plan](docs/mac-alpha-review.md)
+- [Development and recovery](docs/development.md)
+- [Release checklist](docs/release-checklist.md)
+- [Next-phase plan](docs/next-phase-plan.md)
+- [Contributing](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [Decision records](docs/decisions/)
 
 ## License
 

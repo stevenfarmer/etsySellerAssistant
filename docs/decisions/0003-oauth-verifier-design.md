@@ -1,6 +1,6 @@
 # ADR 0003: Bounded OAuth verification design
 
-- Status: Accepted for offline implementation; live verification remains separately authorized.
+- Status: Accepted; separately authorized Mac alpha verification has since passed. See the release addendum below.
 - Date: 2026-10-31
 
 ## Boundary
@@ -76,13 +76,13 @@ owner's shop, and completing the listing read. Listing IDs must first come from 
 current server session, outputs are allowlisted, and raw API errors are replaced by generic errors.
 Listing text is untrusted. The ordinary server remains status-only. Offline MCP, token lifecycle,
 wrong-shop, and redaction tests support this review; live listing behavior and the Windows platform
-remain unverified. A successful owner-authorized OAuth connection is recorded separately.
+remained unverified at the time of this review. A successful owner-authorized OAuth connection is recorded separately.
 
-The existing Mac connection has no persisted expiry from its initial grant. Its first alpha read
-will therefore attempt a token refresh before identity and listing GETs. An interrupted or uncertain
+The existing Mac connection had no persisted expiry from its initial grant. Its first alpha read
+therefore required a token refresh before identity and listing GETs. An interrupted or uncertain
 refresh leaves a recovery marker and is not retried automatically. The owner must authorize that
-specific refresh and read before the live test. This Mac alpha review does not mark the cross-platform
-T-008 task complete or authorize publication.
+specific refresh and read before the live test. This Mac alpha review did not mark the cross-platform
+T-008 task complete.
 
 The npm audit on 31 October 2026 reported zero production findings and 11 moderate development
 dependency findings, including the minimatch glob-amplification advisory
@@ -109,3 +109,7 @@ contain additional language concerning AI prompting with content obtained from i
 31 October 2026 the product owner accepted this unresolved risk for the time being and chose not to
 contact Etsy now. This decision is not a determination of compliance or a waiver of Etsy's terms.
 The independent technical review and explicit live-access authorization gates remain in place.
+
+## Release addendum — 31 October 2026
+
+The owner subsequently authorized the bounded Mac checks. OAuth, the configured-shop identity check, a Codex Desktop listing read, and a separate list-and-detail smoke test succeeded. The merged Mac-tested `v0.1.0-alpha.1` was published as a GitHub prerelease. CI covered macOS and Windows on Node 24 and 26, but Windows live credential storage and browser handoff remain unverified. T-007 delegated authorization and T-008 cross-platform and recovery acceptance remain open. The default entry point remains status-only; read-only tools are available through the separate alpha entry point.

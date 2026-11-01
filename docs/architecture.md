@@ -14,7 +14,7 @@ flowchart LR
   process --> sdk[MCP SDK]
   sdk --> tool[get_setup_status]
   tool --> response[Reports Etsy access is not configured]
-  process -. "Not implemented; no request is sent" .-> api[(Etsy Open API)]
+  process -. "Default entry point sends no requests" .-> api[(Etsy Open API)]
 ```
 
 The diagram shows the default status-only entry point. The MCP SDK owns protocol framing;
@@ -30,11 +30,14 @@ is not implemented or authorized.
 
 ```mermaid
 flowchart LR
-  seller[Seller] --> codex[Codex Desktop]
+  seller[Seller] --> setup[Local guided setup and OAuth consent]
+  setup --> store[OS credential store<br/>Windows Credential Manager or macOS Keychain]
+  setup -->|short-lived localhost callback| etsyAuth[Etsy authorization]
+  seller --> codex[Codex Desktop]
   codex <-->|local STDIO| mcp[Local MCP server]
   mcp --> readTools[Read-only shop/listing tools]
   readTools --> oauth[OAuth token provider]
-  oauth --> store[OS credential store<br/>Windows Credential Manager or macOS Keychain]
+  oauth --> store
   readTools --> api[(Etsy Open API)]
   api --> allowlist[Allowlisted listing fields]
   allowlist --> codex
@@ -88,3 +91,5 @@ flowchart LR
 ```
 
 CI must remain offline from Etsy and must not require production credentials. Keep screenshots, generated outputs, tokens, and machine-specific configuration out of source control.
+
+Before publishing, complete the [release checklist](release-checklist.md) and reconcile all project materials with the candidate.

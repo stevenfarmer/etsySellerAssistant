@@ -17,3 +17,5 @@ Do not commit credentials, local config, generated files, Etsy exports, shop ide
 ## Pull requests
 
 Every code change must include or update automated tests. Explain any platform-specific behavior and show that Windows and macOS remain supported. Do not add Etsy write capabilities, additional OAuth scopes, telemetry, or hosted services without an approved requirements change.
+
+Before every release, complete the [release checklist](docs/release-checklist.md), including the README, security policy, diagrams, decision records, tracker, steering document and release notes. An unresolved documentation mismatch blocks publication.

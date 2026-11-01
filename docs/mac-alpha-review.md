@@ -1,6 +1,6 @@
 # Mac read-only alpha: review and test plan
 
-Status: private Mac alpha candidate `0.1.0-alpha.1`; not published. On 31 October 2026, the product
+Status: [`0.1.0-alpha.1` was published as a GitHub prerelease](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) on 31 October 2026. It is a local, single-shop Mac-tested alpha. On that date, the product
 owner explicitly authorized the bounded Mac check and the local smoke test reported success with
 one active listing. No listing content or identifiers were recorded. The normal server remains
 status-only. The separate local alpha entry point is `dist/src/alpha.js` after `npm run build`.
@@ -8,7 +8,7 @@ The alpha server has been registered in the Mac's Codex configuration with no cr
 environment variables. In a fresh Codex Desktop chat, a separately requested read returned one
 active listing, and the product owner confirmed it was expected. A subsequent explicitly authorized
 one-listing list-and-detail smoke check also passed on the Mac. No listing contents or identifiers
-were recorded in project materials. Broader release and platform checks remain open.
+were recorded in project materials. Windows live platform checks and production readiness remain open.
 
 ## Scope and boundaries
 
@@ -46,8 +46,8 @@ listed and retrieved one matching listing successfully, while outputting only pa
 4. If a listing exists and the owner approves, request that listing in the same session. Confirm
    the owner recognizes it and the assistant treats its text as untrusted data. Record only
    sanitized pass/fail and error categories. Stop on identity mismatch or storage/refresh errors.
-5. Review cleanup and owner acceptance before packaging. Windows browser/credential-store behavior
-   and the full platform matrix remain unverified; label the build Mac-tested only.
+5. Review cleanup and owner acceptance for any subsequent release. Windows live browser and
+   credential-store behavior remain unverified; label this build Mac-tested only.
 
 The live flow is expected to make a token refresh POST if the stored expiry is unknown, an Etsy
 owner-to-shop GET, and the agreed bounded listing GET. It will not change listings. Reauthorization,
