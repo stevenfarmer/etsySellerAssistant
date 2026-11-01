@@ -19,5 +19,10 @@ Read this file, the README, and relevant files under `docs/` before making chang
 - Keep credentials, local settings, logs, generated output, and `auditTrail/` out of Git. Do not weaken ignore rules to make local data commit-able.
 - Prefer a feature branch and a small pull request. Do not push directly to the default branch.
 - Document externally visible behavior, configuration, security consequences, and recovery steps.
-
 - Before every release, reconcile the README, security policy, relevant guides and diagrams, decision records, steering document, tracker, version, and release notes against the exact release candidate. Record the checks in the release checklist and do not publish with unresolved discrepancies. Preserve already-published tags.
+
+## Efficient agent workflow
+
+- Inspect only the files and documentation relevant to the task; search first, read targeted excerpts, and limit tool output. Expand the investigation when evidence requires it.
+- Reuse current verification evidence and run checks appropriate to the change; do not repeat successful checks without a reason. Preserve all mandatory tests, security reviews, and release gates.
+- Use subagents only when parallel independent work is likely to justify their added context and coordination. Keep progress updates and handoffs concise, with decisions, evidence, and remaining work.
