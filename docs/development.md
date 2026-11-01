@@ -142,3 +142,7 @@ adjustments can extend waits or apparent freshness; forward adjustments can shor
 arbitrary clock jumps. This follow-up retains that timing model; monotonic waits and a conservative
 expiry anchored before transport need a separate focused design and tests. No automatic lock
 stealing is justified by age, expiry, or clock changes.
+
+## Isolated Mac recovery drill
+
+See [Mac recovery acceptance](mac-recovery-acceptance.md) for the offline drill and the exact, separately authorized test-only Keychain actions. Neither mode reads the healthy connection. Native mode is manual only; CI tests inject a fabricated backend.
