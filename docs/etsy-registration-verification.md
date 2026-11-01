@@ -1,10 +1,14 @@
 # T-007: Seller App registration and OAuth verification
 
-Status: Seller App approved, callback saved, and owner-authorized Mac connection reported
-successful; bounded Mac listing and detail reads passed. Last reviewed on 31 October 2026.
-Final task acceptance remains open. Windows live verification is deferred to v2 or later and is not a v1 requirement. Further live credential handling
-and Etsy requests remain separately gated. The default MCP server remains status-only; the
-separate opt-in alpha entry point exposes bounded read-only listing tools.
+Current task state: **T-007 Done** for the owner-authorized v1 route. The approved Seller App,
+successful owner OAuth, exact scope/identity checks and accepted listing reads provide the
+recorded evidence. Delegated access is separate T-016/P3 backlog. No demonstrated extra
+website/domain requirement blocks this working installation; no new portal inspection is claimed.
+
+The detailed discovery/verifier record below is historical (30 October–1 November 2026), including its
+then-pending questions. Current requirements and acceptance are in the
+[current matrix](requirements-and-acceptance.md). Live/native/credential actions remain
+separately authorized. This task completion does not accept or publish the final v1 candidate.
 
 ## Latest portal evidence: Seller App approved
 
@@ -130,7 +134,7 @@ responses, account identifiers, shop names/URLs/IDs, or listing data. Keep gener
 computer; credential setup and storage belong to the separately reviewed T-008 design. Do not put
 them in this repository, synced project notes, Codex MCP configuration, or GitHub.
 
-## Current scope decision — 1 November 2026
+## Historical scope decision — 1 November 2026
 
 The owner deferred delegated access to the very low-priority backlog (T-016/P3), with no target date. It is not required for v1 and remains untested. T-007 now concerns owner-authorized registration and OAuth only. Its remaining owner-path criteria still require evidence reconciliation; this decision alone does not mark T-007 Done. The evidence table and completion history below retain their original observations.
 

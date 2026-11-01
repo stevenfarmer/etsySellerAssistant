@@ -21,6 +21,13 @@ Read this file, the README, and relevant files under `docs/` before making chang
 - Document externally visible behavior, configuration, security consequences, and recovery steps.
 - Before every release, reconcile the README, security policy, relevant guides and diagrams, decision records, steering document, tracker, version, and release notes against the exact release candidate. Record the checks in the release checklist and do not publish with unresolved discrepancies. Preserve already-published tags.
 
+## Required project tracking for every change
+
+- Follow `docs/project-tracking.md`. Keep the connected tracker and `docs/requirements-and-acceptance.md` synchronized as part of every change, not only releases.
+- Add/update tasks when work or features are added or changed; remove obsolete work from the active plan and retire/defer its tracker entry with rationale while preserving history and stable IDs. Track unfinished follow-ups explicitly.
+- Update affected requirements, use cases, acceptance criteria, local delivery/status documentation and connected task evidence/status/date in the same change. Distinguish implementation, verification and owner acceptance.
+- Before reporting completion, read back connected updates and verify local consistency. If tracking cannot be updated, report it as incomplete. Do not mark tests, acceptance or publication complete without evidence.
+
 ## Efficient agent workflow
 
 - Inspect only the files and documentation relevant to the task; search first, read targeted excerpts, and limit tool output. Expand the investigation when evidence requires it.

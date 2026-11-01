@@ -87,7 +87,7 @@ Refresh coordination uses a per-user lock and a non-secret state file. If a proc
 incomplete lock requires manual recovery; never remove it while an owner process might be active.
 An interrupted refresh reports recovery required and is not retried automatically, because the
 server may already have rotated the token. Partial setup can leave credentials in protected storage;
-do not remove or overwrite them without deliberate recovery. Mac recovery procedures and connection integration still require v1 review. Windows native behavior and live acceptance are deferred; retained Windows guidance is for future development.
+do not remove or overwrite them without deliberate recovery. The isolated Mac recovery/Keychain drill is accepted; final product/limits acceptance is tracked in the current requirements matrix. Live revocation/reauthorization and interactive terminal recovery remain explicitly untested by that drill. Windows native behavior and live acceptance are deferred; retained Windows guidance is for future development.
 
 For a stale lock, first stop every instance of the local CLI and MCP server on that computer and
 verify that none is still running. The app's local support folder is `~/Library/Application

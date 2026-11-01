@@ -4,6 +4,8 @@ Describe the change and the reason for it.
 
 ## Requirements and impact
 
+- [ ] Affected task IDs and requirement/use-case IDs are listed; tracker tasks were added/updated/retired as needed.
+- [ ] Current local requirements, use cases, acceptance criteria and delivery/status docs agree with tracker edits; connected changes were read back.
 - [ ] Requirements or acceptance criteria are reflected in the change.
 - [ ] No shop-specific names, IDs, URLs, credentials, customer data, or live exports are included.
 - [ ] Windows and macOS behavior is covered or unaffected.
