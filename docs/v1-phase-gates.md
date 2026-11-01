@@ -38,7 +38,8 @@ The last runtime baseline passed 200 offline tests. New chunks must record their
 
 ## Phases, deliverables and gates
 
-All chunks below are **planned**, not delivered. Each includes relevant automated coverage for
+Chunk 1A storage is implemented in its focused PR; see [the storage contract](private-playbooks.md)
+and [checkpoint](work-checkpoint.md) for evidence. Remaining chunks are planned. Each includes relevant automated coverage for
 code changes, `npm run validate`, focused review, required CI and synchronized tracking.
 
 | Phase / chunk                                       | Task                | Small deliverable                                                                                                                                                                                                                                     | Gate to the next chunk / phase                                                                                                                                                                                                                                                                                   |

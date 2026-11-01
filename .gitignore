@@ -21,3 +21,7 @@ oauth-cache.json
 *.sqlite
 *.db
 auditTrail/
+
+# Defense in depth: actual guidance lives outside the repository.
+playbook.private.md
+*.playbook.private.md
