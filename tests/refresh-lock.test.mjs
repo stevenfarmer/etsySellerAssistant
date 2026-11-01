@@ -335,7 +335,7 @@ for (const contents of [undefined, '{partial']) {
           directory,
           waitTimeoutMs: 5,
           retryIntervalMs: 1,
-          now: () => clock++,
+          monotonicNow: () => clock++,
         }),
         { code: 'recovery_required' },
       );
@@ -399,3 +399,51 @@ test('lease cleanup preserves even falsy primary errors and reports cleanup-only
     }
   }
 });
+
+for (const jump of [-100, 100_000]) {
+  test(`a wall-clock jump of ${jump}ms cannot change the lock wait budget`, async () => {
+    await withTempDirectory(async (directory) => {
+      const holder = await acquireRefreshLock({ directory });
+      const ownerPath = path.join(directory, 'refresh.lock', 'owner.json');
+      const owner = await fs.readFile(ownerPath, 'utf8');
+      let attempts = 0;
+      let wallReads = 0;
+      let elapsed = 0;
+      try {
+        await assert.rejects(
+          acquireRefreshLock({
+            directory,
+            waitTimeoutMs: 3,
+            retryIntervalMs: 1,
+            now: () => (++wallReads === 1 ? 1000 : 1000 + jump),
+            monotonicNow: () => elapsed++,
+            fileSystem: {
+              ...fs,
+              mkdir: async (...args) => {
+                if (++attempts > 5) throw new Error('wait exceeded deterministic retry budget');
+                return fs.mkdir(...args);
+              },
+            },
+          }),
+          { code: 'timeout' },
+        );
+        assert.equal(attempts, 3);
+        assert.equal(await fs.readFile(ownerPath, 'utf8'), owner);
+        await holder.assertOwned();
+      } finally {
+        await holder.release();
+      }
+    });
+  });
+}
+
+for (const clock of [() => NaN, () => Infinity, () => -1]) {
+  test('invalid injected elapsed clock fails closed', async () => {
+    await withTempDirectory(async (directory) => {
+      await assert.rejects(acquireRefreshLock({ directory, monotonicNow: clock }), {
+        code: 'invalid_input',
+      });
+      assert.deepEqual(await fs.readdir(directory), []);
+    });
+  });
+}

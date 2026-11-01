@@ -136,12 +136,18 @@ A wrong-owner or malformed refresh grant fails validation and leaves `token-stat
 `refreshing`. Later requests require recovery without another refresh attempt or reuse of the old
 refresh token. Follow the deliberate recovery procedure above; do not clear the marker to retry.
 
-Clock assessment: lock waits and persisted expiry currently use wall-clock time. Backward clock
-adjustments can extend waits or apparent freshness; forward adjustments can shorten them. The
-60-second freshness margin and strict expiry comparison cover ordinary boundary conditions, not
-arbitrary clock jumps. This follow-up retains that timing model; monotonic waits and a conservative
-expiry anchored before transport need a separate focused design and tests. No automatic lock
-stealing is justified by age, expiry, or clock changes.
+Clock assessment: lock contention waits use a monotonic elapsed-time clock, so moving the system
+clock forward or backward does not change the wait budget. Owner metadata retains its wall-clock
+creation timestamp; age still never authorizes automatic lock stealing. This bounds retry waiting,
+not the duration of an individual stalled filesystem operation or suspension of the process.
+
+Persisted token expiry still uses wall-clock time and is calculated after refresh transport.
+Backward adjustments can extend apparent token freshness; forward adjustments can shorten it.
+The 60-second freshness margin and strict comparison cover ordinary boundaries, not arbitrary
+clock jumps. An offline fabricated 40-second transport delay produced an expiry 40 seconds later
+than anchoring the same lifetime before transport. That confirms the calculation's timing
+assumption, not a live Etsy expiry failure. Conservative expiry anchoring, short-lifetime grants
+and clock validation need a separate focused design and tests.
 
 ## Isolated Mac recovery drill
 
