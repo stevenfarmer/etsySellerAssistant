@@ -9,9 +9,10 @@ test('opt-in MCP server exposes only bounded read tools and sanitizes service er
   const script = `
     import { serveStdio } from '@modelcontextprotocol/server/stdio';
     import { createServer } from './dist/src/server.js';
+    import { EtsyReadError } from './dist/src/etsy/read-client.js';
     const service = {
       async listActiveListings() { return { listings: [], nextOffset: null }; },
-      async getListing() { throw new Error('fake secret'); }
+      async getListing() { const error = new EtsyReadError('authorization_rejected'); error.message = 'fake secret'; throw error; }
     };
     await serveStdio(() => createServer({ readService: service }));
   `;
@@ -68,6 +69,7 @@ test('opt-in MCP server exposes only bounded read tools and sanitizes service er
       arguments: { listingId: 123 },
     });
     assert.equal(failedRead.result.isError, true);
+    assert.match(failedRead.result.content[0].text, /Etsy rejected the authorization/);
     assert.equal(JSON.stringify(failedRead).includes('fake secret'), false);
     const invalid = await request(5, 'tools/call', {
       name: 'list_active_listings',

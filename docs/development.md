@@ -152,3 +152,17 @@ and clock validation need a separate focused design and tests.
 ## Isolated Mac recovery drill
 
 See [Mac recovery acceptance](mac-recovery-acceptance.md) for the offline drill and the exact, separately authorized test-only Keychain actions. Neither mode reads the healthy connection. Native mode is manual only; CI tests inject a fabricated backend.
+
+## Listing-read diagnostics
+
+The read tools now distinguish Etsy rejecting authorization (401), denying access (403), a missing
+resource (404), request timeout (408 or a cancelled/timed-out transport), rate limiting (429),
+temporary service failure (5xx), invalid response data, and network/other request failures.
+Authorization rejection can indicate expired or revoked authorization; the status alone does not
+establish which. Follow the recovery guide rather than repeatedly retrying or automatically resetting.
+
+Rate-limit and service-failure messages ask the operator to pause before retrying. This change adds
+no automatic retries or retry scheduling and does not interpret or echo Retry-After headers.
+Error bodies, status text, headers, tokens, identifiers and local paths are not copied into tool
+errors. Unexpected untyped exceptions keep the generic sanitized message. No settings or credentials
+are changed by these diagnostics.
