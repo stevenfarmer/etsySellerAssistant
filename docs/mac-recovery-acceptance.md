@@ -54,10 +54,9 @@ Do not record credentials, live shop data or raw native errors.
 Current evidence (1 November 2026): offline and separately owner-authorized Keychain modes passed all eight stages and verified cleanup on macOS 27.0.1, Node 24.11.1, npm 11.6.2. Executed drill source matches reviewed PR #10 head `1ecac27ca79c820892fc1d3d0406b8b639be76ec`; subsequent evidence-only documentation edits do not change that executable. All five checks passed on that head. Local validation passed 178 offline tests.
 Automated tests cover the complete drill, failure cleanup, explicit mode selection, native adapter
 namespace isolation and unique service generation. Keychain mode completed with exit 0 and verified absence of all four fabricated entries and the temporary directory.
-Owner acceptance is pending; passing automation does not provide it.
+On 1 November 2026, after reading the record and receiving the test summary and limitations, the product owner accepted the isolated Mac recovery results as understandable. This accepts the bounded drill and its documented behavior; it does not assert code expertise, live Etsy recovery acceptance, or release authorization.
 
-After the authorized Keychain run, the owner reviews the result and confirms whether the recovery
-instructions and behavior are acceptable. Keep real Etsy revocation/reauthorization, interactive CLI
+The owner review of this isolated drill is complete. Keep real Etsy revocation/reauthorization, interactive CLI
 prompts, and recovery of the healthy connection explicitly untested by this drill. T-008 may only be
 closed to the extent that its acceptance criteria are actually satisfied; any remaining criteria
 need explicit owner disposition. Release publication remains a separate authorization.
