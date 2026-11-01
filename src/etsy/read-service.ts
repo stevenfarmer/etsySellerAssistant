@@ -5,6 +5,17 @@ import type { RefreshLockLease } from '../local/refresh-lock.js';
 
 export type PublicListing = Omit<ListingSummary, 'shopId'>;
 
+export type SessionConnectionStatus =
+  | { readonly etsyAccess: 'not_checked' }
+  | {
+      readonly etsyAccess: 'verified_this_session';
+      readonly connection: {
+        readonly ownerId: number;
+        readonly shopId: number;
+        readonly lastVerifiedAt: string;
+      };
+    };
+
 export interface ReadServiceOptions {
   readonly config: LocalConfigStore;
   readonly store: SecretStore;
@@ -25,7 +36,7 @@ export function createReadService(options: ReadServiceOptions) {
         readonly client: EtsyReadClient;
       }
     | undefined;
-  const client = async (lease: RefreshLockLease): Promise<EtsyReadClient> => {
+  const client = async (lease: RefreshLockLease) => {
     const config = await options.config.read();
     if (!config) throw new Error('not_configured');
     const [key, secret, refresh] = await Promise.all([
@@ -62,8 +73,8 @@ export function createReadService(options: ReadServiceOptions) {
         }),
       };
     }
-    await cached.client.verifyConfiguredShop();
-    return cached.client;
+    const identity = await cached.client.verifyConfiguredShop();
+    return { client: cached.client, identity };
   };
   const omitShopId = (listing: ListingSummary): PublicListing => ({
     listingId: listing.listingId,
@@ -76,17 +87,44 @@ export function createReadService(options: ReadServiceOptions) {
     state: listing.state,
     url: listing.url,
   });
+  let sequence = 0;
+  let status: SessionConnectionStatus = { etsyAccess: 'not_checked' };
+  const read = async <T>(work: (client: EtsyReadClient) => Promise<T>): Promise<T> => {
+    const request = ++sequence;
+    status = { etsyAccess: 'not_checked' };
+    // Publish only after the full operation, including lock release, succeeds.
+    const completed = await options.withLock(async (lease) => {
+      const verified = await client(lease);
+      const result = await work(verified.client);
+      return {
+        result,
+        connection: {
+          ownerId: verified.identity.ownerId,
+          shopId: verified.identity.shopId,
+          lastVerifiedAt: new Date().toISOString(),
+        },
+      };
+    });
+    // A later pending/failed request must not be overwritten by an older completion.
+    if (request === sequence) {
+      status = { etsyAccess: 'verified_this_session', connection: completed.connection };
+    }
+    return completed.result;
+  };
   return {
+    getConnectionStatus(): SessionConnectionStatus {
+      return status.etsyAccess === 'verified_this_session'
+        ? { etsyAccess: status.etsyAccess, connection: { ...status.connection } }
+        : { etsyAccess: 'not_checked' };
+    },
     async listActiveListings(input: { readonly pageSize?: number; readonly offset?: number }) {
-      return options.withLock(async (lease) => {
-        const result = await (await client(lease)).listActiveListings({ ...input, maxPages: 1 });
+      return read(async (client) => {
+        const result = await client.listActiveListings({ ...input, maxPages: 1 });
         return { listings: result.listings.map(omitShopId), nextOffset: result.nextOffset };
       });
     },
     async getListing(listingId: number): Promise<PublicListing> {
-      return options.withLock(async (lease) =>
-        omitShopId(await (await client(lease)).getListing(listingId)),
-      );
+      return read(async (client) => omitShopId(await client.getListing(listingId)));
     },
   };
 }

@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 import type { McpServer } from '@modelcontextprotocol/server';
-import type { PublicListing } from '../etsy/read-service.js';
+import type { PublicListing, SessionConnectionStatus } from '../etsy/read-service.js';
 import { EtsyReadError, type EtsyReadErrorCode } from '../etsy/read-client.js';
 import { RefreshCoordinationError } from '../local/refresh-lock.js';
 
@@ -11,6 +11,7 @@ export interface ActiveListingsPage {
 
 /** Narrow service contract: callers provide no shop or endpoint selection. */
 export interface ReadOnlyListingService {
+  getConnectionStatus?(): SessionConnectionStatus;
   listActiveListings(options: {
     readonly pageSize: number;
     readonly offset: number;

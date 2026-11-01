@@ -10,9 +10,15 @@ test('opt-in MCP server exposes only bounded read tools and sanitizes service er
     import { serveStdio } from '@modelcontextprotocol/server/stdio';
     import { createServer } from './dist/src/server.js';
     import { EtsyReadError } from './dist/src/etsy/read-client.js';
+    let connection = { etsyAccess: 'not_checked' };
     const service = {
-      async listActiveListings() { return { listings: [], nextOffset: null }; },
-      async getListing() { const error = new EtsyReadError('authorization_rejected'); error.message = 'fake secret'; throw error; }
+      getConnectionStatus() { return connection; },
+      async listActiveListings() {
+        connection = { etsyAccess: 'verified_this_session',
+          connection: { ownerId: 71001, shopId: 82002, lastVerifiedAt: '2026-11-01T00:00:00.000Z' } };
+        return { listings: [], nextOffset: null };
+      },
+      async getListing() { connection = { etsyAccess: 'not_checked' }; const error = new EtsyReadError('authorization_rejected'); error.message = 'fake secret'; throw error; }
     };
     await serveStdio(() => createServer({ readService: service }));
   `;
@@ -64,6 +70,17 @@ test('opt-in MCP server exposes only bounded read tools and sanitizes service er
     assert.equal(JSON.parse(status.result.content[0].text).etsyAccess, 'not_checked');
     const listed = await request(3, 'tools/call', { name: 'list_active_listings', arguments: {} });
     assert.deepEqual(JSON.parse(listed.result.content[0].text), { listings: [], nextOffset: null });
+    const verifiedStatus = await request(7, 'tools/call', {
+      name: 'get_setup_status',
+      arguments: {},
+    });
+    const verified = JSON.parse(verifiedStatus.result.content[0].text);
+    assert.equal(verified.etsyAccess, 'verified_this_session');
+    assert.deepEqual(verified.connection, {
+      ownerId: 71001,
+      shopId: 82002,
+      lastVerifiedAt: '2026-11-01T00:00:00.000Z',
+    });
     const failedRead = await request(4, 'tools/call', {
       name: 'get_listing',
       arguments: { listingId: 123 },
@@ -71,6 +88,13 @@ test('opt-in MCP server exposes only bounded read tools and sanitizes service er
     assert.equal(failedRead.result.isError, true);
     assert.match(failedRead.result.content[0].text, /Etsy rejected the authorization/);
     assert.equal(JSON.stringify(failedRead).includes('fake secret'), false);
+    const clearedStatus = await request(8, 'tools/call', {
+      name: 'get_setup_status',
+      arguments: {},
+    });
+    const cleared = JSON.parse(clearedStatus.result.content[0].text);
+    assert.equal(cleared.etsyAccess, 'not_checked');
+    assert.equal('connection' in cleared, false);
     const invalid = await request(5, 'tools/call', {
       name: 'list_active_listings',
       arguments: { shopId: 123 },

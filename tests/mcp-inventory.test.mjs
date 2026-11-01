@@ -48,7 +48,10 @@ async function readInventory(entry) {
       `${JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' })}\n`,
     );
     const status = await request(3, 'tools/call', { name: 'get_setup_status', arguments: {} });
-    assert.equal(JSON.parse(status.result.content[0].text).version, manifest.version);
+    const setup = JSON.parse(status.result.content[0].text);
+    assert.equal(setup.version, manifest.version);
+    assert.equal(setup.etsyAccess, entry.endsWith('/alpha.js') ? 'not_checked' : 'not_configured');
+    assert.equal('connection' in setup, false);
     const inventory = await request(2, 'tools/list', {});
     return inventory.result.tools.map((tool) => tool.name).sort();
   } finally {
