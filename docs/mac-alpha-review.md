@@ -10,9 +10,9 @@ active listing, and the product owner confirmed it was expected. A subsequent ex
 one-listing list-and-detail smoke check also passed on the Mac. No listing contents or identifiers
 were recorded in project materials. Mac recovery and v1 readiness remain open. Windows live platform checks are deferred to v2 or later, outside v1 acceptance.
 
-## Current rc.1 candidate follow-up
+## Current v1 candidate follow-up
 
-The unpublished `1.0.0-rc.1` candidate includes the offline-tested recovery/error fixes, actionable diagnostics and session identity confirmation. Alpha.2 was an unpublished intermediate milestone. The prior live alpha.1 evidence remains accepted; it is not a live test of alpha.2. T-010 restart/setup-status acceptance is Done. Owner Mac recovery acceptance remains open; no reset or reauthorization is required merely to prepare this prerelease. See [candidate release notes](releases/v1.0.0-rc.1.md).
+The unpublished `1.0.0` candidate includes the offline-tested recovery/error fixes, actionable diagnostics and session identity confirmation. Alpha.2 was an unpublished intermediate milestone. The prior live alpha.1 evidence remains accepted; it is not a live test of alpha.2. T-010 restart/setup-status acceptance is Done. Owner Mac recovery acceptance remains open; no reset or reauthorization is required merely to prepare this prerelease. See [candidate release notes](releases/v1.0.0.md).
 
 ## Scope and boundaries
 
