@@ -8,5 +8,6 @@ void serveStdio(() =>
   createServer({
     readService: createLocalReadService(globalThis.fetch),
     guidanceService: createLocalGuidanceService(),
+    draftValidation: true,
   }),
 );

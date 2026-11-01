@@ -259,6 +259,7 @@ test('real alpha STDIO advertises and returns generic guidance with unchanged st
       'get_review_guidance',
       'get_setup_status',
       'list_active_listings',
+      'validate_listing_draft',
     ]);
     const meta = inventory.tools.find((t) => t.name === 'get_review_guidance');
     assert.equal(meta.inputSchema.additionalProperties, false);

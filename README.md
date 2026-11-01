@@ -8,10 +8,10 @@ A local-first MCP assistant for reviewing listings in one owner-authorized Etsy 
 
 There are two server entry points:
 
-| Entry point         | Behavior                                                                                                                |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                         |
-| `dist/src/alpha.js` | Opt-in read-only alpha; status, bounded listing pages/detail, and explicit generic or opted-in private review guidance. |
+| Entry point         | Behavior                                                                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                                     |
+| `dist/src/alpha.js` | Opt-in read-only alpha; status, bounded listing pages/detail, explicit generic/private review guidance, and local draft validation. |
 
 In the unpublished development candidate, alpha `get_setup_status` starts with
 `etsyAccess: not_checked`. After a complete successful listing read, it reports
@@ -33,6 +33,13 @@ In the unpublished development build, ask the assistant to call `get_review_guid
 generic starter. An already running MCP process needs a restart to discover the new tool.
 See [private guidance settings and disclosure](docs/private-playbooks.md) before opting into
 private text. The published alpha.1 tool inventory remains historical and unchanged.
+
+Chunk 2A adds a [generic review workflow and blank buyer brief](docs/draft-review-workflow.md)
+and `validate_listing_draft` in the development alpha. It checks only title/description/tags
+locally and returns issue codes/counts without saving or echoing draft text. A passing result
+does not verify facts, predict sales or approve edits. The [fabricated worked review](docs/review-workflow-example.md)
+demonstrates the workflow. Existing MCP processes pick up tool/template changes on restart;
+no extra real-client acceptance gate is added to this offline development chunk.
 
 ## Version roadmap
 

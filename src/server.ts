@@ -4,6 +4,7 @@ import { getSetupStatus, getReadSetupStatus } from './status.js';
 import { registerReadOnlyListingTools, type ReadOnlyListingService } from './mcp/read-tools.js';
 import { registerGuidanceTool } from './mcp/guidance-tool.js';
 import type { ReviewGuidanceService } from './guidance/review-guidance.js';
+import { registerDraftValidationTool } from './mcp/draft-tool.js';
 
 const emptyInput = z.object({});
 
@@ -11,6 +12,7 @@ export function createServer(
   options: {
     readonly readService?: ReadOnlyListingService;
     readonly guidanceService?: ReviewGuidanceService;
+    readonly draftValidation?: boolean;
   } = {},
 ): McpServer {
   const server = new McpServer({
@@ -44,6 +46,7 @@ export function createServer(
 
   if (options.readService) registerReadOnlyListingTools(server, options.readService);
   if (options.guidanceService) registerGuidanceTool(server, options.guidanceService);
+  if (options.draftValidation) registerDraftValidationTool(server);
 
   return server;
 }
