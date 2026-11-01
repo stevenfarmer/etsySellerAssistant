@@ -191,6 +191,8 @@ test('MCP registration exposes a bounded read-only contract and sanitized failur
     },
   });
   assert.equal(tool.name, 'validate_listing_draft');
+  assert.match(tool.config.description, /140 Unicode code points/);
+  assert.match(tool.config.description, /application policy, not an Etsy maximum/);
   assert.deepEqual(tool.config.annotations, {
     readOnlyHint: true,
     destructiveHint: false,
