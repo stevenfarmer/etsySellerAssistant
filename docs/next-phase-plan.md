@@ -214,13 +214,14 @@ sequencing refinement, and delegation structure. Live credentials/API access, fu
 private-data features, hosting, publication, and merge remain subject to their stated
 review/authorization boundaries.
 
-Current state: duplicate documentation connection removed; the owner approved this plan and bounded
-delegation. Offline implementation is in progress; a fabricated macOS protected-store smoke test
+Current state (31 October 2026): duplicate documentation connection removed; the owner approved this plan and bounded
+delegation. The read-only alpha has been implemented; a fabricated macOS protected-store smoke test
 passed, while Windows and the full platform matrix remain unverified. The product owner has accepted
 the unresolved Etsy terms risk for now. The local connection CLI is implemented for offline-tested
 verification and the owner-authorized Mac connection was reported successful. Bounded live listing
 and detail reads have passed on the Mac through the alpha entry point. Windows and recovery review
-remain open; the normal server remains status-only.
+remain open; the normal server remains status-only. The Mac-tested `v0.1.0-alpha.1` is published
+as a GitHub prerelease. This plan also describes historical gates and does not imply Windows live acceptance.
 
 ## Reference evidence
 

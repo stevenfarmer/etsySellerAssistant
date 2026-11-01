@@ -98,7 +98,7 @@ has now been observed; permitted-use questions and approval of later purpose cha
    > not serve other sellers.
 
    Read Etsy's terms yourself before submitting. This guide does not accept terms or submit the
-   registration for you. The wording describes planned use; the current scaffold has no Etsy access.
+   registration for you. This historical registration wording described planned use; the opt-in alpha now has read-only Etsy access.
    The description is 394 characters when pasted as one paragraph. Disclosing the later phase does
    not authorize writes or change the read-only MVP. Etsy's
    [API Terms, section 3](https://www.etsy.com/legal/api/) require prior approval of application
