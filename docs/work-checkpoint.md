@@ -6,25 +6,27 @@ for verifying live main/PRs/CI and the connected steering/tracker before work re
 
 ## Current checkpoint
 
-- Prior completed plan: PR #20, `e8d5531aca9f5e009b4c1617ff9766368b0a7c73`;
-  live main/PRs/CI, steering and tracker verified at chunk 1A start. No open PRs then.
-- Current deliverable: **1A / T-026 private playbook storage**. Read-only bounded loader,
-  resolver, generic template and Git-ignore defense implemented. No runtime/CLI/MCP integration,
-  actual private strategy file creation/read or Etsy/credential action. See [storage contract](private-playbooks.md).
-- Actual validation: `npm run validate` passed **212 offline tests** and static checks,
-  including 12 new private-playbook cases. The implementation PR and T-026 record exact
-  reviewed/merged commits, final CI, connected readbacks and checkpoint completion. Check those
-  live records before treating the merge gate as passed.
-- **Next chunk after this PR is merged and checkpointed: 1B / T-027 — standard MCP guidance
-  delivery.** Read the storage contract; design one explicit read-only client-neutral contract,
-  then integrate the bounded reader, explicit source labeling and safe missing/error handling.
-  No arbitrary path input, startup/status content reads or safety override. Verify supported
-  Codex discovery/invocation with fabricated content. Do not implement editing or the private
-  owner strategy in 1B; those remain later chunks.
-- Current feature branch: `codex/private-playbook-storage`; final PR/merge/head and clean-main
-  status are recorded in T-026 and that PR. This source checkpoint cannot embed its own merge SHA.
-- Blocking owner action: none. Stop after 1A checks/merge/tracking; do not start 1B automatically.
-  Future live/credential and publication steps retain concrete authorization gates.
+- Prior completed chunk: 1A/T-026, PR #21, `e6ef85fc40eeaa26697c2016db6deba4c5570fe0`.
+  Live main/PRs/CI and steering/tracker verified at 1B start; local checkout clean, no open PRs.
+- Current deliverable: **1B / T-027 guidance interface**. Alpha now exposes strict no-argument
+  `get_review_guidance`, generic by default, private only through explicit client settings.
+  Source labels, bounded schema/results, sanitized errors and no invalid-private fallback.
+  Default scaffold unchanged; startup/status/discovery never invoke guidance. See [contract](private-playbooks.md).
+- Actual validation: `npm run validate` passed **222 offline tests** and static checks, including
+  9 new guidance tests, actual alpha STDIO scenarios and the optional read-only smoke inventory
+  regression. No real private guidance/credentials/Etsy requests. Implementation PR/T-027 hold
+  exact head/merge/CI and connected readback evidence; compare live records before assuming merge.
+- **Pending gate: real Codex client discovery/default-generic invocation.** The running host still
+  advertises the old three-tool inventory. After merged build, quit/reopen the app to reload its
+  MCP process, return to this chat, discover `get_review_guidance` and invoke with `{}` in default
+  generic mode. Record sanitized pass/fail in T-027 and connected/local docs. Do not read private
+  content or Etsy. Automated STDIO success does not replace this planned client acceptance.
+- **Next implementation chunk after that gate: 2A / T-023** review workflow/validators.
+  Do not start it during this continuation. The real private sales playbook remains chunk 2B.
+- Feature branch: `codex/mcp-guidance-interface`; final PR/head/merge/clean-main status in T-027.
+  This source checkpoint cannot embed its own merge SHA. T-027 stays In Review until client check.
+- Required owner action after technical work: restart the app and return here for the guidance-only
+  check. No credential change, live Etsy request, reset or release publication is authorized.
 
 ## Required replacement at each checkpoint
 
