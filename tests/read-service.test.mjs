@@ -29,9 +29,13 @@ async function harness(shop = SHOP) {
   await store.set('refreshToken', `${OWNER}.fake-refresh`);
   const calls = [];
   let locked = false;
+  let failure;
+  let releaseFailure = false;
+  let completionPause;
   const fetch = async (url, init) => {
     assert.equal(locked, true);
     calls.push({ url, init });
+    if (failure) throw failure;
     if (url.includes('/users/')) return globalThis.Response.json({ shop_id: shop, user_id: OWNER });
     if (url.includes('/listings?'))
       return globalThis.Response.json({ count: 1, results: [listing()] });
@@ -52,11 +56,20 @@ async function harness(shop = SHOP) {
     withLock: async (work) => {
       assert.equal(locked, false);
       locked = true;
+      let result;
       try {
-        return await work(lease);
+        result = await work(lease);
       } finally {
         locked = false;
       }
+      const pause = completionPause;
+      completionPause = undefined;
+      if (pause) {
+        pause.entered();
+        await pause.promise;
+      }
+      if (releaseFailure) throw new Error('fabricated release failure');
+      return result;
     },
     getAccessToken: async (id, receivedLease) => {
       assert.equal(locked, true);
@@ -65,7 +78,19 @@ async function harness(shop = SHOP) {
       return `${OWNER}.fake-access`;
     },
   });
-  return { service, calls };
+  return {
+    service,
+    calls,
+    setFailure: (value) => {
+      failure = value;
+    },
+    setReleaseFailure: () => {
+      releaseFailure = true;
+    },
+    pauseCompletion: (promise, entered) => {
+      completionPause = { promise, entered };
+    },
+  };
 }
 
 test('read service checks shop ownership per call and omits shop and extra fields', async () => {
@@ -87,4 +112,82 @@ test('wrong shop prevents listing access and unknown IDs are never fetched', asy
   const expected = await harness();
   await assert.rejects(expected.service.getListing(LISTING), { code: 'listing_not_owned' });
   assert.equal(expected.calls.length, 1);
+});
+
+test('session status starts unknown and confirms only a completed read without extra requests', async () => {
+  const { service, calls } = await harness();
+  assert.deepEqual(service.getConnectionStatus(), { etsyAccess: 'not_checked' });
+  assert.equal(calls.length, 0);
+  await service.listActiveListings({});
+  const count = calls.length;
+  const status = service.getConnectionStatus();
+  assert.equal(status.etsyAccess, 'verified_this_session');
+  assert.equal(status.connection.ownerId, OWNER);
+  assert.equal(status.connection.shopId, SHOP);
+  assert.equal(Number.isNaN(Date.parse(status.connection.lastVerifiedAt)), false);
+  assert.deepEqual(Object.keys(status.connection).sort(), ['lastVerifiedAt', 'ownerId', 'shopId']);
+  status.connection.shopId = 9999;
+  assert.equal(service.getConnectionStatus().connection.shopId, SHOP);
+  assert.equal(calls.length, count);
+  await service.getListing(LISTING);
+  assert.equal(service.getConnectionStatus().etsyAccess, 'verified_this_session');
+});
+
+test('status is strictly in memory and a fresh service has no prior confirmation', async () => {
+  const unavailable = () => {
+    throw new Error('status touched a dependency');
+  };
+  const fresh = () =>
+    createReadService({
+      config: { read: unavailable },
+      store: { get: unavailable },
+      fetch: unavailable,
+      getAccessToken: unavailable,
+      withLock: unavailable,
+    });
+  assert.deepEqual(fresh().getConnectionStatus(), { etsyAccess: 'not_checked' });
+  const { service } = await harness();
+  await service.listActiveListings({});
+  assert.equal(service.getConnectionStatus().etsyAccess, 'verified_this_session');
+  assert.deepEqual(fresh().getConnectionStatus(), { etsyAccess: 'not_checked' });
+});
+
+test('failed listing operation or release clears verification and omits identity', async () => {
+  for (const stage of ['transport', 'release']) {
+    const h = await harness();
+    await h.service.listActiveListings({});
+    if (stage === 'transport') h.setFailure(new Error('fabricated network failure'));
+    else h.setReleaseFailure();
+    await assert.rejects(h.service.getListing(LISTING));
+    assert.deepEqual(h.service.getConnectionStatus(), { etsyAccess: 'not_checked' });
+  }
+  const wrong = await harness(SHOP + 1);
+  await assert.rejects(wrong.service.listActiveListings({}), { code: 'identity_mismatch' });
+  assert.deepEqual(wrong.service.getConnectionStatus(), { etsyAccess: 'not_checked' });
+});
+
+test('pending release does not publish identity and older success cannot overwrite newer failure', async () => {
+  const h = await harness();
+  let resume;
+  const pause = new Promise((resolve) => {
+    resume = resolve;
+  });
+  let signalEntered;
+  const entered = new Promise((resolve) => {
+    signalEntered = resolve;
+  });
+  h.pauseCompletion(pause, signalEntered);
+  const older = h.service.listActiveListings({});
+  await Promise.race([
+    entered,
+    older.then(() => {
+      throw new Error('expected completion gate');
+    }),
+  ]);
+  assert.deepEqual(h.service.getConnectionStatus(), { etsyAccess: 'not_checked' });
+  h.setFailure(new Error('fabricated newer failure'));
+  await assert.rejects(h.service.getListing(LISTING));
+  resume();
+  await older;
+  assert.deepEqual(h.service.getConnectionStatus(), { etsyAccess: 'not_checked' });
 });

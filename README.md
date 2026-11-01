@@ -13,6 +13,14 @@ There are two server entry points:
 | `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                               |
 | `dist/src/alpha.js` | Opt-in read-only alpha; status, bounded active-listing pages, and listing detail for IDs returned in the same server session. |
 
+In the unpublished development candidate, alpha `get_setup_status` starts with
+`etsyAccess: not_checked`. After a complete successful listing read, it reports
+`verified_this_session` and a `connection` object containing the verified numeric owner/shop IDs
+and `lastVerifiedAt` (UTC). This is evidence from that read, not a live health check.
+A later pending or failed read clears it; restarting starts fresh. Status itself reads no
+credentials/settings and makes no Etsy request. Outside changes to authorization or configuration
+are not detected until a listing read or restart. The default scaffold's status remains unchanged.
+
 The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
 
 ## Next release candidate

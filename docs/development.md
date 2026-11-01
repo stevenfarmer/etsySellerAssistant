@@ -166,3 +166,22 @@ no automatic retries or retry scheduling and does not interpret or echo Retry-Af
 Error bodies, status text, headers, tokens, identifiers and local paths are not copied into tool
 errors. Unexpected untyped exceptions keep the generic sanitized message. No settings or credentials
 are changed by these diagnostics.
+
+## Session connection confirmation
+
+In the development alpha, `get_setup_status` initially reports `etsyAccess: not_checked`. After
+a listing page or detail operation succeeds, including lock release, it reports
+`etsyAccess: verified_this_session` with `connection.ownerId`, `connection.shopId`, and
+`connection.lastVerifiedAt` (UTC). An empty successful listing page also verifies the connection.
+
+The snapshot is held only in memory. Reading it never contacts Etsy, reads settings/credentials,
+refreshes a token or acquires a lock. It remains evidence of the last successful read, not proof
+of current token validity. External reset, revocation or configuration changes are not detected
+until another read or restart. A new read clears the snapshot while pending; failure, including
+release failure, leaves `not_checked` with no identity object. An older request cannot overwrite
+the status of a newer pending/failed request. Restarting discards all confirmation.
+
+The default status-only server keeps its existing output. Tool names and input schemas are
+unchanged. Alpha output adds the `verified_this_session` state and allowlisted identity fields;
+clients consuming the JSON should handle that state. Use a listing read only when authorized
+to obtain fresh confirmation; status does not silently upgrade itself to a live probe.
