@@ -1,5 +1,7 @@
 # ADR 0002: Etsy access is gated; read-only first
 
+> Historical decision record: pre-alpha enablement gates below describe the sequence at that date. Later accepted owner OAuth/listing evidence and current task dispositions are consolidated in the [current matrix](../requirements-and-acceptance.md). The read-only/write boundary remains in force.
+
 - Status: Accepted
 - Date: 2026-10-30
 

@@ -8,11 +8,13 @@ The alpha server has been registered in the Mac's Codex configuration with no cr
 environment variables. In a fresh Codex Desktop chat, a separately requested read returned one
 active listing, and the product owner confirmed it was expected. A subsequent explicitly authorized
 one-listing list-and-detail smoke check also passed on the Mac. No listing contents or identifiers
-were recorded in project materials. Mac recovery and v1 readiness remain open. Windows live platform checks are deferred to v2 or later, outside v1 acceptance.
+were recorded in project materials. The isolated Mac recovery drill was subsequently accepted; final candidate product/limits acceptance and publication remain pending. Windows live platform checks are deferred to v2 or later, outside v1 acceptance.
 
 ## Current v1 candidate follow-up
 
-The unpublished `1.0.0` candidate includes the offline-tested recovery/error fixes, actionable diagnostics and session identity confirmation. Alpha.2 was an unpublished intermediate milestone. The prior live alpha.1 evidence remains accepted; it is not a live test of alpha.2. T-010 restart/setup-status acceptance is Done. Owner Mac recovery acceptance remains open; no reset or reauthorization is required merely to prepare this prerelease. See [candidate release notes](releases/v1.0.0.md).
+The unpublished `1.0.0` candidate includes the offline-tested recovery/error fixes, actionable diagnostics and session identity confirmation. Alpha.2 was an unpublished intermediate milestone. The prior live alpha.1 evidence remains accepted; it is not a live test of alpha.2. T-010 restart/setup-status acceptance is Done. Scoped isolated Mac recovery acceptance is complete; final disclosed-limits acceptance remains pending; no reset or reauthorization is required merely to prepare this prerelease. See [candidate release notes](releases/v1.0.0.md).
+
+For current use cases, feature acceptance and task states, use the [current matrix](requirements-and-acceptance.md). Historical live evidence below remains labelled by version/date.
 
 ## Scope and boundaries
 

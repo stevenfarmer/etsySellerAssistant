@@ -4,7 +4,7 @@ A local-first MCP assistant for reviewing listings in one owner-authorized Etsy 
 
 ## Current release
 
-[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a public GitHub prerelease of a local, single-shop tool. The shop owner completed OAuth on a Mac; an owner-confirmed Codex Desktop listing read and a separate bounded list-and-detail check passed. CI tested macOS and Windows with Node 24 and 26, but Windows live credential storage and browser authorization remain unverified. v1 targets macOS with Codex Desktop only; Windows manual acceptance is deferred. Mac recovery and release readiness remain open.
+[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a public GitHub prerelease of a local, single-shop tool. The shop owner completed OAuth on a Mac; an owner-confirmed Codex Desktop listing read and a separate bounded list-and-detail check passed. CI tested macOS and Windows with Node 24 and 26, but Windows live credential storage and browser authorization remain unverified. v1 targets macOS with Codex Desktop only; Windows manual acceptance is deferred. The owner accepted the isolated Mac recovery drill; final v1 product/limits acceptance and publication remain pending.
 
 There are two server entry points:
 
@@ -88,6 +88,8 @@ If the server does not start, check the Node path, working directory and selecte
 - [Seller App registration and OAuth verification](docs/etsy-registration-verification.md)
 - [Mac alpha review and test plan](docs/mac-alpha-review.md)
 - [Development and recovery](docs/development.md)
+- [Current requirements, use cases and acceptance](docs/requirements-and-acceptance.md)
+- [Required tracking process](docs/project-tracking.md)
 - [v1 readiness evidence](docs/v1-readiness.md)
 - [Release checklist](docs/release-checklist.md)
 - [Next-phase plan](docs/next-phase-plan.md)

@@ -1,57 +1,59 @@
-# macOS / Codex Desktop v1 readiness
+# Current v1 readiness
 
-Reviewed on 1 November 2026. The development candidate is `1.0.0`, not a published release or stable v1. Published `v0.1.0-alpha.1` remains unchanged. Platform sequencing follows [ADR 0004](decisions/0004-v1-platform-scope.md).
+Updated 1 November 2026. The development version is `1.0.0`, an **unpublished candidate**.
+The published release remains `v0.1.0-alpha.1`. No final v1 product acceptance or publication
+authorization has been given.
 
-## Accepted evidence
+The authoritative local feature/use-case/acceptance matrix is
+[requirements-and-acceptance.md](requirements-and-acceptance.md). Task state is synchronized
+with the connected tracker under the [tracking process](project-tracking.md). This page is a
+release summary, not a second requirements list.
 
-- Owner-authorized Mac OAuth, configured-shop identity, Codex Desktop listing retrieval, and a separate bounded list-and-detail check passed. T-009 remains Done.
-- The owner restarted the app after PR #7. The registered alpha's setup-status tool passed without contacting Etsy. T-010 is Done. This evidence does not verify current authorization.
-- Recorded environment: macOS 27.0.1, Node.js 24.11.1, npm 11.6.2; host ChatGPT 26.1027.30824 build 22943, embedded Codex helper 156.0.8078.48 build 8078.48. These are observed host/runtime versions, not an inferred standalone Codex Desktop release number.
-- PR #8 merged as `4f0761e`. Its five PR and main checks passed. Local validation passed 174 offline tests against the merged dependency baseline.
-- Recovery coverage includes cross-process refresh concurrency, uncertain refresh, incomplete token pairs, replacement-token persistence failures, primary plus cleanup failure, cleanup-only failure, oversized/incomplete owner metadata at the deadline, invalid grants retaining the refreshing marker, and release tombstones. Tests use fabricated stores and temporary directories.
-- Listing tools distinguish contention from recovery-required failures. Tool names, inputs, read-only permissions, and Etsy scopes are unchanged.
+## Completed implementation and verification
 
-Candidate preparation now targets [v1.0.0](releases/v1.0.0.md). The release PR records its immutable SHA, fresh-checkout results and required CI. Intermediate alpha.2 and rc.1 were never published; the final candidate remains unpublished.
+- M1: Mac setup/startup and owner-route identity checks; session status displays verified numeric
+  owner/shop IDs and UTC time from the last successful read. Status does no I/O and is not current health.
+- M2: protected OAuth/token lifecycle, fail-closed uncertain refresh, recovery guidance, and the
+  accepted eight-stage isolated Mac Keychain drill with verified cleanup.
+- M3: bounded configured-shop listing pages/detail. Existing owner-authorized Mac reads and
+  restart/status acceptance remain accepted; T-009/T-010 are Done.
+- M4: fabricated list/detail path and [worked fact-grounded review](listing-review-example.md)
+  demonstrated. Owner usefulness/final product acceptance remains with T-012.
+- M5: read-only inventory, constrained inputs/outputs, secret handling, and actionable sanitized
+  authorization/access/rate-limit/timeout/service/data diagnostics.
 
-## Actual remaining v1 work
+Runtime baseline [PR #17](https://github.com/stevenfarmer/etsySellerAssistant/pull/17),
+`6dc9c3b`, matches reviewed head `c26ba1c` exactly. It passed all five PR/main checks.
+A fresh exported checkout on macOS 27.0.1 / Node 24.11.1 / npm 11.6.2 passed locked install,
+build and `npm run validate` with **200 offline tests**. Production audit: zero findings;
+full audit: 11 moderate development entries, no high/critical findings.
+This was a fresh checkout on the existing Mac, not a new clean-machine/live OAuth test.
 
-The agreed read-only requirements are owner-authorized Mac/Codex setup, protected credentials,
-correct-shop listing retrieval, useful fact-grounded review, understandable errors, recovery review,
-and the normal release checks. Historical discovery notes and additional hardening ideas are not
-automatically independent release gates.
+## Current remaining decisions
 
-| Requirement                              | Current result                                                                                                                                    | Remaining work                                                                                                                                                                                                  |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Install/start and owner-authorized reads | Accepted Mac OAuth, identity, listing/detail and restart checks; T-009/T-010 Done.                                                                | Verify install/update instructions against the exact release candidate. Do not repeat accepted live checks without a concrete reason.                                                                           |
-| Connection confirmation                  | After a successful listing read, status displays verified owner/shop IDs and UTC timestamp from memory; pending/failed reads or restart clear it. | Implemented with no new Etsy calls or credential reads; exact-candidate tests cover lifecycle, privacy, release failure and out-of-order completion.                                                            |
-| Fact-grounded review (M4)                | [Fabricated list/detail demonstration and worked review](listing-review-example.md) completed through production read modules and MCP handlers.   | Owner review of the usefulness and clarity of suggested title/description/tags; no new server-side AI feature required.                                                                                         |
-| Actionable diagnostics (M5)              | Typed authorization, permission, rate-limit, timeout, service, missing-resource and response errors now produce distinct sanitized tool messages. | Exact-candidate tests/CI and review; no automatic retries or setup mutation.                                                                                                                                    |
-| Recovery review                          | Eight-stage offline and authorized test-only Keychain drill passed with verified cleanup; owner accepted its scoped results.                      | Keep live revocation/reauthorization and interactive terminal recovery explicitly untested. Assess actual risk at final release review; do not treat every untested scenario as an invented mandatory exercise. |
-| Release readiness                        | Automated validation and protected-branch checks operate; published alpha.1 remains unchanged.                                                    | Final candidate/version, security/dependency dispositions, installation/update evidence, reconciled notes and explicit publication authorization.                                                               |
+T-007 owner registration verification is Done from accepted owner-path evidence. T-008 is
+In Review for final disclosed-limits acceptance, with implementation and isolated recovery
+already complete. T-012 is In Review for usefulness, final product/limits acceptance and the
+separate exact-commit publication decision.
 
-## Corrections to historical gates
+The documentation reconciliation changes the full repository commit while leaving runtime and
+version unchanged. Its PR records the current candidate SHA, its own checks and the relationship
+to the reusable runtime evidence above. Use that reconciled target for any publication decision.
 
-The owner-registration form observed in the existing record had no Website URL field. The
-Seller App was subsequently approved, and owner authorization and listing reads passed.
-There is no demonstrated missing website/domain setup requirement for this working installation.
-The earlier request for additional app-page checks was an overstatement of an old discovery note;
-it is not a v1 blocker without a concrete applicable requirement or failure. This does not claim
-a new portal inspection occurred.
+## Disclosed limitations and backlog
 
-Delegated access is T-016/P3 backlog, outside v1 acceptance by explicit owner decision.
-The historical T-007 registration/callback questions must be reconciled against the accepted
-owner-route evidence, not kept open merely because they predate the successful flow.
+- Status is evidence from a prior read; external reset/revocation is not detected until a read/restart.
+- Live revocation/reauthorization and interactive terminal recovery were not exercised by the
+  accepted isolated drill. Extra isolated terminal coverage is T-022/Backlog.
+- Persisted expiry still uses wall time and post-transport anchoring: T-020/Backlog.
+- Moderate development dependency advisory remediation is T-021/Backlog; no fix is claimed.
+- Existing Etsy terms uncertainty retains the previously recorded owner decision.
+- Delegated access is T-016/P3 backlog, outside v1. Writes and other clients remain deferred.
 
-## Engineering risks, distinct from product gaps
+There is no demonstrated missing website/domain setup requirement for the already approved,
+successfully owner-authorized installation. The earlier request for extra checks was a historical
+discovery inference, not a current feature gate. No new portal inspection or waiver is claimed.
 
-- Lock retry timing across system-clock changes was fixed with monotonic elapsed time.
-- Persisted token freshness still uses wall time and post-transport expiry calculation.
-  The fabricated timing assessment identifies an assumption; it is not proof of a live failure.
-  Evaluate concrete fixes or dispositions without turning a timing rewrite into a new feature gate.
-- The last audit reported 11 moderate development entries tracing to minimatch and zero
-  production findings. Final release review must record the actual current results and disposition.
-- Further interactive CLI coverage is useful engineering work; it is not a new product feature
-  or a reason to destroy the healthy connection.
-
-The [delivery plan](v1-delivery-plan.md) is subject to these requirement/evidence corrections.
-No additional live requests, credential actions, release tags or publication are authorized here.
+See the [delivery status](v1-delivery-plan.md), [candidate notes](releases/v1.0.0.md), and
+[release checklist](release-checklist.md). No additional live/native/credential action is required
+or authorized by this reconciliation.

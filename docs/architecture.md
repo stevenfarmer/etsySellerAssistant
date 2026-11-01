@@ -20,6 +20,8 @@ flowchart LR
 The diagram shows the default status-only entry point. The MCP SDK owns protocol framing;
 application/domain logic stays separate from MCP schemas and can be tested without a desktop client.
 
+The read-server status displays only allowlisted identity and time from a complete successful listing read in this process. It performs no settings/credential/network I/O; pending/failed reads or restart clear confirmation. See [current requirements/use cases/acceptance](requirements-and-acceptance.md) for current evidence and task states.
+
 ## Etsy boundary
 
 The alpha uses Etsy's official Open API and `listings_r` authorization, restricted to the configured,

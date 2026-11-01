@@ -1,83 +1,32 @@
-# Delivery plan to v1
+# Current delivery status to v1
 
-Prepared 1 November 2026 from live main `276af58`, the steering document and tracker.
-This is the working delivery plan, not authorization for release publication or live access.
-It supersedes the earlier phase proposal for sequencing future v1 work; historical evidence remains intact.
+Updated 1 November 2026. The plan has reached final candidate review; it is no longer a list
+of unimplemented product features. Use the [current requirements/use cases/acceptance matrix](requirements-and-acceptance.md)
+for feature details and the [tracking process](project-tracking.md) for every change.
 
-The [current readiness record](v1-readiness.md) distinguishes concrete product gaps from historical discovery notes and supporting hardening. Its corrections supersede any suggestion below that a website check, every untested recovery scenario, or a timing rewrite automatically blocks v1. Immediate product work is actionable diagnostics, a useful fact-grounded review demonstration, connection-status presentation reconciliation, and final release preparation.
+| Stage                                            | Current state                                             | Evidence / remaining action                                                                                                                                                                      |
+| ------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Owner-only v1 boundary                           | Decided                                                   | macOS/Codex Desktop, local STDIO, one owner-authorized shop, read-only. Delegated access is T-016/P3 backlog with no target date.                                                                |
+| Listing, authorization and safety implementation | Complete                                                  | Accepted historical Mac owner OAuth/list/detail/restart checks; fixed scopes/endpoints and read-only inventory. T-007/T-009/T-010 Done.                                                          |
+| Recovery and focused diagnostics/status fixes    | Implemented and verified                                  | Isolated Mac recovery accepted; monotonic retry wait, actionable diagnostics and session identity implemented. T-018/T-019 Done; T-008 final limits review pending.                              |
+| Useful review demonstration                      | Demonstrated                                              | Fabricated facts and worked suggestions are recorded; usefulness acceptance is part of T-012 final review.                                                                                       |
+| Candidate install/build/test and reconciliation  | Runtime rehearsal complete; documentation reconciled here | PR #17 runtime baseline passed a fresh-checkout install/build and 200 offline tests, plus five PR/main checks. This docs-only change has its own required checks and updated publication target. |
+| Final acceptance and publication                 | In Review — T-012                                         | Owner accepts usefulness and disclosed limits, then separately authorizes the named version/commit. No v1 tag or release exists.                                                                 |
 
-Current candidate preparation is unpublished `1.0.0`; alpha.2 and the rehearsed rc.1 remain unpublished intermediate milestones. No intermediate prerelease publication is required. See the [candidate notes](releases/v1.0.0.md) and release PR for exact source/evidence. This preparation creates no release or tag.
+Development version is `1.0.0`, unpublished. Alpha.2 and rc.1 were intermediate source milestones,
+never published; publishing them is not required. Published `v0.1.0-alpha.1` remains unchanged.
 
-## What v1 delivers
+## Next action
 
-A dependable local, owner-authorized, read-only listing assistant on macOS with Codex Desktop.
-The operator can install, connect, inspect listing facts, obtain grounded copy suggestions through
-Codex, understand failures, and follow documented recovery steps. Credentials remain in Keychain.
-The default status-only entry point and explicit read-only entry point remain distinct.
+Finish the final review using the [candidate notes](releases/v1.0.0.md) and current evidence.
+Do not restart implementation already verified, revive speculative website checks, require
+destructive live recovery, or add a new feature gate from a supporting engineering idea.
 
-Writes, expanded scopes, hosted services, new MCP clients and additional operating systems are
-outside this delivery. No new feature is needed merely to label the existing assistant v1.
-Version targets are `1.0.0-rc.1` for final rehearsal and `1.0.0` after acceptance, subject to
-review of the exact candidate. The unpublished alpha.2 can be an interim checkpoint; publishing
-another alpha is optional and must not delay the v1 gates without a useful reason.
+Tracked engineering follow-ups are T-020 (expiry reliability), T-021 (development advisory),
+and T-022 (additional isolated terminal recovery coverage). They remain Backlog/P2.
+T-011 writes/audit and T-015 other clients/platforms remain Deferred. Scope changes require
+the existing authorization and design/review boundaries.
 
-## Baseline we retain
-
-- T-009 listing reads and T-010 Mac/Codex restart/setup-status acceptance are Done.
-- Owner-authorized Mac OAuth, configured-shop identity, listing and detail reads passed.
-- The isolated recovery drill passed all eight stages in offline and owner-authorized test-only
-  Keychain modes, verified cleanup, and was accepted by the owner. PR #10/main `87c6023`
-  passed all five checks; local validation passed 178 offline tests.
-- PR #11 records scoped owner acceptance. It does not claim live revocation, reauthorization,
-  interactive CLI recovery, or recovery of the healthy connection was tested.
-- Published `v0.1.0-alpha.1` remains unchanged. Alpha.2 is prepared but unpublished.
-
-## Milestones and completion criteria
-
-| Milestone                                    | Work led by maintainer                                                                                                                                                                                                                                                                                                      | Evidence required to finish                                                                                                                                                                                                                                                                                                       | Owner involvement                                                                                                                                                                                                                |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1. Close the acceptance gaps on paper        | Map every remaining T-007/T-008 criterion to accepted evidence, a bounded test, or a proposed deferral. Define the owner-only v1 claim and recovery limitations precisely.                                                                                                                                                  | A criterion-by-criterion matrix in the readiness record; explicit disposition for every open criterion. No silent task closure or scope reduction.                                                                                                                                                                                | Delegated access was deferred by the owner on 1 November 2026. Decide whether the stated live recovery limitations are acceptable for v1. Receive a plain-language recommendation first.                                         |
-| 2. Finish focused offline hardening          | Review clock changes and expiry calculation after refresh transport; reproduce actual failure cases before selecting small fixes. Review the 11 moderate development audit findings and compatible remediation. Add isolated coverage for interactive CLI recovery without exposing production paths or native credentials. | Focused PRs with regression tests; timing behavior and audit findings fixed or explicitly dispositioned with rationale. CLI cancellation, partial failure, cleanup and successful recovery are exercised with mocks/temporary fixtures. Required CI stays enforced.                                                               | No routine approvals. Concrete authorization only if a proposed test needs native storage or live access beyond existing authorization.                                                                                          |
-| 3. Rehearse the release candidate on the Mac | Prepare rc.1 and concise install/update/recovery instructions. Verify a fresh checkout/build and STDIO status/inventory from the exact candidate using isolated settings and fabricated storage. Exercise a listing-review scenario with synthetic facts.                                                                   | Repeatable installation and restart; version agreement across manifest, lockfile, handshake and status; expected read-only inventory; no unintended network/credential access; suggestions separate facts from ideas and invent no materials, dimensions or claims. Record actual Mac/runtime versions and operator observations. | Review the short operator walkthrough and whether the behavior is useful and understandable. Any justified live smoke test is separately specified and authorized; existing accepted live checks are not automatically reopened. |
-| 4. Release v1 deliberately                   | Freeze the source candidate, finish technical/security review, reconcile all release materials and connected records, run the normal PR/CI process, and prepare exact release notes and rollback instructions.                                                                                                              | All applicable gates resolved; exact-candidate validation, supported Node CI, audit disposition and secret scan recorded. README, SECURITY, guides, diagrams, ADRs, steering, tracker, versions and notes agree. Post-merge source matches the reviewed candidate.                                                                | Approve publication of the named version and exact commit after seeing the completion summary and remaining risks. Publication is never inferred from enthusiasm or acceptance of a test.                                        |
-
-Proceed in this order; milestone 2 investigation and the milestone 1 evidence matrix can overlap.
-Use small PRs and reuse valid evidence. There is no calendar promise until the remaining findings
-and owner decisions are bounded. Report completion or a concrete decision needed, not routine
-platform backlog updates.
-
-## Decisions to prepare, not assume
-
-1. **Delegated authorization (T-016):** owner decision on 1 November 2026: no delegated access
-   is needed for v1. Keep it in the backlog at P3 (very low priority), with no target date.
-   T-007 covers owner-authorized registration and OAuth only; delegated access is no longer
-   a v1 acceptance gate. This does not establish delegated support or authorize implementation.
-2. **Recovery (T-008):** the isolated Mac results are accepted. Next cover the interactive CLI
-   with isolated fixtures and present what that proves. Do not destroy a healthy connection to
-   test revocation. Explain residual live-service uncertainty and ask the owner to decide whether
-   it is an acceptable documented limitation or needs a separately authorized live exercise.
-3. **Clock and dependency risk:** maintainer first investigates and recommends concrete fixes or
-   dispositions. Do not ask the owner to judge code or to accept an unexplained technical risk.
-   The rejected TypeScript 7 upgrade must not be forced through incompatible lint tooling.
-4. **Interim alpha.2:** finish its reconciliation if publishing it provides a useful checkpoint.
-   Otherwise proceed toward rc.1 without creating or moving an alpha tag. The owner decides
-   publication only when the chosen artifact is concrete.
-
-Delegated-access deferral above is approved. The remaining proposed dispositions are not waivers.
-T-007/T-008 remain In Progress until their actual criteria are fulfilled or explicitly revised.
-T-012 tracks delivery through the release gate; T-009/T-010 stay Done.
-
-## Immediate next work
-
-Produce the T-007/T-008 acceptance matrix and review the timing/expiry paths against fabricated
-clock/transport cases. Bring back a concise recommendation for the remaining recovery decision above
-while continuing independent offline engineering. Prepare the isolated interactive CLI coverage
-once its fixture and storage boundary are reviewed. No new live requests, credential reads,
-resets, reauthorization, native test runs, release tags or publication are authorized by this plan.
-
-## Final handoff to the owner
-
-The final release decision should fit on one page: what v1 does, exact version/commit, what passed,
-what remains untested, risks and their dispositions, installation/update instructions, and how to
-return to the prior release without discarding connection state. The owner evaluates product
-behavior and stated limits; the maintainer owns technical review and truthful evidence.
+The owner is being asked to judge usefulness and explained limits, not certify source code.
+The maintainer owns technical review, truthful evidence and exact-candidate consistency.
+Publication remains a separate explicit decision after this documentation reconciliation.
