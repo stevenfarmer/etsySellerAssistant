@@ -61,3 +61,14 @@ read-only scope and published tags remain in force.
 - Affected guides and release material updated; historical material labelled.
 - Actual verification evidence linked; pending acceptance and follow-ups explicit.
 - No new scope/permission/live action or publication inferred from tracking work.
+
+## Token-aware delivery checkpoints
+
+Follow the [gated plan](v1-phase-gates.md): normally one numbered chunk/PR per continuation,
+then stop. Update [the checkpoint](work-checkpoint.md), affected matrix/acceptance/status docs
+and connected tasks/decisions together. Preserve exact PR/commit/CI evidence in task records;
+keep the checkpoint concise with completed/current/next work and the precise restart step.
+If interrupted, document uncommitted/branch work and failures without marking completion.
+Recheck live sources when resuming. Split an oversized chunk into named subchunks before
+expanding scope. Usage budgets/reset times are not guaranteed or a reason to bypass checks.
+Private playbook contents never belong in checkpoint, tracking or connected project documents.

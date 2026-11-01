@@ -1,30 +1,29 @@
-# Current delivery plan to v1
+# Current delivery status to v1
 
-Updated 1 November 2026. The owner confirmed editing and intelligent sales-oriented recommendations
-are expected in v1. The prior read-only publication recommendation is superseded by
-[ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). Use the
-[current matrix](requirements-and-acceptance.md) for acceptance and the
-[tracking process](project-tracking.md) for every change.
+Updated 1 November 2026. The [phase-gated plan](v1-phase-gates.md) is the single sequence of
+small deliverables and exit gates. The [work checkpoint](work-checkpoint.md) records where to
+resume. Use the [current matrix](requirements-and-acceptance.md) for requirements/acceptance
+and the connected tracker for execution state.
 
-| Stage                                        | State            | Next deliverable                                                                                                                                                                |
-| -------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Mac/Codex owner read foundation              | Delivered        | Retain accepted OAuth/list/detail/restart and isolated recovery evidence. T-007/T-009/T-010/T-018/T-019 Done; T-008 final disclosed-limits review remains.                      |
-| Intelligent recommendation workflow — T-023  | Next / P1        | Repeatable client workflow using facts, owner brief and dated Etsy guidance; prioritized exact drafts with reasons/uncertainty; fabricated evaluation and validation.           |
-| Guarded-write design/security review — T-011 | In Progress / P1 | Review API/scope and permitted use, tool contracts, approval binding, stale/concurrent edits, audit durability and uncertain outcomes before write-access implementation.       |
-| Guarded-edit implementation — T-024          | Next / P1        | After T-011 review: title/description/tags prepare/approve/apply/verify, audit-before-write, recovery guidance and offline failure-path tests.                                  |
-| Measurement and usefulness — T-025           | Next / P1        | Optional owner-supplied aggregate Stats baseline/comparison, fabricated examples and owner review of useful recommendations. No sales-uplift guarantee or mandatory sales wait. |
-| Exact candidate and publication — T-012      | In Progress / P1 | After expanded M4/M6/M7 delivery/acceptance: reconcile exact source/version/docs, validate, review limits, obtain separate publication authorization.                           |
+| Phase                             | State                            | Tasks / result                                                                                               |
+| --------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Read/setup/recovery foundation    | Delivered within recorded limits | Existing accepted evidence retained; final T-008 limitations review remains.                                 |
+| 1. Private playbooks              | Next                             | T-026 storage/template, then T-027 client-neutral MCP delivery.                                              |
+| 2. Useful recommendations         | Next                             | T-023 workflow/validators, then fabricated evaluation and private owner playbook.                            |
+| 3. Editing design/security        | In Progress                      | T-011 detailed API/scopes/tool/approval/audit/recovery review before phase 4.                                |
+| 4. Guarded editing                | Next                             | T-024 umbrella; T-028 proposal/approval, T-029 audit, T-030 apply/reconciliation.                            |
+| 5. Measurement and Mac acceptance | Next                             | T-025 aggregate measurement; T-031 concrete separately authorized Mac/usefulness/live-edit acceptance.       |
+| 6. Release-ready and publication  | In Progress (planning only)      | T-012 exact candidate, checks, risk disposition/docs reconciliation, then separately authorized publication. |
 
-## Immediate work
+**Next chunk: 1A / T-026.** This planning change implements no private file loader, guidance tool
+or editing capability. Default to one numbered chunk per continuation; finish its checks,
+review/merge, connected tracking and checkpoint, then stop. Failed checks leave it incomplete.
+No token-count promise or routine approval phrase is required. Live/credential and publication
+steps retain their concrete authorization gates.
 
-Start the intelligent review workflow and detailed editing design. The
-[review requirements](intelligent-listing-review.md) define inputs, outputs and acceptance.
-Develop using fabricated data and temporary directories; keep the healthy connection intact.
-The product owner judges usefulness and business fit; the maintainer owns technical review.
-Live tests, credential/scope changes and publication need concrete authorization when ready.
-
-Development version still reads `1.0.0`; that unpublished literal is not a completed v1 release.
-No stable publication target is selected. Published `v0.1.0-alpha.1` remains unchanged.
-T-020 expiry reliability, T-021 development advisory and T-022 extra terminal recovery coverage
-remain Backlog/P2 with disclosed limits. T-016 delegated access stays Backlog/P3 outside v1.
-No website/setup detour or destructive recovery exercise is introduced by this scope change.
+Development version `1.0.0` is unpublished and incomplete for v1. No stable publication target
+is selected; published `v0.1.0-alpha.1` is unchanged. The reusable MCP design remains client-neutral;
+v1 runtime acceptance remains macOS/Codex Desktop, with other clients afterward. T-020/T-021/T-022
+remain Backlog/P2; assess their relevance to the final write-capable product at release review.
+Delegated access remains low-priority backlog. No website/setup detour or destructive recovery
+exercise is introduced by this plan.

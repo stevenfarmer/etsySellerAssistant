@@ -27,7 +27,7 @@ The Etsy documentation MCP and this project’s shop-connected local MCP are sep
 
 The development version still reads `1.0.0`, but the current read-only build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). No write capability or broader permissions have been implemented or enabled. Published alpha.1 installation remains below.
 
-For the staged path from this candidate to stable v1, see the [v1 delivery plan](docs/v1-delivery-plan.md).
+For the small deliverables and gates to stable v1, see the [phase-gated plan](docs/v1-phase-gates.md) and [current checkpoint](docs/work-checkpoint.md). Work proceeds one chunk per continuation by default. The plan also separates a public generic guidance template from a private customizable playbook outside the repository; that storage/interface is planned, not implemented. See [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md).
 
 ## Version roadmap
 
