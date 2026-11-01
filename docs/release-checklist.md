@@ -18,6 +18,8 @@ Complete this checklist for every release, including prereleases. A release is b
 
 ## v0.1.0-alpha.2 candidate
 
+Historical intermediate milestone, superseded by the v1 candidate below; alpha.2 was never published.
+
 - Version: `0.1.0-alpha.2`; unpublished, macOS/Codex Desktop read-only prerelease.
 - Exact source SHA: record the immutable head of the release PR after its final change. Any later change invalidates candidate check evidence.
 - Reconciled: README, SECURITY.md, development/recovery guide, readiness, Mac review, historical next-phase plan, and draft release notes.
@@ -30,3 +32,16 @@ Complete this checklist for every release, including prereleases. A release is b
 - Open limitations: live revocation/reauthorization and interactive CLI recovery, wall-clock/transport expiry assumptions, and accepted unresolved Etsy terms interpretation risk. This candidate does not claim stable v1 acceptance.
 - Delegated access: owner deferred it to T-016/P3 on 1 November 2026; it is untested and outside v1 acceptance, with no implementation authorization.
 - Publication: blocked pending completed candidate checks, owner disposition of applicable open gates, and explicit authorization for the exact candidate. No tag has been created or moved.
+
+## v1.0.0 candidate
+
+- Version: `1.0.0`, unpublished macOS/Codex Desktop read-only candidate.
+- Exact source commit and final required CI: recorded in the v1 preparation PR after its last change. Published tags remain untouched.
+- Version agreement is checked across manifest, root lockfile entries, STDIO handshake and status.
+- Reconciliation reviewed README, SECURITY, setup/recovery, status semantics, architecture diagrams, ADR 0004, agent rules, readiness, synthetic review, draft release notes, steering and tracker. Runtime remains local STDIO with the status-only default and explicit read server.
+- Candidate local validation and fresh exported-checkout install/build/test results: record actual outcomes in the preparation PR. A clean checkout on the existing Mac is not a clean-machine/live OAuth acceptance claim.
+- Actual dependency audit, including production-only results and moderate development findings: record in the preparation PR. No forced dependency upgrade or claim of zero development risk.
+- Accepted historical evidence: Mac owner OAuth/listing/detail/restart and isolated recovery with Keychain cleanup. The candidate does not repeat live reads or native credential exercises.
+- Open release decisions: owner usefulness acceptance of the synthetic review; final acceptance of disclosed limitations/risks; explicit publication authorization for the exact version/commit. Additional engineering ideas and the historical website question are not independent feature gates.
+- Limitations remain explicit: status is prior-read evidence; live revocation/reauthorization and interactive terminal recovery were not exercised by the isolated drill; expiry uses wall time/post-transport anchoring; moderate development dependency risk and previously accepted Etsy terms uncertainty remain.
+- Publication: no tag or release created. Exact final-version checks and the owner publication decision remain required. Intermediate alpha.2 and rc.1 were never published; no intermediate publication gate is added.

@@ -10,7 +10,7 @@ export function createServer(
 ): McpServer {
   const server = new McpServer({
     name: 'etsySellerAssistant',
-    version: '0.1.0-alpha.2',
+    version: '1.0.0',
   });
 
   server.registerTool(

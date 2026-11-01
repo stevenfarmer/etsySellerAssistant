@@ -6,6 +6,8 @@ It supersedes the earlier phase proposal for sequencing future v1 work; historic
 
 The [current readiness record](v1-readiness.md) distinguishes concrete product gaps from historical discovery notes and supporting hardening. Its corrections supersede any suggestion below that a website check, every untested recovery scenario, or a timing rewrite automatically blocks v1. Immediate product work is actionable diagnostics, a useful fact-grounded review demonstration, connection-status presentation reconciliation, and final release preparation.
 
+Current candidate preparation is unpublished `1.0.0`; alpha.2 and the rehearsed rc.1 remain unpublished intermediate milestones. No intermediate prerelease publication is required. See the [candidate notes](releases/v1.0.0.md) and release PR for exact source/evidence. This preparation creates no release or tag.
+
 ## What v1 delivers
 
 A dependable local, owner-authorized, read-only listing assistant on macOS with Codex Desktop.
