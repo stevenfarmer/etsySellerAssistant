@@ -2,7 +2,7 @@ import type { SessionConnectionStatus } from './etsy/read-service.js';
 
 export interface SetupStatus {
   readonly application: 'etsySellerAssistant';
-  readonly version: '0.1.0-alpha.2';
+  readonly version: '1.0.0-rc.1';
   readonly etsyAccess: 'not_configured';
   readonly readOnly: true;
 }
@@ -10,7 +10,7 @@ export interface SetupStatus {
 export function getSetupStatus(): SetupStatus {
   return {
     application: 'etsySellerAssistant',
-    version: '0.1.0-alpha.2',
+    version: '1.0.0-rc.1',
     etsyAccess: 'not_configured',
     readOnly: true,
   };

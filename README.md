@@ -25,7 +25,7 @@ The Etsy documentation MCP and this project’s shop-connected local MCP are sep
 
 ## Next release candidate
 
-The development version is `0.1.0-alpha.2`; it has not been published. It includes the refresh recovery fixes and current macOS/Codex guidance. See the [draft release notes](docs/releases/v0.1.0-alpha.2.md) and [candidate checklist](docs/release-checklist.md#v010-alpha2-candidate). The installation instructions above and below describe the published alpha.1; candidate verification uses the exact commit recorded in the release PR.
+The development version is `1.0.0-rc.1`; it has not been published. It contains the read-only v1 features, recovery fixes, actionable diagnostics and session connection confirmation. See the [candidate release notes](docs/releases/v1.0.0-rc.1.md) and [candidate checklist](docs/release-checklist.md#v100-rc1-candidate). Alpha.2 was an unpublished intermediate milestone. Installation instructions for the published alpha.1 remain below; candidate installation uses the exact commit recorded in the release PR.
 
 For the staged path from this candidate to stable v1, see the [v1 delivery plan](docs/v1-delivery-plan.md).
 

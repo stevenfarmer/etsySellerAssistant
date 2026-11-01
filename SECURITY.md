@@ -17,7 +17,7 @@ Do not publish credentials, access tokens, private shop data, or exploitable vul
 
 The product owner has accepted the currently unresolved Etsy terms interpretation risk for this alpha. That acceptance is not a legal determination or approval of additional uses. Review the terms and permitted use again when capabilities or distribution change.
 
-The unpublished `0.1.0-alpha.2` candidate preserves primary operation errors across lock cleanup, reports cleanup-only failures, and requires recovery for malformed owner metadata. It does not add scopes or tools. Clock/expiry assumptions and deliberate recovery limits are documented in the [development guide](docs/development.md#refresh-failure-and-cleanup-diagnostics).
+The unpublished `1.0.0-rc.1` candidate preserves primary operation errors across lock cleanup, reports cleanup-only failures, and requires recovery for malformed owner metadata. It does not add scopes or tools. Clock/expiry assumptions and deliberate recovery limits are documented in the [development guide](docs/development.md#refresh-failure-and-cleanup-diagnostics).
 
 The development alpha status can display owner/shop IDs and a verification timestamp obtained
 during a successful listing read in the current process. These are allowlisted identity fields

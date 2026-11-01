@@ -1,6 +1,6 @@
 # macOS / Codex Desktop v1 readiness
 
-Reviewed on 1 November 2026. The development candidate is `0.1.0-alpha.2`, not a published release or stable v1. Published `v0.1.0-alpha.1` remains unchanged. Platform sequencing follows [ADR 0004](decisions/0004-v1-platform-scope.md).
+Reviewed on 1 November 2026. The development candidate is `1.0.0-rc.1`, not a published release or stable v1. Published `v0.1.0-alpha.1` remains unchanged. Platform sequencing follows [ADR 0004](decisions/0004-v1-platform-scope.md).
 
 ## Accepted evidence
 
@@ -10,6 +10,8 @@ Reviewed on 1 November 2026. The development candidate is `0.1.0-alpha.2`, not a
 - PR #8 merged as `4f0761e`. Its five PR and main checks passed. Local validation passed 174 offline tests against the merged dependency baseline.
 - Recovery coverage includes cross-process refresh concurrency, uncertain refresh, incomplete token pairs, replacement-token persistence failures, primary plus cleanup failure, cleanup-only failure, oversized/incomplete owner metadata at the deadline, invalid grants retaining the refreshing marker, and release tombstones. Tests use fabricated stores and temporary directories.
 - Listing tools distinguish contention from recovery-required failures. Tool names, inputs, read-only permissions, and Etsy scopes are unchanged.
+
+Candidate preparation now targets [rc.1](releases/v1.0.0-rc.1.md). The release PR records its immutable SHA, fresh-checkout results and required CI. Intermediate alpha.2 was never published.
 
 ## Actual remaining v1 work
 
