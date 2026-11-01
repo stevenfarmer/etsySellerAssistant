@@ -58,3 +58,14 @@ preflight only, with explicit `grounding: not_evaluated`, `approvalGranted: fals
 Unsupported claims or hostile instructions may pass text constraints; the client must treat
 source listing text as data and review facts separately. No write or broader permission is added.
 See [the review contract](docs/draft-review-workflow.md).
+
+## Private evaluation and playbook deployment
+
+Chunk 2B creates the initial private guidance and private fabricated review artifacts outside
+Git, with no-clobber creation and 0700 directory/0600 file permissions. No existing configuration,
+credential or connection setting was changed; generic mode remains default. Private-mode
+activation remains explicit. CI uses public fabricated inputs/synthetic protocol examples only,
+not the actual private file or its generated reviews. Public evidence is limited to generic
+criteria and sanitized results. The offline evaluation helper is not a registered tool or AI
+judge: exact declared-reference checks cannot catch all undeclared claims, so semantic assessment
+is explicitly manual. Self-entered scores do not establish independent quality, truth or sales.

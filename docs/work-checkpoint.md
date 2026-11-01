@@ -6,28 +6,30 @@ for verifying live main/PRs/CI and the connected steering/tracker before work re
 
 ## Current checkpoint
 
-- Prior completed gate: phase 1/T-026/T-027, acceptance PR #23,
-  `a196366993e876626ebd30e9763599074f86e107`. Live main/PRs/CI and connected records verified
-  at 2A start; local checkout clean, no open PRs. Retain scoped real Codex generic acceptance.
-- Current deliverable: **2A / T-023 workflow and validators**. Generic review sequence, blank
-  brief, local three-field draft preflight and complete fabricated manual review. Alpha exposes
-  `validate_listing_draft`; default scaffold unchanged. No Etsy/credential/filesystem I/O or
-  persistence in the checker; output is counts/issues, not draft text, truth or edit approval.
-- Actual validation: `npm run validate` passed **234 offline tests**/static checks, including
-  12 new draft tests and actual alpha STDIO integration. Current API character rules and official
-  title/tag limits checked through documentation only; application description bound is separately
-  labeled. Broader AI evaluation and private playbook not implemented. No actual private strategy
-  was read or written. Implementation PR/T-023 hold final head/merge/CI and connected readbacks.
-- **Next chunk after 2A checks/merge: 2B / T-023** — broader fabricated evaluation cases/rubric,
-  source-date maintenance and a private owner playbook outside Git. Read review requirements and
-  the [2A contract](draft-review-workflow.md). Never move private instructions/facts/drafts into
-  public template, fixtures, PRs or connected documents. Keep owner usefulness separate from tests.
-- T-023 remains In Progress until its 2B criteria are met; T-012 stays In Progress. This source
-  checkpoint cannot embed its own merge SHA; verify final PR/task evidence when resuming.
-- Feature branch: `codex/review-workflow-validators`; final clean-main status in the PR/T-023.
-- Blocking owner action: none. Stop after 2A. The new tool/workflow loads on future process
-  restart; no new 2A native-client gate is implied. Live/private credential and publication
-  authorizations remain separate. Do not begin 2B automatically.
+- Prior completed chunk: 2A/T-023, PR #24, `2ea3a6f13e9e361906d9472033a8232f71108027`.
+  Live main/PRs/CI and connected records verified at 2B start; checkout clean, no open PRs.
+- Current deliverable: **2B / T-023 evaluation and private playbook**. Eight public fabricated
+  scenarios, dated source register, offline declared-evidence helper and manual rubric. Eight
+  client reviews passed declared checks and same-assistant self-review threshold (not independent
+  or automated model benchmarking). See [evaluation evidence](review-evaluation.md).
+- Initial private playbook and evaluation outputs created outside Git using no-clobber creation,
+  0700 directory/0600 files; explicit safe-reader load passed. No contents or machine-specific
+  path in public records. CI never reads those actual artifacts. Generic mode remains default;
+  no connection settings/credentials/scopes/live Etsy actions or publication changed.
+- Actual validation: `npm run validate` passed **242 offline tests**/static checks, including
+  8 evaluation regression tests and a deliberate semantic-limit example. Actual private artifact
+  verification and public-diff exclusion evidence are separate from CI. Final PR/T-023 hold
+  head/merge/CI/readback evidence; compare live state before resuming.
+- T-023 Done denotes its 2A/2B development criteria. Owner usefulness/private-mode client/live
+  editing acceptance remains T-031 and final T-012. Owner/product facts are not invented.
+- **PAUSED at owner's explicit request after 2B. Do not continue automatically.**
+- **Next on explicit resumption: 3A / T-011** guarded-write design/security/API/terms review.
+  First read the existing write requirements/ADRs and recheck live project state. Specify actual
+  tool/OAuth/approval/staleness/concurrency/audit/uncertain-outcome contracts and resolve blockers
+  before ANY phase-4 write-access implementation. No live/scope/credential action is authorized
+  by this checkpoint; prepare concrete authorized steps only when ready.
+- Feature branch: `codex/review-evaluation-playbook`; final clean-main status in PR/T-023.
+  This file cannot embed its own merge SHA. Stop after final checks/merge/tracking and wait.
 
 ## Required replacement at each checkpoint
 

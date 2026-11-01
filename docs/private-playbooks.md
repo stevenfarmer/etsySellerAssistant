@@ -2,8 +2,9 @@
 
 Chunk 1A implements a generic [starter template](../templates/playbook.example.md), path resolver
 and safe private reader. Chunk 1B adds `get_review_guidance` to the opt-in alpha, with explicit
-source labels. The default server remains status-only. No actual owner strategy file is created
-or read during development; private-mode tests use fabricated temporary files. Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
+source labels. The default server remains status-only. Chunk 2B creates an initial private owner playbook outside Git using no-clobber creation,
+private permissions and explicit local verification. CI/private-mode regression tests still
+use fabricated temporary files and never read that actual playbook. Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
 separately from automated STDIO verification (T-027 Done).
 
 ## How guidance is selected
@@ -120,5 +121,10 @@ for generic, missing/private/error results, argument rejection and unchanged sta
 non-invocation during discovery/status and schema/error privacy checks. Actual Codex also discovered and successfully invoked the tool with `{}` after restart on
 1 November 2026: generic/generic_mode, schema version 1, nonempty guidance and no error.
 No Etsy/credential/private-file access. This closes the scoped T-027/phase-1 gate, without
-claiming real private-mode or advanced-review acceptance. The owner
-private playbook remains later chunk 2B, and full usefulness/edit acceptance remains T-031.
+claiming real private-mode or advanced-review acceptance. The initial private playbook was created in chunk 2B with a 0700 guidance directory and
+0600 file, verified through the safe reader, without changing client settings or accessing Etsy
+or credentials. Its contents and private evaluation outputs stay out of Git/project records.
+Generic mode remains the default: file presence alone never enables private reads. This is a
+strategy baseline with no invented owner/product facts; actual buyer/product context can be
+added privately when supplied. See [the evaluation evidence](review-evaluation.md). Full owner
+usefulness/private-mode client/edit acceptance remains T-031.

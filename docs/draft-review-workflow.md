@@ -5,7 +5,7 @@ Chunk 2A/T-023 supplies a generic repeatable workflow, a blank
 The generic [playbook](../templates/playbook.example.md), delivered by `get_review_guidance`,
 contains the review sequence. Private mode continues to return the operator's own guidance;
 it does not silently merge public instructions into that file. Both modes retain fixed safety
-notice/connector safeguards. Private selling strategy and broader AI evaluation remain chunk 2B.
+notice/connector safeguards. Chunk 2B separately delivers a private local playbook and the [evaluation suite/rubric](review-evaluation.md).
 
 ## Operator workflow
 
@@ -80,7 +80,8 @@ this is a bounded subset of copy checks, not a promise that a future write will 
 The [fabricated worked review](review-workflow-example.md) demonstrates a complete manual client
 review with source labels and an executed preflight; automated tests verify that exact draft,
 rules/bounds, Unicode, warnings, redaction, immutability and real alpha STDIO contract/status.
-This is not an automated AI quality evaluation or evidence of actual sales uplift. Chunk 2B adds
-the broader quality rubric/cases and private playbook; owner usefulness acceptance remains later.
+This is not an automated AI quality evaluation or evidence of actual sales uplift. Chunk 2B supplies
+the broader quality rubric/cases, self-assessed development run and private playbook; owner
+usefulness acceptance remains later.
 The new tool is available after a development alpha process restart; no new manual client gate
 is invented for 2A. Earlier 1B client acceptance remains scoped to its actual version/inventory.

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "etsy_titles",
+    "url": "https://www.etsy.com/seller-handbook/article/1399426136697",
+    "checkedOn": "2026-11-01",
+    "use": "Buyer-readable titles; advice is not a hard word-count limit",
+    "recheck": "Before release or when guidance changes"
+  },
+  {
+    "id": "etsy_search",
+    "url": "https://www.etsy.com/seller-handbook/article/how-etsy-search-works/375461474487",
+    "checkedOn": "2026-11-01",
+    "use": "Search matching/ranking context; no guaranteed visibility",
+    "recheck": "Before release or when guidance changes"
+  },
+  {
+    "id": "etsy_stats",
+    "url": "https://help.etsy.com/hc/en-us/articles/115015774268-How-to-Use-Etsy-Stats-for-Your-Shop",
+    "checkedOn": "2026-11-01",
+    "use": "Correct aggregate metric scope and time windows",
+    "recheck": "Before release or when guidance changes"
+  }
+]
