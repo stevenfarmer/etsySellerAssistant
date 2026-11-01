@@ -32,3 +32,13 @@ credentials or settings, and returns no token, key, shop name, listing content o
 Confirmation is cleared by the next pending/failed read or restart; it does not attest to
 current authorization or detect external reset/revocation. Keep real identity output out of
 repository artifacts and public reports.
+
+## Planned private guidance
+
+[ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md) separates the
+public generic template from a private customized playbook outside the repository. Storage and
+MCP delivery are planned, not enabled by the planning change. The bounded loader/interface must
+exclude arbitrary file access, implicit startup/status reads and private content in logs/errors,
+fixtures, PRs or connected project documents. Custom guidance cannot confer write approval or
+bypass enforced restrictions. When used, the chosen AI client/provider receives the guidance;
+local/Git exclusion is not copy protection or a guarantee about that provider's data handling.

@@ -22,7 +22,12 @@ documented and evaluated, not depend on the owner inventing a good prompt each t
 The initial review must work without Stats: label it a content review with limited evidence,
 not a performance diagnosis. No invented search volumes, competition scores, keyword rankings,
 conversion forecasts or fabricated product claims. Keep seller facts separate from hypotheses.
-Private input retention/storage needs explicit design; it is not automatically an audit record.
+Private guidance storage/delivery is planned under [ADR 0006](decisions/0006-private-playbooks-and-delivery-checkpoints.md)
+and M8: tracked generic template plus separate private local file outside the repository; no
+custom-content overwrite, arbitrary-path tool or safety override. Guidance is sent to the chosen
+AI client/provider when used; Git exclusion is not DRM or a provider-privacy guarantee. T-026/T-027
+deliver storage and client-neutral MCP access. Private content never enters public fixtures or
+connected project records. It is not automatically an audit record.
 
 ## Review output and acceptance (M4, T-023)
 

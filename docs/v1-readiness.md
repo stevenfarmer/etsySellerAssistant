@@ -35,6 +35,11 @@ The owner confirmed editing and intelligent sales-oriented recommendations are e
 [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) supersedes the read-only-only
 release recommendation. T-023 (intelligent review), T-011 (guarded-write design/security review),
 T-024 (guarded edits after review) and T-025 (measurement/usefulness) are active v1 work.
+ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
+[phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
+[the checkpoint](work-checkpoint.md) names 1A/T-026 as next. T-028/T-029/T-030 split T-024;
+T-031 tracks concrete separately authorized Mac/usefulness/edit acceptance. None is implemented
+by this planning change.
 Their [requirements](intelligent-listing-review.md) distinguish planned capabilities from the
 existing read-only implementation. No write tools/scopes have been enabled.
 

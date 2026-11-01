@@ -104,3 +104,10 @@ and optional owner-provided aggregate Stats. The local server enforces validatio
 no hosted model service or OpenAI API key is added. Repeatable review, fabricated evaluations and
 measurement requirements are defined in [intelligent listing review](intelligent-listing-review.md).
 No new data reads, tools or permissions are enabled by the planning decision.
+
+The planned guidance boundary is [ADR 0006](decisions/0006-private-playbooks-and-delivery-checkpoints.md):
+a tracked generic template and a separately configured private local file outside the repository,
+explicitly supplied through a bounded read-only MCP contract. Keep delivery client-neutral;
+verify supported-client invocation instead of assuming automatic prompt loading. No arbitrary
+path argument or startup/status private read. This storage/interface remains to implement in
+phase 1 of the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
