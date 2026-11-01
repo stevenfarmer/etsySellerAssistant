@@ -328,8 +328,67 @@ test('network and HTTP failures are sanitized and never expose response content'
     response({ error: 'fabricated private detail' }, 403),
   ]);
   await assert.rejects(httpClient.verifyConfiguredShop(), (error) => {
-    assert.equal(error.code, 'request_failed');
+    assert.equal(error.code, 'access_denied');
     assert.equal(error.message.includes('fabricated private'), false);
     return true;
   });
 });
+
+for (const [status, code] of [
+  [401, 'authorization_rejected'],
+  [403, 'access_denied'],
+  [404, 'not_found'],
+  [408, 'request_timeout'],
+  [429, 'rate_limited'],
+  [500, 'service_unavailable'],
+  [503, 'service_unavailable'],
+  [599, 'service_unavailable'],
+  [400, 'request_failed'],
+]) {
+  test(`HTTP ${status} is typed, sanitized, and not retried`, async () => {
+    let bodyReads = 0;
+    const failed = {
+      ok: false,
+      status,
+      statusText: 'fabricated-private-status',
+      json: async () => {
+        bodyReads++;
+        throw new Error('fabricated-private-body');
+      },
+    };
+    for (const location of ['identity', 'list', 'detail']) {
+      const responses =
+        location === 'identity'
+          ? [failed]
+          : location === 'list'
+            ? [response(shop()), failed]
+            : [response(shop()), response({ count: 1, results: [listing()] }), failed];
+      const { client, calls } = createClient(responses);
+      if (location === 'detail') await client.listActiveListings();
+      const operation =
+        location === 'identity'
+          ? client.verifyConfiguredShop()
+          : location === 'list'
+            ? client.listActiveListings()
+            : client.getListing(LISTING_ID);
+      await assert.rejects(operation, (error) => {
+        assert.ok(error instanceof EtsyReadError);
+        assert.equal(error.code, code);
+        assert.equal(error.message.includes('fabricated-private'), false);
+        return true;
+      });
+      assert.equal(calls.length, location === 'identity' ? 1 : location === 'list' ? 2 : 3);
+    }
+    assert.equal(bodyReads, 0);
+  });
+}
+
+for (const name of ['TimeoutError', 'AbortError']) {
+  test(`transport ${name} is sanitized without retry`, async () => {
+    const { client, calls } = createClient([
+      Object.assign(new Error('fabricated-private'), { name }),
+    ]);
+    await assert.rejects(client.verifyConfiguredShop(), { code: 'request_timeout' });
+    assert.equal(calls.length, 1);
+  });
+}

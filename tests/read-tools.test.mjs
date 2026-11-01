@@ -109,3 +109,39 @@ test('unexpected service errors return one generic response without leaking deta
     assert.equal(result.content[0].text.includes('fabricated token'), false);
   }
 });
+
+test('both listing tools provide actionable typed diagnostics and reject code spoofing', async () => {
+  const { EtsyReadError } = await import('../dist/src/etsy/read-client.js');
+  let failure;
+  const fail = async () => {
+    throw failure;
+  };
+  const tools = setup({ listActiveListings: fail, getListing: fail });
+  const expected = [
+    ['authorization_rejected', /Stop listing retries/],
+    ['access_denied', /Do not broaden scopes/],
+    ['rate_limited', /Pause listing requests/],
+    ['service_unavailable', /temporarily unavailable/],
+    ['request_timeout', /timed out or was cancelled/],
+    ['request_failed', /Check connectivity/],
+    ['not_found', /List the active listings again/],
+    ['invalid_response', /unexpected data/],
+    ['identity_mismatch', /Stop retries/],
+    ['listing_not_owned', /current session/],
+    ['invalid_configuration', /local read configuration/],
+    ['invalid_input', /request is invalid/],
+  ];
+  for (const [name, { handler }] of tools) {
+    for (const [code, pattern] of expected) {
+      failure = new EtsyReadError(code);
+      failure.message = 'fabricated-private-token-and-path';
+      const result = await handler(name === 'get_listing' ? { listingId: 93003 } : {});
+      assert.equal(result.isError, true);
+      assert.match(result.content[0].text, pattern);
+      assert.equal(JSON.stringify(result).includes('fabricated-private'), false);
+    }
+    failure = Object.assign(new Error('fabricated-private'), { code: 'rate_limited' });
+    const result = await handler(name === 'get_listing' ? { listingId: 93003 } : {});
+    assert.equal(result.content[0].text, 'Listing read failed. Check local setup or retry.');
+  }
+});

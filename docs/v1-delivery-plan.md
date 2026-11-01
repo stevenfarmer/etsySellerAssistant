@@ -4,6 +4,8 @@ Prepared 1 November 2026 from live main `276af58`, the steering document and tra
 This is the working delivery plan, not authorization for release publication or live access.
 It supersedes the earlier phase proposal for sequencing future v1 work; historical evidence remains intact.
 
+The [current readiness record](v1-readiness.md) distinguishes concrete product gaps from historical discovery notes and supporting hardening. Its corrections supersede any suggestion below that a website check, every untested recovery scenario, or a timing rewrite automatically blocks v1. Immediate product work is actionable diagnostics, a useful fact-grounded review demonstration, connection-status presentation reconciliation, and final release preparation.
+
 ## What v1 delivers
 
 A dependable local, owner-authorized, read-only listing assistant on macOS with Codex Desktop.

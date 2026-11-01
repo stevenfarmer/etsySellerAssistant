@@ -47,6 +47,12 @@ export type EtsyReadErrorCode =
   | 'invalid_configuration'
   | 'invalid_input'
   | 'request_failed'
+  | 'authorization_rejected'
+  | 'access_denied'
+  | 'rate_limited'
+  | 'service_unavailable'
+  | 'request_timeout'
+  | 'not_found'
   | 'invalid_response'
   | 'identity_mismatch'
   | 'listing_not_owned';
@@ -347,10 +353,26 @@ export class EtsyReadClient {
         signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         redirect: 'error',
       });
-    } catch {
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        (error.name === 'TimeoutError' || error.name === 'AbortError')
+      ) {
+        throw new EtsyReadError('request_timeout');
+      }
       throw new EtsyReadError('request_failed');
     }
-    if (!response.ok) throw new EtsyReadError('request_failed');
+    // Classify only status, never raw error bodies, headers or status text.
+    if (!response.ok) {
+      if (response.status === 401) throw new EtsyReadError('authorization_rejected');
+      if (response.status === 403) throw new EtsyReadError('access_denied');
+      if (response.status === 404) throw new EtsyReadError('not_found');
+      if (response.status === 408) throw new EtsyReadError('request_timeout');
+      if (response.status === 429) throw new EtsyReadError('rate_limited');
+      if (response.status >= 500 && response.status <= 599)
+        throw new EtsyReadError('service_unavailable');
+      throw new EtsyReadError('request_failed');
+    }
     try {
       return await response.json();
     } catch {
