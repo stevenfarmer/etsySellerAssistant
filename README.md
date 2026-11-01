@@ -41,6 +41,13 @@ does not verify facts, predict sales or approve edits. The [fabricated worked re
 demonstrates the workflow. Existing MCP processes pick up tool/template changes on restart;
 no extra real-client acceptance gate is added to this offline development chunk.
 
+Chunk 2B adds the [eight-case evaluation suite and manual rubric](docs/review-evaluation.md),
+with dated official sources and an offline declared-evidence checker. The development run used
+fabricated reviews generated and self-reviewed by the same client assistant; it is not an
+independent model benchmark or sales evidence. The initial private playbook and its evaluation
+outputs live outside Git. Private activation remains explicit; repository updates do not replace
+custom guidance. Owner usefulness and live-edit acceptance remain later work.
+
 ## Version roadmap
 
 - **v1:** macOS with Codex Desktop, local STDIO, owner-authorized listing reads, evidence-based recommendations, guarded approved title/description/tag edits, local audit history, Keychain storage, and repeatable setup/recovery. Reads are delivered; the expanded intelligence/editing workflow remains to be built and reviewed.

@@ -2,7 +2,8 @@
 
 Updated 1 November 2026. Approved goal: recommendations that help the right buyers find and
 understand the item, followed by safely applying the edits the owner approves. Chunk 2A implements the generic workflow/brief and deterministic copy validator; broader
-evaluation/private strategy remains chunk 2B, and no sales improvement is established. See
+evaluation/rubric and initial private playbook are delivered in chunk 2B; no sales improvement
+or final owner usefulness acceptance is established. See
 [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) and the [current matrix](requirements-and-acceptance.md).
 
 ## Inputs and reasoning
@@ -38,8 +39,13 @@ and [complete fabricated review](review-workflow-example.md). `get_review_guidan
 provides a repeatable sequence; `validate_listing_draft` checks the three proposed copy fields
 without Etsy/files/credentials or data persistence. It does not fact-check or approve copy.
 Full validation passed 234 offline tests, including 12 new draft cases and actual alpha STDIO.
-T-023 remains In Progress for chunk 2B rubric/cases/private playbook; owner usefulness remains
-later acceptance. The manually reasoned demonstration is not an automated model evaluation.
+Chunk 2B delivers [eight fabricated cases, a manual rubric and evaluation evidence](review-evaluation.md),
+plus an initial private local playbook outside Git. Eight reviews passed declared-evidence checks
+and the self-review threshold; the same assistant generated and scored them. This is not an
+independent/automated model benchmark. The public regression suite verifies evaluation rejection
+logic and its semantic limits; full validation passed 242 offline tests. T-023 Done denotes the
+stated development deliverables, not owner usefulness/sales/private-client/edit acceptance, which
+remains later work. Private guidance is not automatically activated by file creation.
 
 ## Review output and acceptance (M4, T-023)
 

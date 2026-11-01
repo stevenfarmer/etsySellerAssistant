@@ -132,4 +132,11 @@ Chunk 2A adds [generic review workflow/draft validation](draft-review-workflow.m
 from supplied facts and an owner brief, while the pure validator enforces documented copy
 constraints. The MCP adapter exposes bounded three-field input and counts/issues only, with no
 filesystem, Etsy, credential, persistence, approval or connection-status effect. A valid result
-is not semantic truth or sales evidence; broader evaluation/private strategy remains chunk 2B.
+is not semantic truth or sales evidence; chunk 2B supplies the separate evaluation evidence and private strategy baseline.
+
+The [2B evaluator](review-evaluation.md) is an offline development library, not an MCP endpoint.
+Public fabricated case inputs and synthetic protocol tests stay in Git; the actual playbook and
+client-generated review artifacts stay in separate private local storage. Automated declared-fact
+and draft checks and manual semantic assessment are separate. The recorded run is same-assistant
+self-review, not an independent benchmark. No server tool inventory or OAuth behavior changes in
+2B, and private file creation does not switch the running client out of generic mode.
