@@ -39,8 +39,8 @@ The last runtime baseline passed 200 offline tests. New chunks must record their
 ## Phases, deliverables and gates
 
 Chunk 1A storage is implemented in its focused PR; see [the storage contract](private-playbooks.md)
-and [checkpoint](work-checkpoint.md) for evidence. Chunk 1B implementation and automated STDIO checks are delivered, with actual Codex restart/discovery
-acceptance pending in T-027. Later chunks remain planned. Each includes relevant automated coverage for
+and [checkpoint](work-checkpoint.md) for evidence. Chunk 1B implementation and automated STDIO checks are delivered, and actual Codex discovery/default-generic
+invocation passed after restart on 1 November 2026 (T-027 Done). Later chunks remain planned. Each includes relevant automated coverage for
 code changes, `npm run validate`, focused review, required CI and synchronized tracking.
 
 | Phase / chunk                                       | Task                | Small deliverable                                                                                                                                                                                                                                     | Gate to the next chunk / phase                                                                                                                                                                                                                                                                                   |

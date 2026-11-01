@@ -26,7 +26,7 @@ Private guidance separation is specified under [ADR 0006](decisions/0006-private
 and M8: tracked generic template plus separate private local file outside the repository; no
 custom-content overwrite, arbitrary-path tool or safety override. Guidance is sent to the chosen
 AI client/provider when used; Git exclusion is not DRM or a provider-privacy guarantee. T-026/T-027
-map to storage (T-026 implemented in chunk 1A) and client-neutral MCP access (T-027 implemented; real Codex restart/discovery acceptance pending).
+map to storage (T-026 implemented in chunk 1A) and client-neutral MCP access (T-027 Done; real Codex discovery/default-generic invocation passed after restart).
 See [the guidance contract](private-playbooks.md): generic default, explicit private opt-in and
 invocation, no startup/status read, labeled fallback only for absence. Private content never enters public fixtures or
 connected project records. It is not automatically an audit record.

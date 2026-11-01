@@ -6,27 +6,25 @@ for verifying live main/PRs/CI and the connected steering/tracker before work re
 
 ## Current checkpoint
 
-- Prior completed chunk: 1A/T-026, PR #21, `e6ef85fc40eeaa26697c2016db6deba4c5570fe0`.
-  Live main/PRs/CI and steering/tracker verified at 1B start; local checkout clean, no open PRs.
-- Current deliverable: **1B / T-027 guidance interface**. Alpha now exposes strict no-argument
-  `get_review_guidance`, generic by default, private only through explicit client settings.
-  Source labels, bounded schema/results, sanitized errors and no invalid-private fallback.
-  Default scaffold unchanged; startup/status/discovery never invoke guidance. See [contract](private-playbooks.md).
-- Actual validation: `npm run validate` passed **222 offline tests** and static checks, including
-  9 new guidance tests, actual alpha STDIO scenarios and the optional read-only smoke inventory
-  regression. No real private guidance/credentials/Etsy requests. Implementation PR/T-027 hold
-  exact head/merge/CI and connected readback evidence; compare live records before assuming merge.
-- **Pending gate: real Codex client discovery/default-generic invocation.** The running host still
-  advertises the old three-tool inventory. After merged build, quit/reopen the app to reload its
-  MCP process, return to this chat, discover `get_review_guidance` and invoke with `{}` in default
-  generic mode. Record sanitized pass/fail in T-027 and connected/local docs. Do not read private
-  content or Etsy. Automated STDIO success does not replace this planned client acceptance.
-- **Next implementation chunk after that gate: 2A / T-023** review workflow/validators.
-  Do not start it during this continuation. The real private sales playbook remains chunk 2B.
-- Feature branch: `codex/mcp-guidance-interface`; final PR/head/merge/clean-main status in T-027.
-  This source checkpoint cannot embed its own merge SHA. T-027 stays In Review until client check.
-- Required owner action after technical work: restart the app and return here for the guidance-only
-  check. No credential change, live Etsy request, reset or release publication is authorized.
+- Completed: **1B / T-027 guidance interface**, implemented in PR #22,
+  `dad5cca9d93cb00d2d447f7522939034dd3d4088`. Live main/PRs/steering/tracker verified at
+  client-check resumption; checkout clean, no open PRs.
+- Real Codex client check passed 1 November 2026 after the app restart: the host advertised
+  `get_review_guidance`; invocation with `{}` succeeded with `source: generic`,
+  `selection: generic_mode`, `schemaVersion: 1` and nonempty guidance. No Etsy, credential or
+  private-file read. This closes the specific pending phase-1 client gate, not owner acceptance
+  of advanced recommendations or live edits. Private-mode coverage remains fabricated STDIO.
+- Prior implementation validation: `npm run validate` passed 222 offline tests/static checks;
+  all five PR/main checks passed. This documentation-only acceptance record has its own PR/CI
+  evidence in T-027. No runtime behavior changed or private contents copied into records.
+- **Next chunk: 2A / T-023 — useful review workflow and validators.** Read the review requirements;
+  use bounded facts and generic buyer-brief structure to produce grounded proposals with reasons,
+  uncertainty and keep-unchanged option. Validate relevant constraints using current API docs.
+  Use fabricated inputs only. Real private strategy/evaluation expansion stays chunk 2B.
+- T-026 and T-027 Done; T-012 In Progress. Final acceptance-record PR/head/merge/CI and local
+  clean-main status live in T-027; this source file cannot embed its own merge SHA.
+- Blocking owner action: none. Stop after recording this passed 1B gate; do not start 2A here.
+  Live/credential and publication actions retain separate concrete authorization requirements.
 
 ## Required replacement at each checkpoint
 
