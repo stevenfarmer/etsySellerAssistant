@@ -36,9 +36,10 @@ repository artifacts and public reports.
 ## Planned private guidance
 
 [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md) separates the
-public generic template from a private customized playbook outside the repository. Storage and
-MCP delivery are planned, not enabled by the planning change. The bounded loader/interface must
-exclude arbitrary file access, implicit startup/status reads and private content in logs/errors,
-fixtures, PRs or connected project documents. Custom guidance cannot confer write approval or
+public generic template from a private customized playbook outside the repository. Chunk 1A implements the explicit bounded read-only storage loader and generic template,
+with no startup/status/CLI/MCP integration or write path. [The storage contract](docs/private-playbooks.md)
+describes boundary/link/permission/UTF-8/size checks and sanitized typed errors; actual private
+files are not accessed by this change. MCP delivery remains T-027/chunk 1B. Private content stays
+out of logs/errors, fixtures, PRs or connected project documents. Custom guidance cannot confer write approval or
 bypass enforced restrictions. When used, the chosen AI client/provider receives the guidance;
 local/Git exclusion is not copy protection or a guarantee about that provider's data handling.

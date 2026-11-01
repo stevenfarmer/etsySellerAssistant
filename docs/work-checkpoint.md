@@ -6,20 +6,25 @@ for verifying live main/PRs/CI and the connected steering/tracker before work re
 
 ## Current checkpoint
 
-- Last completed feature/scope record: PR #19, `db9858098a27afb684dc725add9521a15a94b43c`.
-  Read foundation delivered; expanded intelligence/editing not implemented. All five main checks
-  passed at plan start. Accepted historical Mac/recovery evidence remains scoped as documented.
-- Current deliverable: gated plan and private-playbook requirements, tracked under T-012 and
-  T-026/T-027. Its PR and connected records hold final merge/check evidence. This is planning,
-  not completion of phase 1.
-- **Next chunk: 1A / T-026 — private playbook storage.** Read ADR 0006 and the M8/UC-11 criteria.
-  Define exact local configuration/file contract; add only the generic public template and
-  fabricated loader/tests. Do not write the real private sales playbook in this first chunk.
-- Open implementation branch/PR at planning start: none. No implementation begun in this change.
-- Actual local planning validation and final CI results: recorded in the planning PR/T-012.
-  Prior baseline: 200 offline tests; do not claim those verify future features.
-- Blocking owner action now: none. Later concrete live/credential and publication authorizations
-  remain separate. No current token reset, live read or connection reset is needed.
+- Prior completed plan: PR #20, `e8d5531aca9f5e009b4c1617ff9766368b0a7c73`;
+  live main/PRs/CI, steering and tracker verified at chunk 1A start. No open PRs then.
+- Current deliverable: **1A / T-026 private playbook storage**. Read-only bounded loader,
+  resolver, generic template and Git-ignore defense implemented. No runtime/CLI/MCP integration,
+  actual private strategy file creation/read or Etsy/credential action. See [storage contract](private-playbooks.md).
+- Actual validation: `npm run validate` passed **212 offline tests** and static checks,
+  including 12 new private-playbook cases. The implementation PR and T-026 record exact
+  reviewed/merged commits, final CI, connected readbacks and checkpoint completion. Check those
+  live records before treating the merge gate as passed.
+- **Next chunk after this PR is merged and checkpointed: 1B / T-027 — standard MCP guidance
+  delivery.** Read the storage contract; design one explicit read-only client-neutral contract,
+  then integrate the bounded reader, explicit source labeling and safe missing/error handling.
+  No arbitrary path input, startup/status content reads or safety override. Verify supported
+  Codex discovery/invocation with fabricated content. Do not implement editing or the private
+  owner strategy in 1B; those remain later chunks.
+- Current feature branch: `codex/private-playbook-storage`; final PR/merge/head and clean-main
+  status are recorded in T-026 and that PR. This source checkpoint cannot embed its own merge SHA.
+- Blocking owner action: none. Stop after 1A checks/merge/tracking; do not start 1B automatically.
+  Future live/credential and publication steps retain concrete authorization gates.
 
 ## Required replacement at each checkpoint
 

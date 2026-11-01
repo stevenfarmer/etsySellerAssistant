@@ -109,5 +109,6 @@ The planned guidance boundary is [ADR 0006](decisions/0006-private-playbooks-and
 a tracked generic template and a separately configured private local file outside the repository,
 explicitly supplied through a bounded read-only MCP contract. Keep delivery client-neutral;
 verify supported-client invocation instead of assuming automatic prompt loading. No arbitrary
-path argument or startup/status private read. This storage/interface remains to implement in
-phase 1 of the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
+path argument or startup/status private read. The [storage foundation](private-playbooks.md) is implemented in chunk 1A as an inert reader
+and path resolver with a separate generic template; there is no runtime integration yet.
+Chunk 1B adds MCP delivery in the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.

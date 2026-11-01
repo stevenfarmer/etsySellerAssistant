@@ -8,15 +8,16 @@ and the connected tracker for execution state.
 | Phase                             | State                            | Tasks / result                                                                                               |
 | --------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Read/setup/recovery foundation    | Delivered within recorded limits | Existing accepted evidence retained; final T-008 limitations review remains.                                 |
-| 1. Private playbooks              | Next                             | T-026 storage/template, then T-027 client-neutral MCP delivery.                                              |
+| 1. Private playbooks              | 1A storage delivered; 1B Next    | T-026 storage/template Done; T-027 client-neutral MCP delivery Next.                                         |
 | 2. Useful recommendations         | Next                             | T-023 workflow/validators, then fabricated evaluation and private owner playbook.                            |
 | 3. Editing design/security        | In Progress                      | T-011 detailed API/scopes/tool/approval/audit/recovery review before phase 4.                                |
 | 4. Guarded editing                | Next                             | T-024 umbrella; T-028 proposal/approval, T-029 audit, T-030 apply/reconciliation.                            |
 | 5. Measurement and Mac acceptance | Next                             | T-025 aggregate measurement; T-031 concrete separately authorized Mac/usefulness/live-edit acceptance.       |
 | 6. Release-ready and publication  | In Progress (planning only)      | T-012 exact candidate, checks, risk disposition/docs reconciliation, then separately authorized publication. |
 
-**Next chunk: 1A / T-026.** This planning change implements no private file loader, guidance tool
-or editing capability. Default to one numbered chunk per continuation; finish its checks,
+**Next chunk after 1A merge/checkpoint: 1B / T-027.** Chunk 1A delivers the
+[storage foundation](private-playbooks.md), generic template and 12 fabricated tests (212 full
+offline tests passed). It adds no guidance tool, startup/status/CLI integration or editing capability. Default to one numbered chunk per continuation; finish its checks,
 review/merge, connected tracking and checkpoint, then stop. Failed checks leave it incomplete.
 No token-count promise or routine approval phrase is required. Live/credential and publication
 steps retain their concrete authorization gates.
