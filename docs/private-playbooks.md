@@ -3,8 +3,8 @@
 Chunk 1A implements a generic [starter template](../templates/playbook.example.md), path resolver
 and safe private reader. Chunk 1B adds `get_review_guidance` to the opt-in alpha, with explicit
 source labels. The default server remains status-only. No actual owner strategy file is created
-or read during development; private-mode tests use fabricated temporary files. Real Codex client
-restart/discovery acceptance is tracked separately from automated STDIO verification in T-027.
+or read during development; private-mode tests use fabricated temporary files. Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
+separately from automated STDIO verification (T-027 Done).
 
 ## How guidance is selected
 
@@ -117,7 +117,8 @@ changes, sanitized failures and cleanup error precedence. Existing offline inven
 coverage remains required. See the [checkpoint](work-checkpoint.md) for actual aggregate results
 and the [gated plan](v1-phase-gates.md). Automated chunk-1B coverage uses actual alpha STDIO
 for generic, missing/private/error results, argument rejection and unchanged status, plus provider
-non-invocation during discovery/status and schema/error privacy checks. These are not a claim
-of real Codex UI acceptance. After the build/restart, confirm discovery and invoke only default
-generic guidance in Codex; record sanitized pass/fail in T-027 before closing phase 1. The owner
+non-invocation during discovery/status and schema/error privacy checks. Actual Codex also discovered and successfully invoked the tool with `{}` after restart on
+1 November 2026: generic/generic_mode, schema version 1, nonempty guidance and no error.
+No Etsy/credential/private-file access. This closes the scoped T-027/phase-1 gate, without
+claiming real private-mode or advanced-review acceptance. The owner
 private playbook remains later chunk 2B, and full usefulness/edit acceptance remains T-031.

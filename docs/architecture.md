@@ -121,5 +121,6 @@ and path resolver with a separate generic template.
 Chunk 1B adds explicit `get_review_guidance` MCP delivery (generic by default; private via trusted
 client environment settings, never a model-selected path). Discovery/status do not read content,
 and invalid private guidance never falls back. The default scaffold stays status-only.
-Client restart/acceptance remains separate from actual STDIO tests. See the guide and T-027
+Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
+separately from automated STDIO tests. This is scoped client evidence, not advanced-review acceptance. See the guide and T-027
 for current evidence. Delivery follows in the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
