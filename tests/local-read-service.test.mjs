@@ -52,3 +52,25 @@ test('local read refreshes once under the lock, verifies the shop, and makes onl
     ['POST', 'GET', 'GET', 'GET', 'GET'],
   );
 });
+
+test('local read preserves recovery failure when cleanup also fails', async (t) => {
+  const { writeFile } = await import('node:fs/promises');
+  const directory = await mkdtemp(join(tmpdir(), 'etsy-alpha-offline-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const store = new InMemorySecretStore();
+  for (const [key, value] of Object.entries({
+    appKeystring: 'fake-key',
+    appSharedSecret: 'fake-secret',
+    accessToken: '2222.old',
+    refreshToken: '2222.old-refresh',
+  }))
+    await store.set(key, value);
+  const service = createLocalReadService(
+    async () => {
+      await writeFile(join(directory, 'refresh.lock', 'owner.json'), '{partial');
+      throw new Error('fabricated private transport error');
+    },
+    { directory, store, config: { read: async () => ({ expectedShopId: 1111 }) } },
+  );
+  await assert.rejects(service.listActiveListings({}), { code: 'recovery_required' });
+});

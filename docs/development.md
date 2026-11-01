@@ -116,3 +116,29 @@ Do not reset a healthy connection as an acceptance test. Use fabricated stores a
 - **Node is not found:** restart Codex Desktop after installing Node, or configure the full Node executable path.
 - **The MCP server does not start:** run `npm ci`, then `npm run build`; check that the configured argument points to `dist/src/index.js`.
 - **The server appears to hang in a terminal:** that is expected; an STDIO MCP server waits for its client. Stop it with Ctrl+C.
+
+## Refresh failure and cleanup diagnostics
+
+Lease-owning token, listing-read, and CLI operations preserve the primary failure if lock release
+also fails. If the operation succeeds but release fails, the request still fails; CLI success
+output is emitted only after release succeeds. Errors remain typed and sanitized. A failed release
+rename leaves the lock in place and blocks contenders. A successful rename ends ownership even
+when deletion of the resulting `.refresh-released-*` tombstone fails: that failure is reported,
+but a new lock can be acquired. Tombstones are not active locks; never interpret them as permission
+to remove a current `refresh.lock`.
+
+Missing, incomplete, malformed, or oversized owner metadata reports `recovery_required` once the
+bounded wait ends. Briefly incomplete metadata can occur during initialization. A valid owner
+still present at the deadline reports `timeout` (or `busy` for a non-waiting caller). None of these
+cases authorizes automatic lock removal.
+
+A wrong-owner or malformed refresh grant fails validation and leaves `token-state.json` marked
+`refreshing`. Later requests require recovery without another refresh attempt or reuse of the old
+refresh token. Follow the deliberate recovery procedure above; do not clear the marker to retry.
+
+Clock assessment: lock waits and persisted expiry currently use wall-clock time. Backward clock
+adjustments can extend waits or apparent freshness; forward adjustments can shorten them. The
+60-second freshness margin and strict expiry comparison cover ordinary boundary conditions, not
+arbitrary clock jumps. This follow-up retains that timing model; monotonic waits and a conservative
+expiry anchored before transport need a separate focused design and tests. No automatic lock
+stealing is justified by age, expiry, or clock changes.
