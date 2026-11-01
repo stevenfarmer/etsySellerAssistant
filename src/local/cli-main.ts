@@ -8,7 +8,7 @@ import { createLocalConfigStore, resolveLocalConfigDirectory } from './config.js
 import { connectLocal } from './connect.js';
 import { readHiddenInput } from './hidden-input.js';
 import { lookupLocalShop } from './lookup.js';
-import { acquireRefreshLock, createRefreshStateStore } from './refresh-lock.js';
+import { acquireRefreshLock, createRefreshStateStore, withRefreshLease } from './refresh-lock.js';
 import { resetLocalSetup } from './reset.js';
 
 async function main(): Promise<void> {
@@ -43,7 +43,8 @@ async function main(): Promise<void> {
   const directory = resolveLocalConfigDirectory();
   await mkdir(directory, { recursive: true, mode: 0o700 });
   const lease = await acquireRefreshLock({ directory });
-  try {
+  let output = '';
+  await withRefreshLease(lease, async () => {
     const configStore = createLocalConfigStore();
     const secretStore = createOsSecretStore();
     if (args[0] === 'reset') {
@@ -56,7 +57,7 @@ async function main(): Promise<void> {
         deleteConfig: () => configStore.delete(),
         clearTokenState: () => createRefreshStateStore({ directory }).clear(lease),
       });
-      process.stdout.write(`Local reset ${result}.\n`);
+      output = `Local reset ${result}.\n`;
       if (result !== 'reset') process.exitCode = 1;
       return;
     }
@@ -96,11 +97,10 @@ async function main(): Promise<void> {
       process.stderr.write(`Local operation failed (${result.reason}).\n`);
       process.exitCode = 1;
     } else {
-      process.stdout.write(`Local operation ${result.status}.\n`);
+      output = `Local operation ${result.status}.\n`;
     }
-  } finally {
-    await lease.release();
-  }
+  });
+  if (output) process.stdout.write(output);
 }
 
 void main().catch(() => {

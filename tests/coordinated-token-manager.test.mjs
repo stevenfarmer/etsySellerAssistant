@@ -213,3 +213,80 @@ for (const failedKey of ['refreshToken', 'accessToken']) {
     assert.equal(calls, 1);
   });
 }
+
+for (const grant of [
+  { accessToken: '456.bad', refreshToken: '456.bad', expiresIn: 3600, scope: ['listings_r'] },
+  { accessToken: '123.new', refreshToken: '123.rotated', expiresIn: 0, scope: ['listings_r'] },
+  { accessToken: '123.new', refreshToken: '123.rotated', expiresIn: 3600, scope: [] },
+]) {
+  test('invalid refresh grant preserves marker and never retries the old token', async (t) => {
+    const { directory, store } = await fixture(t);
+    let calls = 0;
+    const options = {
+      directory,
+      store,
+      ownerId: 123,
+      refresh: async () => {
+        calls++;
+        return grant;
+      },
+    };
+    await assert.rejects(getCoordinatedAccessToken(options), { code: 'invalid_state' });
+    assert.equal(
+      JSON.parse(await readFile(join(directory, 'token-state.json'), 'utf8')).status,
+      'refreshing',
+    );
+    await assert.rejects(getCoordinatedAccessToken(options), { code: 'recovery_required' });
+    assert.equal(calls, 1);
+    assert.equal(await store.get('refreshToken'), '123.old-refresh');
+    assert.equal(await store.get('accessToken'), '123.old-access');
+  });
+}
+
+test('failed refresh remains recovery_required when release loses ownership', async (t) => {
+  const { directory, store } = await fixture(t);
+  await assert.rejects(
+    getCoordinatedAccessToken({
+      directory,
+      store,
+      ownerId: 123,
+      refresh: async () => {
+        await writeFile(join(directory, 'refresh.lock', 'owner.json'), '{partial');
+        throw new Error('fabricated private transport error');
+      },
+    }),
+    { code: 'recovery_required' },
+  );
+  assert.equal(
+    JSON.parse(await readFile(join(directory, 'token-state.json'), 'utf8')).status,
+    'refreshing',
+  );
+});
+
+test('fresh token cannot report success when release loses ownership', async (t) => {
+  const { directory, store } = await fixture(t);
+  const { createRefreshStateStore } = await import('../dist/src/local/refresh-lock.js');
+  const lease = await acquireRefreshLock({ directory });
+  const state = createRefreshStateStore({ directory });
+  await state.markRefreshing(lease);
+  await state.markReady(lease, 4_600_000);
+  await lease.release();
+  await assert.rejects(
+    getCoordinatedAccessToken({
+      directory,
+      ownerId: 123,
+      now: () => 1_000_000,
+      store: {
+        get: async (key) => {
+          if (key === 'accessToken')
+            await writeFile(join(directory, 'refresh.lock', 'owner.json'), '{partial');
+          return store.get(key);
+        },
+      },
+      refresh: async () => {
+        throw new Error('unexpected refresh');
+      },
+    }),
+    { code: 'ownership_lost' },
+  );
+});

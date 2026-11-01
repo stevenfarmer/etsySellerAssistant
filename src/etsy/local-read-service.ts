@@ -2,7 +2,7 @@ import { getCoordinatedAccessToken } from '../auth/coordinated-token-manager.js'
 import { refreshAuthorization } from '../auth/token-client.js';
 import { createLocalConfigStore, resolveLocalConfigDirectory } from '../local/config.js';
 import { createOsSecretStore } from '../os-secret-store.js';
-import { acquireRefreshLock } from '../local/refresh-lock.js';
+import { acquireRefreshLock, withRefreshLease } from '../local/refresh-lock.js';
 import { createReadService } from './read-service.js';
 import type { LocalConfigStore } from '../local/config.js';
 import type { SecretStore } from '../secret-store.js';
@@ -25,11 +25,7 @@ export function createLocalReadService(
     fetch: fetchImpl,
     withLock: async (work) => {
       const lease = await acquireRefreshLock({ directory, waitTimeoutMs: 10_000 });
-      try {
-        return await work(lease);
-      } finally {
-        await lease.release();
-      }
+      return withRefreshLease(lease, () => work(lease));
     },
     getAccessToken: async (ownerId, lease) => {
       const clientId = await store.get('appKeystring');

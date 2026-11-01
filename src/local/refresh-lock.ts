@@ -186,6 +186,7 @@ async function readSmallFile(
   fileSystem: RefreshCoordinationFileSystem,
   path: string,
   missingCode: 'missing' | 'error',
+  malformedCode: 'invalid_state' | 'recovery_required' = 'invalid_state',
 ): Promise<string | undefined> {
   let info: FileInfo;
   try {
@@ -206,7 +207,7 @@ async function readSmallFile(
   }
   try {
     if ((await handle.stat()).size > MAX_METADATA_BYTES) {
-      throw new RefreshCoordinationError('invalid_state');
+      throw new RefreshCoordinationError(malformedCode);
     }
     return await handle.readFile('utf8');
   } catch (error) {
@@ -247,6 +248,7 @@ async function readLockOwner(
     fileSystem,
     pathApi.join(lockDirectory, OWNER_FILENAME),
     'missing',
+    'recovery_required',
   );
   if (serialized === undefined) throw new RefreshCoordinationError('recovery_required');
   return parseOwner(serialized);
@@ -508,4 +510,28 @@ export function isRefreshStateFresh(
     state?.status === 'ready' &&
     state.expiresAtMs - expirySkewMs > nowMs
   );
+}
+
+/** Always release an owned lease; cleanup must not replace an operation failure. */
+export async function withRefreshLease<T>(
+  lease: RefreshLockLease,
+  work: () => Promise<T>,
+): Promise<T> {
+  let result: T;
+  try {
+    result = await work();
+  } catch (error) {
+    try {
+      await lease.release();
+    } catch {
+      // The primary error already reports failure; retain its typed recovery diagnosis.
+    }
+    throw error;
+  }
+  try {
+    await lease.release();
+  } catch (error) {
+    throw asIoError(error);
+  }
+  return result;
 }

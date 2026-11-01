@@ -311,3 +311,91 @@ test('failed lock release preserves the owner and blocks another refresher', asy
     await assert.rejects(acquireRefreshLock({ directory }), { code: 'busy' });
   });
 });
+
+test('oversized owner metadata requires recovery and is preserved', async () => {
+  await withTempDirectory(async (directory) => {
+    const lock = path.join(directory, 'refresh.lock');
+    await fs.mkdir(lock);
+    const owner = 'x'.repeat(2049);
+    await fs.writeFile(path.join(lock, 'owner.json'), owner);
+    await assert.rejects(acquireRefreshLock({ directory }), { code: 'recovery_required' });
+    assert.equal(await fs.readFile(path.join(lock, 'owner.json'), 'utf8'), owner);
+  });
+});
+
+for (const contents of [undefined, '{partial']) {
+  test(`incomplete owner metadata at deadline requires recovery (${contents})`, async () => {
+    await withTempDirectory(async (directory) => {
+      const lock = path.join(directory, 'refresh.lock');
+      await fs.mkdir(lock);
+      if (contents !== undefined) await fs.writeFile(path.join(lock, 'owner.json'), contents);
+      let clock = 100;
+      await assert.rejects(
+        acquireRefreshLock({
+          directory,
+          waitTimeoutMs: 5,
+          retryIntervalMs: 1,
+          now: () => clock++,
+        }),
+        { code: 'recovery_required' },
+      );
+      assert.equal((await fs.lstat(lock)).isDirectory(), true);
+      assert.deepEqual(await fs.readdir(lock), contents === undefined ? [] : ['owner.json']);
+    });
+  });
+}
+
+test('tombstone deletion failure ends ownership and permits a new lock', async () => {
+  await withTempDirectory(async (directory) => {
+    const lease = await acquireRefreshLock({
+      directory,
+      fileSystem: {
+        ...fs,
+        rm: async () => {
+          throw new Error('fabricated private deletion failure');
+        },
+      },
+    });
+    await assert.rejects(lease.release(), { code: 'io_failed' });
+    await assert.rejects(lease.assertOwned(), { code: 'ownership_lost' });
+    assert.equal(
+      (await fs.readdir(directory)).filter((name) => name.startsWith('.refresh-released-')).length,
+      1,
+    );
+    const next = await acquireRefreshLock({ directory });
+    await lease.release();
+    await next.assertOwned();
+    await next.release();
+  });
+});
+
+test('lease cleanup preserves even falsy primary errors and reports cleanup-only failures', async () => {
+  const { withRefreshLease, RefreshCoordinationError } =
+    await import('../dist/src/local/refresh-lock.js');
+  for (const code of ['ownership_lost', 'io_failed']) {
+    for (const primary of [new RefreshCoordinationError('recovery_required'), undefined]) {
+      let releases = 0;
+      const lease = {
+        release: async () => {
+          releases++;
+          throw new RefreshCoordinationError(code);
+        },
+      };
+      let caught = false;
+      try {
+        await withRefreshLease(lease, async () => {
+          throw primary;
+        });
+      } catch (error) {
+        caught = true;
+        assert.equal(error, primary);
+      }
+      assert.equal(caught, true);
+      assert.equal(releases, 1);
+      await assert.rejects(
+        withRefreshLease(lease, async () => 'success'),
+        { code },
+      );
+    }
+  }
+});
