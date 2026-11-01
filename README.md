@@ -4,7 +4,7 @@ A local-first MCP assistant for reviewing listings in one owner-authorized Etsy 
 
 ## Current release
 
-[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a public GitHub prerelease of a local, single-shop tool. The shop owner completed OAuth on a Mac; an owner-confirmed Codex Desktop listing read and a separate bounded list-and-detail check passed. CI tested macOS and Windows with Node 24 and 26, but Windows live credential storage and browser authorization remain unverified. Production readiness and broader client compatibility remain open.
+[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a public GitHub prerelease of a local, single-shop tool. The shop owner completed OAuth on a Mac; an owner-confirmed Codex Desktop listing read and a separate bounded list-and-detail check passed. CI tested macOS and Windows with Node 24 and 26, but Windows live credential storage and browser authorization remain unverified. v1 targets macOS with Codex Desktop only; Windows manual acceptance is deferred. Mac recovery and release readiness remain open.
 
 There are two server entry points:
 
@@ -14,6 +14,15 @@ There are two server entry points:
 | `dist/src/alpha.js` | Opt-in read-only alpha; status, bounded active-listing pages, and listing detail for IDs returned in the same server session. |
 
 The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
+
+## Version roadmap
+
+- **v1:** macOS with Codex Desktop, local STDIO, owner-authorized read-only listing review, Keychain storage, repeatable setup and recovery.
+- **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
+- **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.
+- **Exploratory:** Linux, subject to a credential-store design and explicit platform acceptance; no version commitment.
+
+The server already uses standard MCP over STDIO. Other clients need installation and compatibility acceptance work. Existing Windows adapters and CI remain regression coverage, not a support claim. This roadmap does not authorize Etsy writes or broader scopes. See [ADR 0004](docs/decisions/0004-v1-platform-scope.md).
 
 ## First-time Mac alpha setup
 
@@ -48,7 +57,7 @@ The Etsy documentation MCP and this project’s shop-connected local MCP are sep
 
 7. Open a fresh chat and confirm `get_setup_status`, `list_active_listings`, and `get_listing` are available. After owner authorization, request a small active-listing page and check it locally. To get details, use a listing returned in the same server session. The status tool alone does not prove a live shop connection.
 
-Windows is a supported development and runtime target, but the live alpha flow on Windows has not yet been accepted. For a status-only setup use `dist/src/index.js` as the server argument; it needs no Etsy credentials or OAuth.
+Windows is future work, tentatively v2 or later, and has not been manually tested. It is not a v1 acceptance requirement. For a status-only setup use `dist/src/index.js` as the server argument; it needs no Etsy credentials or OAuth.
 
 ## Updating, troubleshooting, and cleanup
 
@@ -64,6 +73,7 @@ If the server does not start, check the Node path, working directory and selecte
 - [Seller App registration and OAuth verification](docs/etsy-registration-verification.md)
 - [Mac alpha review and test plan](docs/mac-alpha-review.md)
 - [Development and recovery](docs/development.md)
+- [v1 readiness evidence](docs/v1-readiness.md)
 - [Release checklist](docs/release-checklist.md)
 - [Next-phase plan](docs/next-phase-plan.md)
 - [Contributing](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [Decision records](docs/decisions/)

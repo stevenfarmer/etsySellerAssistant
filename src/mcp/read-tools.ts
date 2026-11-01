@@ -1,6 +1,7 @@
 import { z } from 'zod/v4';
 import type { McpServer } from '@modelcontextprotocol/server';
 import type { PublicListing } from '../etsy/read-service.js';
+import { RefreshCoordinationError } from '../local/refresh-lock.js';
 
 export interface ActiveListingsPage {
   readonly listings: readonly PublicListing[];
@@ -43,13 +44,23 @@ function success(value: unknown) {
   return { content: [{ type: 'text' as const, text: JSON.stringify(value) }] };
 }
 
-function failure() {
+function failure(error?: unknown) {
+  let message = 'Listing read failed. Check local setup or retry.';
+  if (error instanceof RefreshCoordinationError) {
+    if (error.code === 'busy' || error.code === 'timeout') {
+      message =
+        'Another local operation is busy. Wait for it to finish before retrying; do not remove its refresh lock.';
+    } else {
+      message =
+        'Local connection recovery is required. Stop listing retries and follow the development guide recovery procedure. Do not delete a refresh lock while any local app process is running. Never share credentials or local state in chat.';
+    }
+  }
   return {
     isError: true,
     content: [
       {
         type: 'text' as const,
-        text: 'Listing read failed. Check local setup or retry.',
+        text: message,
       },
     ],
   };
@@ -73,8 +84,8 @@ export function registerReadOnlyListingTools(
       if (!parsed.success) return failure();
       try {
         return success(await service.listActiveListings(parsed.data));
-      } catch {
-        return failure();
+      } catch (error) {
+        return failure(error);
       }
     },
   );
@@ -92,8 +103,8 @@ export function registerReadOnlyListingTools(
       if (!parsed.success) return failure();
       try {
         return success(await service.getListing(parsed.data.listingId));
-      } catch {
-        return failure();
+      } catch (error) {
+        return failure(error);
       }
     },
   );

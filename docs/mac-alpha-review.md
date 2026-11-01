@@ -8,7 +8,7 @@ The alpha server has been registered in the Mac's Codex configuration with no cr
 environment variables. In a fresh Codex Desktop chat, a separately requested read returned one
 active listing, and the product owner confirmed it was expected. A subsequent explicitly authorized
 one-listing list-and-detail smoke check also passed on the Mac. No listing contents or identifiers
-were recorded in project materials. Windows live platform checks and production readiness remain open.
+were recorded in project materials. Mac recovery and v1 readiness remain open. Windows live platform checks are deferred to v2 or later, outside v1 acceptance.
 
 ## Scope and boundaries
 
@@ -47,7 +47,7 @@ listed and retrieved one matching listing successfully, while outputting only pa
    the owner recognizes it and the assistant treats its text as untrusted data. Record only
    sanitized pass/fail and error categories. Stop on identity mismatch or storage/refresh errors.
 5. Review cleanup and owner acceptance for any subsequent release. Windows live browser and
-   credential-store behavior remain unverified; label this build Mac-tested only.
+   credential-store behavior remain unverified future work, not v1 prerequisites; label this build macOS/Codex Desktop only.
 
 The live flow is expected to make a token refresh POST if the stored expiry is unknown, an Etsy
 owner-to-shop GET, and the agreed bounded listing GET. It will not change listings. Reauthorization,

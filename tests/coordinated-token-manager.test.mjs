@@ -176,3 +176,40 @@ test('an incomplete initial token pair is never refreshed', async (t) => {
   );
   assert.equal(calls, 0);
 });
+
+for (const failedKey of ['refreshToken', 'accessToken']) {
+  test(`failed ${failedKey} persistence preserves uncertain state and prevents another refresh`, async (t) => {
+    const { directory, store } = await fixture(t);
+    let calls = 0;
+    const options = {
+      directory,
+      ownerId: 123,
+      store: {
+        get: (key) => store.get(key),
+        set: async (key, value) => {
+          if (key === failedKey) throw new Error('fabricated private store failure');
+          await store.set(key, value);
+        },
+      },
+      refresh: async () => {
+        calls += 1;
+        return {
+          accessToken: '123.new',
+          refreshToken: '123.rotated',
+          expiresIn: 3600,
+          scope: ['listings_r'],
+        };
+      },
+    };
+    await assert.rejects(getCoordinatedAccessToken(options), { code: 'io_failed' });
+    const state = JSON.parse(await readFile(join(directory, 'token-state.json'), 'utf8'));
+    assert.equal(state.status, 'refreshing');
+    assert.equal(await store.get('accessToken'), '123.old-access');
+    assert.equal(
+      await store.get('refreshToken'),
+      failedKey === 'refreshToken' ? '123.old-refresh' : '123.rotated',
+    );
+    await assert.rejects(getCoordinatedAccessToken(options), { code: 'recovery_required' });
+    assert.equal(calls, 1);
+  });
+}

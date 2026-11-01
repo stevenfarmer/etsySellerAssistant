@@ -289,3 +289,25 @@ test('rejects invalid paths and state transitions without network or credential 
     }
   });
 });
+
+test('failed lock release preserves the owner and blocks another refresher', async () => {
+  await withTempDirectory(async (directory) => {
+    const injectedFileSystem = {
+      ...fs,
+      rename: async () => {
+        throw new Error('fabricated private filesystem failure');
+      },
+    };
+    const lease = await acquireRefreshLock({ directory, fileSystem: injectedFileSystem });
+    const ownerPath = path.join(directory, 'refresh.lock', 'owner.json');
+    const originalOwner = await fs.readFile(ownerPath, 'utf8');
+    await assert.rejects(lease.release(), (error) => {
+      assert.equal(error.code, 'ownership_lost');
+      assert.equal(error.message.includes('fabricated private'), false);
+      return true;
+    });
+    assert.equal(await fs.readFile(ownerPath, 'utf8'), originalOwner);
+    await lease.assertOwned();
+    await assert.rejects(acquireRefreshLock({ directory }), { code: 'busy' });
+  });
+});

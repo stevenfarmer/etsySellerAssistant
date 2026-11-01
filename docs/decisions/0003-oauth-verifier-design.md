@@ -1,5 +1,7 @@
 # ADR 0003: Bounded OAuth verification design
 
+> **Scope superseded on 31 October 2026:** [ADR 0004](0004-v1-platform-scope.md) makes v1 macOS/Codex Desktop only. Earlier cross-platform requirements below are historical. Other local STDIO clients follow v1; Windows is deferred to v2 or later, and Linux is exploratory. Windows manual acceptance does not block v1. Existing code and CI coverage are retained.
+
 - Status: Accepted; separately authorized Mac alpha verification has since passed. See the release addendum below.
 - Date: 2026-10-31
 

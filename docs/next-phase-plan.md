@@ -1,5 +1,7 @@
 # Next phase proposal: verified access and a read-only listing MVP
 
+> **Scope superseded on 31 October 2026:** [ADR 0004](decisions/0004-v1-platform-scope.md) makes v1 macOS/Codex Desktop only. Earlier cross-platform requirements below are historical. Other local STDIO clients follow v1; Windows is deferred to v2 or later, and Linux is exploratory. Windows manual acceptance does not block v1. Existing code and CI coverage are retained.
+
 - Status: Approved by product owner on 2026-10-31 for offline implementation and bounded delegation; live credential handling and live Etsy requests remain separately gated.
 - Date: 2026-10-31.
 - Covers: remaining T-007 verification, T-008 design, T-009 implementation, and T-010 desktop acceptance.

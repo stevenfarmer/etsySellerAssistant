@@ -1,9 +1,10 @@
 # T-007: Seller App registration and OAuth verification
 
-Status: Seller App approved and callback saved; OAuth verification pending. Last reviewed on
-31 October 2026. The owner approved bounded, offline-tested verification work after security review.
-Live credential handling and Etsy requests remain separately gated, and the MCP server remains
-status-only.
+Status: Seller App approved, callback saved, and owner-authorized Mac connection reported
+successful; bounded Mac listing and detail reads passed. Last reviewed on 31 October 2026.
+Final task acceptance remains open. Windows live verification is deferred to v2 or later and is not a v1 requirement. Further live credential handling
+and Etsy requests remain separately gated. The default MCP server remains status-only; the
+separate opt-in alpha entry point exposes bounded read-only listing tools.
 
 ## Latest portal evidence: Seller App approved
 
@@ -133,7 +134,7 @@ them in this repository, synced project notes, Codex MCP configuration, or GitHu
 
 | Gate                      | Official evidence reviewed                                                                                                                          | Evidence still needed                                                                                                      |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| App model                 | Owner-login registration produced an approved Seller App. The separate Shared Access account was rejected by Seller App registration.               | Owner-authorized one-shop verification remains pending; alternative app models need review.                                |
+| App model                 | Owner-login registration produced an approved Seller App. The separate Shared Access account was rejected by Seller App registration.               | Owner-authorized Mac connection reported successful; delegated OAuth and alternative app models remain unverified.         |
 | Registration and approval | Portal dashboard shows App approved and Approved under Seller Apps after owner-login registration.                                                  | Registration/approval milestone met; owner-authorized Mac connection reported successful.                                  |
 | Website                   | Owner-login Seller App screenshot shows app name and API-use fields, with no Website URL field. Earlier Personal App form requires Website URL.     | Confirm any later settings or domain-validation requirements after registration.                                           |
 | Authorizer                | Shared Access excludes Apps/settings. This does not establish a supported delegated OAuth route.                                                    | Owner performs registration and initial consent; any alternative requires explicit Etsy confirmation.                      |
@@ -253,7 +254,10 @@ save/readback. The duplicate Etsy documentation MCP connection was removed; the 
 plugin remains. The owner-authorized Mac connection was reported successful after the verifier's
 grant and shop identity checks. A separately authorized Mac listing and detail read has passed;
 delegated OAuth remains unverified.
-T-007 remains in progress; T-008 and T-009 remain gated.
+T-007 final acceptance remains open. The T-008 connection design and T-009 read-only alpha
+have been implemented and exercised on the Mac; this does not establish final task acceptance
+or Windows live compatibility. The historical implementation gates described above must not
+be read as a claim that these features are still unimplemented.
 
 Record only seller-neutral results in the project tracker: app type/status, owner availability,
 website/callback requirements, generic callback test outcome, permission decision, evidence date,
