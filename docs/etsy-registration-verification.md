@@ -130,6 +130,10 @@ responses, account identifiers, shop names/URLs/IDs, or listing data. Keep gener
 computer; credential setup and storage belong to the separately reviewed T-008 design. Do not put
 them in this repository, synced project notes, Codex MCP configuration, or GitHub.
 
+## Current scope decision — 1 November 2026
+
+The owner deferred delegated access to the very low-priority backlog (T-016/P3), with no target date. It is not required for v1 and remains untested. T-007 now concerns owner-authorized registration and OAuth only. Its remaining owner-path criteria still require evidence reconciliation; this decision alone does not mark T-007 Done. The evidence table and completion history below retain their original observations.
+
 ## Evidence and remaining gates
 
 | Gate                      | Official evidence reviewed                                                                                                                          | Evidence still needed                                                                                                      |

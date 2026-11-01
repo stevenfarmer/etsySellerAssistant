@@ -24,6 +24,7 @@ For the staged path from this candidate to stable v1, see the [v1 delivery plan]
 ## Version roadmap
 
 - **v1:** macOS with Codex Desktop, local STDIO, owner-authorized read-only listing review, Keychain storage, repeatable setup and recovery.
+- **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.
 - **Exploratory:** Linux, subject to a credential-store design and explicit platform acceptance; no version commitment.
