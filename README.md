@@ -19,6 +19,8 @@ The Etsy documentation MCP and this project’s shop-connected local MCP are sep
 
 The development version is `0.1.0-alpha.2`; it has not been published. It includes the refresh recovery fixes and current macOS/Codex guidance. See the [draft release notes](docs/releases/v0.1.0-alpha.2.md) and [candidate checklist](docs/release-checklist.md#v010-alpha2-candidate). The installation instructions above and below describe the published alpha.1; candidate verification uses the exact commit recorded in the release PR.
 
+For the staged path from this candidate to stable v1, see the [v1 delivery plan](docs/v1-delivery-plan.md).
+
 ## Version roadmap
 
 - **v1:** macOS with Codex Desktop, local STDIO, owner-authorized read-only listing review, Keychain storage, repeatable setup and recovery.
