@@ -13,7 +13,7 @@ Reviewed on 1 November 2026. The development candidate is `0.1.0-alpha.2`, not a
 
 ## Remaining acceptance and release work
 
-- The [isolated recovery drill](mac-recovery-acceptance.md) is prepared and its offline mode passes; test-only Keychain execution and owner acceptance remain pending. Owner acceptance of Mac recovery behavior remains open under T-008. Do not reset, revoke, or remove credentials from a healthy connection to fill an evidence checkbox.
+- The [isolated recovery drill](mac-recovery-acceptance.md) passed offline and owner-authorized test-only Keychain modes on the Mac, with cleanup verified; owner acceptance remains pending. Owner acceptance of Mac recovery behavior remains open under T-008. Do not reset, revoke, or remove credentials from a healthy connection to fill an evidence checkbox.
 - Review the alpha.2 candidate diff, run validation and audit, and obtain its own CI/security results. Earlier checks are baseline evidence only.
 - Reconcile release materials and record the exact candidate in the [release checklist](release-checklist.md#v010-alpha2-candidate). Publication requires explicit owner authorization after the candidate is concrete.
 - Delegated authorization remains untested under T-007. This candidate continues the owner-authorized alpha boundary and makes no delegated-access claim.
