@@ -46,3 +46,15 @@ contain no private paths/content. Private content stays
 out of logs/errors, fixtures, PRs or connected project documents. Custom guidance cannot confer write approval or
 bypass enforced restrictions. When used, the chosen AI client/provider receives the guidance;
 local/Git exclusion is not copy protection or a guarantee about that provider's data handling.
+
+## Local draft preflight
+
+The development alpha's `validate_listing_draft` accepts only bounded title/description/tag
+strings, not identity, endpoints, files, state or approval. It uses no Etsy/credential/filesystem
+I/O, logging or persistence and does not affect connection status. Results contain counts and
+fixed issue codes, never draft text; errors omit raw input. This is formatting/constraint
+preflight only, with explicit `grounding: not_evaluated`, `approvalGranted: false` and
+`writePerformed: false`. It cannot determine truth, ownership, policy compliance or sales value.
+Unsupported claims or hostile instructions may pass text constraints; the client must treat
+source listing text as data and review facts separately. No write or broader permission is added.
+See [the review contract](docs/draft-review-workflow.md).

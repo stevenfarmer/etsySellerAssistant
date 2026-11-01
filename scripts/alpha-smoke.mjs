@@ -215,14 +215,18 @@ export async function runAlphaSmoke(options = {}) {
       if (
         names.length !== inventory.tools.length ||
         new Set(names).size !== names.length ||
-        names.some((name) => ![...expectedNames, 'get_review_guidance'].includes(name)) ||
+        names.some(
+          (name) =>
+            ![...expectedNames, 'get_review_guidance', 'validate_listing_draft'].includes(name),
+        ) ||
         expectedNames.some((name) => !names.includes(name)) ||
         inventory.tools.some(
           (tool) =>
             !isRecord(tool) ||
             ((tool.name === 'list_active_listings' ||
               tool.name === 'get_listing' ||
-              tool.name === 'get_review_guidance') &&
+              tool.name === 'get_review_guidance' ||
+              tool.name === 'validate_listing_draft') &&
               (!isRecord(tool.annotations) ||
                 tool.annotations.readOnlyHint !== true ||
                 tool.annotations.destructiveHint !== false)),

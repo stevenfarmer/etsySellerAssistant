@@ -244,7 +244,7 @@ test('CLI accepts only one explicit detail flag', () => {
   assert.equal(parseAlphaSmokeArgs(['--other']), undefined);
 });
 
-test('smoke accepts optional read-only guidance without invoking it, but rejects unsafe or unknown tools', async () => {
+test('smoke accepts optional read-only review tools without invoking them, but rejects unsafe or unknown tools', async () => {
   for (const [extraTools, status] of [
     [
       [
@@ -266,6 +266,24 @@ test('smoke accepts optional read-only guidance without invoking it, but rejects
     ],
     [[{ name: 'unapproved_tool' }], 'failed'],
     [[{ name: 'get_setup_status' }], 'failed'],
+    [
+      [
+        {
+          name: 'validate_listing_draft',
+          annotations: { readOnlyHint: true, destructiveHint: false },
+        },
+      ],
+      'passed',
+    ],
+    [
+      [
+        {
+          name: 'validate_listing_draft',
+          annotations: { readOnlyHint: false, destructiveHint: false },
+        },
+      ],
+      'failed',
+    ],
   ]) {
     const fake = fakeTransport({ extraTools });
     assert.equal((await runAlphaSmoke({ transportFactory: fake.factory })).status, status);

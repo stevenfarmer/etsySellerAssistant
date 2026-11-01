@@ -71,5 +71,6 @@ test('the explicit alpha entry point exposes the bounded read-only tools without
     'get_review_guidance',
     'get_setup_status',
     'list_active_listings',
+    'validate_listing_draft',
   ]);
 });

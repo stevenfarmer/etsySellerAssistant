@@ -1,8 +1,8 @@
 # Intelligent listing review: v1 requirements
 
 Updated 1 November 2026. Approved goal: recommendations that help the right buyers find and
-understand the item, followed by safely applying the edits the owner approves. This specifies
-planned work, not an implemented review engine or evidence of increased sales. See
+understand the item, followed by safely applying the edits the owner approves. Chunk 2A implements the generic workflow/brief and deterministic copy validator; broader
+evaluation/private strategy remains chunk 2B, and no sales improvement is established. See
 [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) and the [current matrix](requirements-and-acceptance.md).
 
 ## Inputs and reasoning
@@ -30,6 +30,16 @@ map to storage (T-026 implemented in chunk 1A) and client-neutral MCP access (T-
 See [the guidance contract](private-playbooks.md): generic default, explicit private opt-in and
 invocation, no startup/status read, labeled fallback only for absence. Private content never enters public fixtures or
 connected project records. It is not automatically an audit record.
+
+## Chunk 2A implementation
+
+See [the review workflow/validator contract](draft-review-workflow.md), blank buyer-brief starter
+and [complete fabricated review](review-workflow-example.md). `get_review_guidance` generic text
+provides a repeatable sequence; `validate_listing_draft` checks the three proposed copy fields
+without Etsy/files/credentials or data persistence. It does not fact-check or approve copy.
+Full validation passed 234 offline tests, including 12 new draft cases and actual alpha STDIO.
+T-023 remains In Progress for chunk 2B rubric/cases/private playbook; owner usefulness remains
+later acceptance. The manually reasoned demonstration is not an automated model evaluation.
 
 ## Review output and acceptance (M4, T-023)
 

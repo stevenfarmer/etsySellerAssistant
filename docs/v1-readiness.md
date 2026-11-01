@@ -37,12 +37,14 @@ release recommendation. T-023 (intelligent review), T-011 (guarded-write design/
 T-024 (guarded edits after review) and T-025 (measurement/usefulness) are active v1 work.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
-[the checkpoint](work-checkpoint.md) records completed 1B/T-027 and names 2A/T-023 as next. T-028/T-029/T-030 split T-024;
+[the checkpoint](work-checkpoint.md) records completed 2A and names 2B/T-023 as next. T-028/T-029/T-030 split T-024;
 T-031 tracks concrete separately authorized Mac/usefulness/edit acceptance. Chunk 1A/T-026 implements private storage/template only: 12 fabricated tests; full validation
 passed 212 offline tests. Chunk 1B adds get_review_guidance to alpha, generic by default;
 full validation now passes 222 offline tests with actual STDIO coverage. After app restart, actual Codex discovery/default-generic invocation also passed on
-1 November 2026. T-027 is Done for that scoped client gate; advanced review usefulness remains later work. Other listed
-capabilities remain planned.
+1 November 2026. T-027 is Done for that scoped client gate; advanced review usefulness remains later work. Chunk 2A adds the [workflow/brief/draft checker](draft-review-workflow.md), fabricated
+manual review and 12 new regressions; full validation passed 234 offline tests. T-023 stays
+In Progress for broader 2B evaluation/private playbook; no advanced owner usefulness or sales
+uplift acceptance is inferred. Other listed capabilities remain planned.
 Their [requirements](intelligent-listing-review.md) distinguish planned capabilities from the
 existing read-only implementation. No write tools/scopes have been enabled.
 

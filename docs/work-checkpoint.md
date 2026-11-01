@@ -6,25 +6,28 @@ for verifying live main/PRs/CI and the connected steering/tracker before work re
 
 ## Current checkpoint
 
-- Completed: **1B / T-027 guidance interface**, implemented in PR #22,
-  `dad5cca9d93cb00d2d447f7522939034dd3d4088`. Live main/PRs/steering/tracker verified at
-  client-check resumption; checkout clean, no open PRs.
-- Real Codex client check passed 1 November 2026 after the app restart: the host advertised
-  `get_review_guidance`; invocation with `{}` succeeded with `source: generic`,
-  `selection: generic_mode`, `schemaVersion: 1` and nonempty guidance. No Etsy, credential or
-  private-file read. This closes the specific pending phase-1 client gate, not owner acceptance
-  of advanced recommendations or live edits. Private-mode coverage remains fabricated STDIO.
-- Prior implementation validation: `npm run validate` passed 222 offline tests/static checks;
-  all five PR/main checks passed. This documentation-only acceptance record has its own PR/CI
-  evidence in T-027. No runtime behavior changed or private contents copied into records.
-- **Next chunk: 2A / T-023 — useful review workflow and validators.** Read the review requirements;
-  use bounded facts and generic buyer-brief structure to produce grounded proposals with reasons,
-  uncertainty and keep-unchanged option. Validate relevant constraints using current API docs.
-  Use fabricated inputs only. Real private strategy/evaluation expansion stays chunk 2B.
-- T-026 and T-027 Done; T-012 In Progress. Final acceptance-record PR/head/merge/CI and local
-  clean-main status live in T-027; this source file cannot embed its own merge SHA.
-- Blocking owner action: none. Stop after recording this passed 1B gate; do not start 2A here.
-  Live/credential and publication actions retain separate concrete authorization requirements.
+- Prior completed gate: phase 1/T-026/T-027, acceptance PR #23,
+  `a196366993e876626ebd30e9763599074f86e107`. Live main/PRs/CI and connected records verified
+  at 2A start; local checkout clean, no open PRs. Retain scoped real Codex generic acceptance.
+- Current deliverable: **2A / T-023 workflow and validators**. Generic review sequence, blank
+  brief, local three-field draft preflight and complete fabricated manual review. Alpha exposes
+  `validate_listing_draft`; default scaffold unchanged. No Etsy/credential/filesystem I/O or
+  persistence in the checker; output is counts/issues, not draft text, truth or edit approval.
+- Actual validation: `npm run validate` passed **234 offline tests**/static checks, including
+  12 new draft tests and actual alpha STDIO integration. Current API character rules and official
+  title/tag limits checked through documentation only; application description bound is separately
+  labeled. Broader AI evaluation and private playbook not implemented. No actual private strategy
+  was read or written. Implementation PR/T-023 hold final head/merge/CI and connected readbacks.
+- **Next chunk after 2A checks/merge: 2B / T-023** — broader fabricated evaluation cases/rubric,
+  source-date maintenance and a private owner playbook outside Git. Read review requirements and
+  the [2A contract](draft-review-workflow.md). Never move private instructions/facts/drafts into
+  public template, fixtures, PRs or connected documents. Keep owner usefulness separate from tests.
+- T-023 remains In Progress until its 2B criteria are met; T-012 stays In Progress. This source
+  checkpoint cannot embed its own merge SHA; verify final PR/task evidence when resuming.
+- Feature branch: `codex/review-workflow-validators`; final clean-main status in the PR/T-023.
+- Blocking owner action: none. Stop after 2A. The new tool/workflow loads on future process
+  restart; no new 2A native-client gate is implied. Live/private credential and publication
+  authorizations remain separate. Do not begin 2B automatically.
 
 ## Required replacement at each checkpoint
 

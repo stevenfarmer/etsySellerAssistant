@@ -5,7 +5,7 @@
 The default entry point is a local MCP process over STDIO with one status tool and no Etsy network
 calls. The separate `dist/src/alpha.js` entry point exposes bounded read-only listing tools for one
 locally configured, owner-authorized shop, plus explicit review guidance (generic by default,
-private only by opt-in client configuration). On the Mac, an owner-authorized listing and detail smoke
+private only by opt-in client configuration) and local bounded title/description/tag preflight. On the Mac, an owner-authorized listing and detail smoke
 test passed. v1 targets macOS with Codex Desktop. Windows is deferred to v2 or later; Linux is exploratory.
 
 ```mermaid
@@ -51,6 +51,9 @@ flowchart LR
   generic --> labeled[Labeled guidance and fixed safety notice]
   private --> labeled
   labeled --> codex
+  mcp --> preflight[validate_listing_draft]
+  preflight --> checks[Pure copy constraints: counts and fixed issue codes]
+  checks --> codex
   mcp -. "Planned v1 write path: detailed review required" .-> preview[Exact change preview]
   preview --> confirm[Explicit seller confirmation]
   confirm --> stale[Recheck listing state]
@@ -124,3 +127,9 @@ and invalid private guidance never falls back. The default scaffold stays status
 Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
 separately from automated STDIO tests. This is scoped client evidence, not advanced-review acceptance. See the guide and T-027
 for current evidence. Delivery follows in the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
+
+Chunk 2A adds [generic review workflow/draft validation](draft-review-workflow.md): Codex reasons
+from supplied facts and an owner brief, while the pure validator enforces documented copy
+constraints. The MCP adapter exposes bounded three-field input and counts/issues only, with no
+filesystem, Etsy, credential, persistence, approval or connection-status effect. A valid result
+is not semantic truth or sales evidence; broader evaluation/private strategy remains chunk 2B.
