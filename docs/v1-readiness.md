@@ -1,24 +1,22 @@
 # macOS / Codex Desktop v1 readiness
 
-Reviewed on 31 October 2026. This is development evidence, not a published v1 release or completed manual recovery acceptance. The candidate changes are on `codex/v1-macos-codex-scope`; published `v0.1.0-alpha.1` is unchanged. Platform sequencing follows [ADR 0004](decisions/0004-v1-platform-scope.md).
+Reviewed on 1 November 2026. The development candidate is `0.1.0-alpha.2`, not a published release or stable v1. Published `v0.1.0-alpha.1` remains unchanged. Platform sequencing follows [ADR 0004](decisions/0004-v1-platform-scope.md).
 
 ## Accepted evidence
 
-- Owner-authorized Mac OAuth, configured-shop identity, Codex Desktop listing retrieval, and a separate bounded list-and-detail check passed. T-009 remains Done; no repeat live listing check is needed to establish that result.
-- The registered alpha's `get_setup_status` returned application `etsySellerAssistant`, version `0.1.0-alpha.1`, `etsyAccess: not_checked`, and `readOnly: true` during this review. This tool does not contact Etsy or verify current authorization.
-- Local environment: macOS 27.0.1, Node.js 24.11.1, npm 11.6.2. The running host is ChatGPT 26.1027.30824 (build 22943), with an embedded Codex helper reporting 156.0.8078.48 (build 8078.48), verified from the running executable locations and bundle metadata. These are the observed host/runtime versions, not an inferred standalone Codex Desktop release number.
-- Offline recovery checks cover refresh concurrency across processes, uncertain refresh, incomplete token pairs, replacement-token persistence failures, lock ownership, interrupted-state preservation, and deliberate reset. They use fabricated stores and temporary directories, not the operator's connection.
-- Listing tools now return distinct, sanitized guidance for contention and recovery-required failures instead of suggesting a retry for an uncertain refresh. Tool names, inputs, read-only permissions, and Etsy scopes are unchanged.
-
-## Local validation result
-
-`npm run validate` passed on this working tree after the recovery changes: formatting, lint, TypeScript, build, and all 163 offline tests. The sandbox-only attempt could not bind callback listeners; the complete rerun with loopback binding available passed. `git diff --check` also passed. This is local Node 24 evidence, not candidate CI or Node 26 evidence.
+- Owner-authorized Mac OAuth, configured-shop identity, Codex Desktop listing retrieval, and a separate bounded list-and-detail check passed. T-009 remains Done.
+- The owner restarted the app after PR #7. The registered alpha's setup-status tool passed without contacting Etsy. T-010 is Done. This evidence does not verify current authorization.
+- Recorded environment: macOS 27.0.1, Node.js 24.11.1, npm 11.6.2; host ChatGPT 26.1027.30824 build 22943, embedded Codex helper 156.0.8078.48 build 8078.48. These are observed host/runtime versions, not an inferred standalone Codex Desktop release number.
+- PR #8 merged as `4f0761e`. Its five PR and main checks passed. Local validation passed 174 offline tests against the merged dependency baseline.
+- Recovery coverage includes cross-process refresh concurrency, uncertain refresh, incomplete token pairs, replacement-token persistence failures, primary plus cleanup failure, cleanup-only failure, oversized/incomplete owner metadata at the deadline, invalid grants retaining the refreshing marker, and release tombstones. Tests use fabricated stores and temporary directories.
+- Listing tools distinguish contention from recovery-required failures. Tool names, inputs, read-only permissions, and Etsy scopes are unchanged.
 
 ## Remaining acceptance and release work
 
-- Complete owner acceptance of the documented Mac setup/recovery behavior using the recorded host/runtime versions. No live revocation, reset, or credential removal was performed during this review; do not destroy a working connection to fill an evidence checkbox.
-- Review the candidate diff, run `npm run validate`, and obtain current candidate CI/security results through the normal protected-branch process. Successful checks on another commit are not candidate evidence.
-- Current main at `dcdf675563d01de75457728542a3429489f15dd5` had a Windows/Node 24 failure during lock-directory rename on release in [run 41255898713](https://github.com/stevenfarmer/etsySellerAssistant/actions/runs/41255898713). Mac jobs passed. Underlying OS cause and Windows fix remain unconfirmed. Existing branch checks still apply; Windows manual runtime acceptance is deferred to v2 or later.
-- Choose the exact v1 release candidate and version only after review. Reconcile all release materials with it and record check results in the [release checklist](release-checklist.md). This work does not publish or retag a release.
+- Owner acceptance of Mac recovery behavior remains open under T-008. Do not reset, revoke, or remove credentials from a healthy connection to fill an evidence checkbox.
+- Review the alpha.2 candidate diff, run validation and audit, and obtain its own CI/security results. Earlier checks are baseline evidence only.
+- Reconcile release materials and record the exact candidate in the [release checklist](release-checklist.md#v010-alpha2-candidate). Publication requires explicit owner authorization after the candidate is concrete.
+- Delegated authorization remains untested under T-007. This candidate continues the owner-authorized alpha boundary and makes no delegated-access claim.
+- Wall-clock adjustments can affect waits and apparent freshness; expiry is currently calculated after refresh transport. See the [clock assessment](development.md#refresh-failure-and-cleanup-diagnostics). A timing redesign remains separate work.
 
 Other local STDIO clients follow v1. Windows follows that client milestone; Linux remains exploratory. Neither is a v1 manual acceptance gate. Etsy writes and broader scopes remain separately gated.

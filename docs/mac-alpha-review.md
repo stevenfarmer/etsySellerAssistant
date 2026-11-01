@@ -10,6 +10,10 @@ active listing, and the product owner confirmed it was expected. A subsequent ex
 one-listing list-and-detail smoke check also passed on the Mac. No listing contents or identifiers
 were recorded in project materials. Mac recovery and v1 readiness remain open. Windows live platform checks are deferred to v2 or later, outside v1 acceptance.
 
+## Alpha.2 candidate follow-up
+
+The unpublished `0.1.0-alpha.2` candidate adds offline-tested recovery/error fixes. The prior live alpha.1 evidence remains accepted; it is not a live test of alpha.2. T-010 restart/setup-status acceptance is Done. Owner Mac recovery acceptance remains open; no reset or reauthorization is required merely to prepare this prerelease. See [draft release notes](releases/v0.1.0-alpha.2.md).
+
 ## Scope and boundaries
 
 - One locally configured shop and the owner's `listings_r` OAuth grant. Credentials and settings

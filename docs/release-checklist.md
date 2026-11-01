@@ -15,3 +15,15 @@ Complete this checklist for every release, including prereleases. A release is b
 ## After publication
 
 - Verify the release page, prerelease status, links, tracker and steering document. Record any remaining limitations accurately. Do not move or replace an already published tag; correct release notes and prepare a subsequent release if the shipped artifact needs correction.
+
+## v0.1.0-alpha.2 candidate
+
+- Version: `0.1.0-alpha.2`; unpublished, macOS/Codex Desktop read-only prerelease.
+- Exact source SHA: record the immutable head of the release PR after its final change. Any later change invalidates candidate check evidence.
+- Reconciled: README, SECURITY.md, development/recovery guide, readiness, Mac review, historical next-phase plan, and draft release notes.
+- Architecture diagrams and ADR 0004 retain the existing local STDIO, status-only default and opt-in read-only boundaries. Agent rules remain applicable without changes.
+- Prior evidence: PR #8/main `4f0761e`, 174 offline tests and five successful checks; candidate results must be recorded separately.
+- Local candidate validation: formatting, lint, type checking, build and 174 offline tests passed. Dependency audit exits 0 at the high threshold, with 11 moderate development findings still open; no forced upgrade applied. Final candidate CI and secret scan evidence belongs in the release PR.
+- Steering and tracker: reconcile with the release PR and its final check results before publication.
+- Open limitations: Mac recovery acceptance, delegated OAuth, wall-clock/transport expiry assumptions, and accepted unresolved Etsy terms interpretation risk. This candidate does not claim stable v1 acceptance.
+- Publication: blocked pending completed candidate checks, owner disposition of applicable open gates, and explicit authorization for the exact candidate. No tag has been created or moved.
