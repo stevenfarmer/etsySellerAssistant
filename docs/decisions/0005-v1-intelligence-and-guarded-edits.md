@@ -35,6 +35,18 @@ terms for these capabilities; the earlier read-only risk acceptance does not cov
 Live Etsy reads/writes, credential reads, scope upgrades, reset, reauthorization and release
 publication still need concrete authorization. Do not disturb the healthy connection.
 
+### 3 November 2026 terms review finding
+
+The conditional phase-3A design baseline is documented in
+[the guarded-edit design review](../guarded-edit-design-review.md). The current Etsy API
+Terms require prior approval for application-purpose changes and restrict automated
+analysis of API content, AI-model purposes, and transfer of Etsy Member content/data to
+third parties. Their application to the approved v1 AI-assisted workflow has not been
+resolved with Etsy. This is a blocking external question, not a legal determination or a
+revision of the owner's feature requirement. No phase-4 implementation or live AI use of
+Etsy-sourced content may proceed until written Etsy guidance/approval and any resulting
+owner scope decision are recorded. Current runtime and OAuth remain read-only.
+
 No price, inventory, images, variations, shipping, publishing, creation/deletion, orders or
 buyer-data tools are added by this decision. Broader analytics API access also needs a separate
 requirement/data-availability review. Recommendations may flag missing evidence; they must not
