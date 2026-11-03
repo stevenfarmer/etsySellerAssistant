@@ -11,29 +11,31 @@ resuming; historical evidence is valid only within its stated scope.
   passed. See [evaluation evidence](review-evaluation.md).
 - Current chunk: **3A / T-011 guarded-edit design and security review**. The owner explicitly
   resumed this chunk on 3 November. Conditional technical baseline is in
-  [guarded-edit-design-review.md](guarded-edit-design-review.md), with corresponding
-  requirements, phase-gate, ADR, and listing-review updates. No runtime, scope, credentials,
-  live Etsy access, or publication changed.
+  [guarded-edit-design-review.md](guarded-edit-design-review.md), merged in PR #26 as
+  `2263e722f6e790bb31fa1883d1655d69ba32af99`. The corresponding requirements, phase-gate,
+  ADR, listing-review, and connected records were updated and read back.
+- Verification: `npm run validate` passed formatting, lint, typecheck, build, and **242/242
+  offline tests** after the sandboxed run could not bind loopback for 9 callback tests.
+  `git diff --check` passed. All five PR checks passed on the reviewed head. No test contacts
+  Etsy or mutates a shop.
 - Blocking finding: Etsy API Terms sections 3, 5.18, 5.24, and 5.25 create an unresolved
   written-authorization/app-purpose question for AI analysis and transfer of API-sourced
   listing content, as well as the proposed write capability. This is not a legal conclusion.
   No Etsy contact was made. Do not begin phase 4 or send Etsy data to an AI provider until
   written Etsy guidance and owner disposition are recorded. Codex's exact approval UX must
-  also be verified before relying on MCP elicitation.
-- Validation: an ordinary sandboxed `npm run validate` reached 233/242 tests; 9 loopback
-  callback-server tests could not bind. The same required command then passed with approved
-  local loopback access: formatting, lint, typecheck, build, and all **242/242 offline tests**.
-  `git diff --check` passed. No test contacts Etsy or mutates a shop.
-- Current branch: `codex/guarded-edit-design-review`, based on live main
-  `4300b849d33ea115a7ee295ff486185c54f92eb0`. The design/docs/checkpoint edits are locally
-  committed locally; push, PR, and final CI are pending. Connected tracker/steering
-  updates and their readback are also pending. Keep T-011 In Progress until the external
-  blocker and client evidence are resolved.
-- Exact next action: review the complete local diff, commit the documentation-only 3A
-  baseline on this feature branch, push/open a focused PR, and wait for required review/CI.
-  Then update Work Tracker T-011 and the current steering record with the PR and actual
-  evidence, read both back, and finalize this checkpoint. Stop after this chunk; phase 4 is
-  closed pending written Etsy guidance/approval and owner disposition.
+  also be verified before relying on MCP elicitation. T-011 remains In Progress.
+- No runtime, OAuth scope, credentials, live Etsy access, or publication changed. PR #26 is
+  merged and its five checks passed. Live main is `2263e722f6e790bb31fa1883d1655d69ba32af99`
+  with tree `a34352275df493e72de25934d3cbe71aff8671a3`.
+- Local checkout remains on `codex/guarded-edit-design-review`, whose last design-review
+  commit was `828d19372fd5b8cd027f03a348cd03223ae06cde`. Local and live commit IDs differ
+  because shell GitHub access could not resolve the host; the connected GitHub integration
+  confirmed the merge and current main. Synchronize the local checkout to live main before
+  further repository work.
+- Exact next action: obtain written Etsy guidance/approval covering the intended app purpose,
+  `listings_w`, and AI-provider data flow; record the owner's disposition; verify Codex's
+  exact host-mediated confirmation behavior. Recheck main/PRs/CI and connected records before
+  resuming. Phase 4 remains closed until every gate passes. Stop after this 3A chunk.
 
 ## Required replacement at each checkpoint
 
