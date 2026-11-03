@@ -26,7 +26,7 @@ resuming; historical evidence is valid only within its stated scope.
   `git diff --check` passed. No test contacts Etsy or mutates a shop.
 - Current branch: `codex/guarded-edit-design-review`, based on live main
   `4300b849d33ea115a7ee295ff486185c54f92eb0`. The design/docs/checkpoint edits are locally
-  uncommitted at this checkpoint; PR and final CI are pending. Connected tracker/steering
+  committed locally; push, PR, and final CI are pending. Connected tracker/steering
   updates and their readback are also pending. Keep T-011 In Progress until the external
   blocker and client evidence are resolved.
 - Exact next action: review the complete local diff, commit the documentation-only 3A
