@@ -72,6 +72,14 @@ Owner usefulness acceptance remains distinct from those checks and from observed
 
 ## Guarded apply requirements (M6, T-011/T-024)
 
+The 3 November 2026 conditional design baseline and current API/terms findings are in
+[the guarded-edit design review](guarded-edit-design-review.md). The present Etsy API Terms
+raise an unresolved written-authorization question for automated analysis of API-sourced
+listing content, the expanded app purpose, and provider data transfer. Treat this as a
+blocking external gate, not a legal conclusion. Do not implement phase 4 or send Etsy data
+to an AI provider until written Etsy guidance/approval and the owner's disposition are
+recorded. The design does not change the current read-only runtime.
+
 Before implementing write access, review the exact tool contracts and threat/failure model:
 
 - Fixed title/description/tags allowlist and current Etsy constraints; no generic endpoint or
