@@ -25,13 +25,14 @@ resuming; historical evidence is valid only within its stated scope.
   written Etsy guidance and owner disposition are recorded. Codex's exact approval UX must
   also be verified before relying on MCP elicitation. T-011 remains In Progress.
 - No runtime, OAuth scope, credentials, live Etsy access, or publication changed. PR #26 is
-  merged and its five checks passed. Live main is `2263e722f6e790bb31fa1883d1655d69ba32af99`
-  with tree `a34352275df493e72de25934d3cbe71aff8671a3`.
-- Local checkout remains on `codex/guarded-edit-design-review`, whose last design-review
-  commit was `828d19372fd5b8cd027f03a348cd03223ae06cde`. Local and live commit IDs differ
-  because shell GitHub access could not resolve the host; the connected GitHub integration
-  confirmed the merge and current main. Synchronize the local checkout to live main before
-  further repository work.
+  merged as `2263e722f6e790bb31fa1883d1655d69ba32af99`; its five checks passed. The
+  checkpoint-only PR #27 then merged as `16d028bb76ba9fb7cec152bb3d466b1fdd67e824` (tree
+  `090f1e2cb8de0d2b5cffc61f1a91abd9289d1c74`).
+- At the final checkpoint sync, local branch `codex/guarded-edit-design-review` was at
+  `3608c75b073aaea78e7f2f2b67303d8d0e6ae12b`; its tree matched the PR #27 merge tree. Local
+  and GitHub commit IDs differ because shell GitHub access could not resolve the host. The
+  connected GitHub integration confirmed both merges. Recheck and synchronize the local
+  checkout to live main before further repository work.
 - Exact next action: obtain written Etsy guidance/approval covering the intended app purpose,
   `listings_w`, and AI-provider data flow; record the owner's disposition; verify Codex's
   exact host-mediated confirmation behavior. Recheck main/PRs/CI and connected records before
