@@ -39,12 +39,14 @@ resuming; historical evidence is valid only within its stated scope.
   all five jobs passed there. On the Mac, the readable same-call form accepted a proposal and
   rejected a negative confirmation, with a fresh read showing the listing unchanged. The owner
   found the form confusing because it required both a yes/no field and a host Accept/Deny action.
-  Current local follow-up removes that field and treats the host `accept` action as the sole
-  approval. `npm run validate` passes format, lint, typecheck, build and 248/248 offline tests;
-  `git diff --check` passes. This follow-up is not yet committed or reflected in the tracker.
-  Next: commit the local code/docs to PR #33, wait for all CI, then have the owner check the revised
-  one-action form on Mac. Keep T-032 in review until that check and PR completion; do not start
-  T-033 yet. No apply tool or update transport exists; no listing changed.
+  The follow-up is in commit `130bd6ebc6018eadcab0eec4e07a01e4296bce5d`; it removes that field
+  and treats the host `accept` action as the sole approval. `npm run validate` passed format,
+  lint, typecheck, build and 248/248 offline tests; `git diff --check` and format check passed.
+  All five CI jobs pass on that code head. T-024/T-032 tracker evidence was updated and read back.
+  Next: the owner restarts the local server connection so it loads the revised form; then run a
+  test-only proposal and confirm the host presents one choice. Keep T-032 in review until that Mac
+  check and PR completion; do not start T-033 yet. No apply tool or update transport exists; no
+  listing changed.
 
 ## Required replacement at each checkpoint
 
