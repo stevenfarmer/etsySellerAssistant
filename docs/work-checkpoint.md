@@ -35,14 +35,16 @@ resuming; historical evidence is valid only within its stated scope.
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
 - Current chunk: **4A follow-up / T-032 confirmation usability**, in review on
   [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
-  `codex/t032-readable-confirmation` (the initial implementation commit is `05ab83e476dbd116bcdf8d6fca1a0d9a9b7a9463`).
+  `codex/t032-readable-confirmation` (implementation commit `05ab83e476dbd116bcdf8d6fca1a0d9a9b7a9463`).
   `prepare_listing_edit` refreshes and validates the listing, then asks for host confirmation in
   the same call; the form shows the listing and exact current/proposed fields without internal
   IDs/timestamps. `npm run validate` passed format, lint, typecheck, build and 248/248 offline
-  tests; `git diff --check` passed. T-024/T-032 tracker updates were read back. PR checks and
-  owner Mac acceptance of the new form are pending. Next: monitor PR checks, then have the owner
-  repeat Mac Codex accept/decline using a test-only proposal; stop before T-033. No apply tool or
-  update transport exists; the live listing remains unchanged.
+  tests; `git diff --check` passed. All five PR checks passed on head
+  `942e03cb81ebd334c67ef2b12990ce57fffbe69b`. T-024/T-032 tracker updates were read back. The
+  Mac was locked during the attempted client check, so the updated form is still unverified there.
+  Next: once the Mac is unlocked, restart the local server only if it points at this checkout,
+  then repeat accept/decline with a test-only proposal; stop before T-033. No apply tool or update
+  transport exists; the live listing remains unchanged.
 
 ## Required replacement at each checkpoint
 
