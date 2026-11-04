@@ -27,8 +27,11 @@ The unpublished development alpha also exposes `prepare_listing_edit` and
 `approve_listing_edit`. These create an in-memory, five-minute exact proposal and ask the
 connected MCP client for explicit form confirmation after a fresh listing read. The server
 does not send a listing update: there is no apply tool yet. Clients without MCP form-elicitation
-support fail closed. Codex Desktop confirmation behavior is still awaiting direct client
-verification; this development workflow is not part of published alpha.1.
+support fail closed. Owner-run Mac Codex Desktop confirmation verification passed on 4 November
+2026: explicit acceptance records approval for later apply, while decline records no approval;
+neither changes a listing. The current form presents raw JSON and the assistant needed a separate
+confirmation request. T-032 tracks a readable form and automatic confirmation request; this
+development workflow is not part of published alpha.1.
 
 ## Work toward v1
 

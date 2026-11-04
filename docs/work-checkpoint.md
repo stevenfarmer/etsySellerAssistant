@@ -6,28 +6,37 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current checkpoint
 
-- Last completed chunk: **3A / T-011 guarded-edit design and security review**. The design baseline
+- Prior design chunk: **3A / T-011 guarded-edit design and security review**. The design baseline
   merged in PR #26 as `2263e722f6e790bb31fa1883d1655d69ba32af99`; see
   [the review](guarded-edit-design-review.md).
-- Current chunk: **4A / T-028 proposal and approval**, PR #31, branch
-  `codex/phase-4a-proposals`. Implementation commit `4897f077de94adbd9e5247dbacdf65311bd01df7`.
-  The checkpoint update is being added to that same PR; use the live PR head for current CI.
+- Last completed chunk: **4A / T-028 proposal and approval**, implemented on branch
+  `codex/phase-4a-proposals` and merged in PR #31 as
+  `4b7e49135418d85f4c7c2f97a668944a26c90099` from reviewed head
+  `2a4a79c40a1dbbfec77b8e2fad3609a5c93e8890`.
 - Delivered in the unpublished alpha: bounded in-memory proposals tied to exact changed fields,
   configured identity and listing modification timestamp; fresh identity/value check immediately
   before MCP form elicitation; five-minute expiry; one-use and concurrent-call protection; no apply
   tool or update transport. The default server remains status-only.
 - Local verification: `npm run validate` passed format, lint, typecheck, build and **248/248 offline
   tests**; `git diff --check` passed. No external mutation, credential/scope change or publication.
-- PR #31 CI at the last live check: repository secret scan and both Windows checks passed; both
-  macOS checks remained queued. Do not record queued checks as passed. The connected tracker and
-  steering document were updated and read back; T-024 is In Progress and T-028 is In Review.
-- Direct Codex Desktop form-confirmation behavior is not yet verified. Unsupported, declined,
-  cancelled, stale, expired or replayed proposals fail closed. No apply operation exists.
-- Exact next actions: wait for all five checks on the current PR #31 head; review their final
-  results; merge only after required checks pass; synchronize this checkpoint with the merged
-  commit and read back tracker/steering. Then verify in Codex Desktop that the exact proposal is
-  presented and only explicit acceptance returns `confirm: true`. Keep T-028 In Review and do not
-  begin 4B until that client check passes. Phase 4B is not started automatically.
+- All five current-head CI checks passed, including Node 24/26 macOS and Windows validation and
+  the repository secret scan. Mac checks passed after rerun following a GitHub Actions incident.
+  PR #32 documentation checks are being refreshed for the current test evidence and follow-ups.
+  No external mutation, credential/scope change or publication.
+- Owner-run Mac Codex Desktop check passed on 4 November 2026: the local alpha exposed listing,
+  prepare and approve tools; accepting an exact proposal returned
+  `status: approved_for_later_apply` and `listingChanged: false`; a separate decline returned no
+  approval. Both paths left the listing unchanged. T-028 client confirmation gate is verified.
+- The owner identified a usability follow-up: the confirmation form displays raw JSON with
+  internal IDs/timestamps, and the assistant needed a separate prompt to request confirmation.
+  Track readable before/proposed fields and automatic approval-tool orchestration as T-032.
+- The owner clarified the product intent: a local Etsy seller-assistant MCP server for compatible
+  clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
+  documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
+- Current next chunk: **4A follow-up / T-032 confirmation usability**. Improve the form and
+  standard assistant flow, add offline coverage, then repeat the Codex Mac accept/decline check.
+  Then complete T-033 before Phase 4B / T-029. No apply tool or update transport exists; the live
+  listing remains unchanged.
 
 ## Required replacement at each checkpoint
 
