@@ -244,7 +244,7 @@ test('CLI accepts only one explicit detail flag', () => {
   assert.equal(parseAlphaSmokeArgs(['--other']), undefined);
 });
 
-test('smoke accepts optional read-only review tools without invoking them, but rejects unsafe or unknown tools', async () => {
+test('smoke accepts known review and proposal tools without invoking them, but rejects unsafe or unknown tools', async () => {
   for (const [extraTools, status] of [
     [
       [
@@ -280,6 +280,28 @@ test('smoke accepts optional read-only review tools without invoking them, but r
         {
           name: 'validate_listing_draft',
           annotations: { readOnlyHint: false, destructiveHint: false },
+        },
+      ],
+      'failed',
+    ],
+    [
+      [
+        {
+          name: 'prepare_listing_edit',
+          annotations: { readOnlyHint: false, destructiveHint: false },
+        },
+        {
+          name: 'approve_listing_edit',
+          annotations: { readOnlyHint: false, destructiveHint: false },
+        },
+      ],
+      'passed',
+    ],
+    [
+      [
+        {
+          name: 'approve_listing_edit',
+          annotations: { readOnlyHint: false, destructiveHint: true },
         },
       ],
       'failed',

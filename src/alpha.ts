@@ -9,5 +9,6 @@ void serveStdio(() =>
     readService: createLocalReadService(globalThis.fetch),
     guidanceService: createLocalGuidanceService(),
     draftValidation: true,
+    editProposals: true,
   }),
 );

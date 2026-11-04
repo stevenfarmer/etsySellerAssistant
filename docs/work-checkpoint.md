@@ -6,38 +6,37 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current checkpoint
 
-- Prior completed chunk: 2B/T-023, PR #25 merged as
-  `4300b849d33ea115a7ee295ff486185c54f92eb0`; 242 offline tests and all five PR checks
-  passed. See [evaluation evidence](review-evaluation.md).
-- Completed chunk: **3A / T-011 guarded-edit design and security review**. The technical
-  baseline is in [guarded-edit-design-review.md](guarded-edit-design-review.md), merged in PR
-  #26 as `2263e722f6e790bb31fa1883d1655d69ba32af99`. Requirements, phase gates, ADR, listing
-  review, and connected records were synchronized. T-011 is Done for the design review.
-- Verification: `npm run validate` passed formatting, lint, typecheck, build, and **242/242
-  offline tests**. The first sandboxed run could not bind loopback for 9 callback tests; the
-  rerun with local loopback access passed. `git diff --check` passed. All five PR checks passed.
-  No test contacts Etsy or mutates a shop.
-- No runtime, OAuth scope, credentials, live Etsy access, or publication changed. PR #27 and
-  PR #28 contain checkpoint-only synchronization; all five checks passed on each. PR #29
-  aligned project requirements and records with the tool's scope; it merged as
-  `ef6c5f9944472e8d0027bbd85995c8ccbe56bfe6` after all five checks passed. Connected tracker
-  and steering updates were read back on 4 November.
-- At the final local check, branch `codex/project-record-scope-cleanup` was clean at
-  `4cd11870d8247338cbe2ae53710f843785a4acb8`; its tree contains the PR #29 changes. Recheck
-  and synchronize local main before further repository work.
-- Exact next chunk: **4A / T-028 proposal and approval implementation**, beginning offline.
-  Verify host-mediated confirmation behavior before relying on it; keep write capability
-  closed until the Phase 4A–4C technical tests/reviews pass. Any concrete credential, scope,
-  live-write, or publication step still requires separate authorization. Stop after one chunk.
+- Last completed chunk: **3A / T-011 guarded-edit design and security review**. The design baseline
+  merged in PR #26 as `2263e722f6e790bb31fa1883d1655d69ba32af99`; see
+  [the review](guarded-edit-design-review.md).
+- Current chunk: **4A / T-028 proposal and approval**, PR #31, branch
+  `codex/phase-4a-proposals`. Implementation commit `4897f077de94adbd9e5247dbacdf65311bd01df7`.
+  The checkpoint update is being added to that same PR; use the live PR head for current CI.
+- Delivered in the unpublished alpha: bounded in-memory proposals tied to exact changed fields,
+  configured identity and listing modification timestamp; fresh identity/value check immediately
+  before MCP form elicitation; five-minute expiry; one-use and concurrent-call protection; no apply
+  tool or update transport. The default server remains status-only.
+- Local verification: `npm run validate` passed format, lint, typecheck, build and **248/248 offline
+  tests**; `git diff --check` passed. No external mutation, credential/scope change or publication.
+- PR #31 CI at the last live check: repository secret scan and both Windows checks passed; both
+  macOS checks remained queued. Do not record queued checks as passed. The connected tracker and
+  steering document were updated and read back; T-024 is In Progress and T-028 is In Review.
+- Direct Codex Desktop form-confirmation behavior is not yet verified. Unsupported, declined,
+  cancelled, stale, expired or replayed proposals fail closed. No apply operation exists.
+- Exact next actions: wait for all five checks on the current PR #31 head; review their final
+  results; merge only after required checks pass; synchronize this checkpoint with the merged
+  commit and read back tracker/steering. Then verify in Codex Desktop that the exact proposal is
+  presented and only explicit acceptance returns `confirm: true`. Keep T-028 In Review and do not
+  begin 4B until that client check passes. Phase 4B is not started automatically.
 
 ## Required replacement at each checkpoint
 
-Keep the current checkpoint short; replace stale entries rather than append chat transcripts.
-Record completed chunk/task, merged PR and commit; current branch/PR/head and uncommitted work
-if any; actual commands/results/CI; decisions and unresolved findings; connected readback status;
-next chunk and exact first action; and any specific required owner action. Link historical evidence
-instead of repeating it. Never include private playbook content, credentials, seller facts or logs.
+Keep this checkpoint short; replace stale entries rather than append chat transcripts. Record
+completed chunk/task, merged PR and commit; current branch/PR/head and uncommitted work; actual
+verification/CI; decisions and unresolved findings; connected readback status; next action; and
+any specific owner action. Link historical evidence instead of repeating it. Never include
+private playbook content, credentials, seller facts or logs.
 
-If interrupted mid-chunk, mark it incomplete and record the safe restart step. Never infer that
-a planned test ran, a PR merged or an owner accepted behavior merely because this file says so;
+If interrupted mid-chunk, mark it incomplete and record the safe restart step. Never infer that a
+planned test ran, a PR merged or an owner accepted behavior merely because this file says so;
 compare the claim with actual source/PR/CI and task evidence.

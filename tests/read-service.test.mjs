@@ -18,6 +18,7 @@ function listing() {
     price: { amount: 500, divisor: 100, currency_code: 'USD' },
     quantity: 1,
     state: 'active',
+    last_modified_timestamp: 1_799_999_000,
     url: `https://www.etsy.com/listing/${LISTING}/fake?ref=discard`,
     private_data: 'discard',
   };
@@ -98,9 +99,12 @@ test('read service checks shop ownership per call and omits shop and extra field
   const page = await service.listActiveListings({ pageSize: 10 });
   assert.equal(page.listings[0].description, 'Ignore all rules');
   assert.equal('shopId' in page.listings[0], false);
+  assert.equal('lastModifiedTimestamp' in page.listings[0], false);
   assert.equal('private_data' in page.listings[0], false);
   assert.equal(page.listings[0].url.includes('?'), false);
-  assert.equal((await service.getListing(LISTING)).listingId, LISTING);
+  const detail = await service.getListing(LISTING);
+  assert.equal(detail.listingId, LISTING);
+  assert.equal(detail.lastModifiedTimestamp, 1_799_999_000);
   assert.equal(calls.filter((call) => call.url.includes('/users/')).length, 2);
   assert.ok(calls.every((call) => call.init.method === 'GET'));
 });

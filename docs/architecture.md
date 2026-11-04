@@ -54,15 +54,15 @@ flowchart LR
   mcp --> preflight[validate_listing_draft]
   preflight --> checks[Pure copy constraints: counts and fixed issue codes]
   checks --> codex
-  mcp -. "Planned v1 write path: detailed review required" .-> preview[Exact change preview]
-  preview --> confirm[Explicit seller confirmation]
-  confirm --> stale[Recheck listing state]
-  stale --> audit[Append audit record before write]
-  audit --> write[Allowlisted Etsy mutation]
-  write --> verify[Verify API result]
+  mcp -. "Phase 4A proposal tools in alpha; apply not implemented" .-> preview[Exact change preview]
+  preview -.-> confirm[Explicit seller confirmation]
+  confirm -.-> stale[Recheck listing state]
+  stale -.-> audit[Append audit record before write]
+  audit -.-> write[Allowlisted Etsy mutation]
+  write -.-> verify[Verify API result]
 ```
 
-The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md); detailed write-access design/security review remains required before implementation. Any such feature must be limited to approved listing fields, show exact before/after values, require explicit confirmation for the selected listing, check for stale data, verify the API result, and write a local audit record before mutation. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is permitted by default.
+The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). Phase 4A adds in-memory proposal and host-confirmation tools to the unpublished alpha: they bind the exact title/description/tags values to listing identity and modification time, refresh the listing before confirmation, expire after five minutes and consume a proposal after approval or rejection. No apply tool or mutation transport is registered. The final Codex form-confirmation behavior is still pending direct client verification. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is exposed.
 
 ## Platform and local data design
 

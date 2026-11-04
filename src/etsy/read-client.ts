@@ -33,6 +33,7 @@ export interface ListingPrice {
 export interface ListingSummary {
   readonly listingId: number;
   readonly shopId: number;
+  readonly lastModifiedTimestamp?: number;
   readonly title: string;
   readonly description: string;
   readonly tags: readonly string[];
@@ -204,6 +205,11 @@ function parseListing(
   return {
     listingId: value.listing_id,
     shopId: value.shop_id,
+    ...(typeof value.last_modified_timestamp === 'number' &&
+    Number.isSafeInteger(value.last_modified_timestamp) &&
+    value.last_modified_timestamp >= 0
+      ? { lastModifiedTimestamp: value.last_modified_timestamp }
+      : {}),
     title: value.title,
     description: value.description,
     tags: value.tags,
