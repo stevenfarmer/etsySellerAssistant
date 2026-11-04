@@ -204,7 +204,9 @@ test('detail output is allowlisted and returned listing identity is rechecked', 
   const { client, calls } = createClient([
     response(shop()),
     response({ count: 1, results: [listing()] }),
-    response(listing({ private_data: 'secret seller data' })),
+    response(
+      listing({ private_data: 'secret seller data', last_modified_timestamp: 1_799_999_000 }),
+    ),
   ]);
   await client.listActiveListings();
 
@@ -213,6 +215,7 @@ test('detail output is allowlisted and returned listing identity is rechecked', 
   assert.deepEqual(Object.keys(result).sort(), [
     'categoryId',
     'description',
+    'lastModifiedTimestamp',
     'listingId',
     'price',
     'quantity',
@@ -223,6 +226,7 @@ test('detail output is allowlisted and returned listing identity is rechecked', 
     'url',
   ]);
   assert.equal('private_data' in result, false);
+  assert.equal(result.lastModifiedTimestamp, 1_799_999_000);
   assert.equal(result.url, `https://www.etsy.com/listing/${LISTING_ID}/fabricated`);
   assert.equal(calls.at(-1).url.pathname, `/v3/application/listings/${LISTING_ID}`);
   assert.equal(calls[0].init.headers.authorization, `Bearer ${OWNER_ID}.fabricated-access-token`);

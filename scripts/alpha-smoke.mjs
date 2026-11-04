@@ -217,7 +217,13 @@ export async function runAlphaSmoke(options = {}) {
         new Set(names).size !== names.length ||
         names.some(
           (name) =>
-            ![...expectedNames, 'get_review_guidance', 'validate_listing_draft'].includes(name),
+            ![
+              ...expectedNames,
+              'get_review_guidance',
+              'validate_listing_draft',
+              'prepare_listing_edit',
+              'approve_listing_edit',
+            ].includes(name),
         ) ||
         expectedNames.some((name) => !names.includes(name)) ||
         inventory.tools.some(
@@ -229,6 +235,10 @@ export async function runAlphaSmoke(options = {}) {
               tool.name === 'validate_listing_draft') &&
               (!isRecord(tool.annotations) ||
                 tool.annotations.readOnlyHint !== true ||
+                tool.annotations.destructiveHint !== false)) ||
+            ((tool.name === 'prepare_listing_edit' || tool.name === 'approve_listing_edit') &&
+              (!isRecord(tool.annotations) ||
+                tool.annotations.readOnlyHint !== false ||
                 tool.annotations.destructiveHint !== false)),
         )
       ) {

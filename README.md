@@ -8,10 +8,10 @@ A local-first MCP assistant for reviewing listings in one owner-authorized Etsy 
 
 There are two server entry points:
 
-| Entry point         | Behavior                                                                                                                            |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                                     |
-| `dist/src/alpha.js` | Opt-in read-only alpha; status, bounded listing pages/detail, explicit generic/private review guidance, and local draft validation. |
+| Entry point         | Behavior                                                                                                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                                                                  |
+| `dist/src/alpha.js` | Opt-in development alpha; bounded listing reads, review guidance, draft checks, and offline edit proposal/host-confirmation tools. It has no listing apply tool. |
 
 In the unpublished development candidate, alpha `get_setup_status` starts with
 `etsyAccess: not_checked`. After a complete successful listing read, it reports
@@ -22,6 +22,13 @@ credentials/settings and makes no Etsy request. Outside changes to authorization
 are not detected until a listing read or restart. The default scaffold's status remains unchanged.
 
 The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
+
+The unpublished development alpha also exposes `prepare_listing_edit` and
+`approve_listing_edit`. These create an in-memory, five-minute exact proposal and ask the
+connected MCP client for explicit form confirmation after a fresh listing read. The server
+does not send a listing update: there is no apply tool yet. Clients without MCP form-elicitation
+support fail closed. Codex Desktop confirmation behavior is still awaiting direct client
+verification; this development workflow is not part of published alpha.1.
 
 ## Work toward v1
 

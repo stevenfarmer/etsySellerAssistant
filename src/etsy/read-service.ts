@@ -76,8 +76,11 @@ export function createReadService(options: ReadServiceOptions) {
     const identity = await cached.client.verifyConfiguredShop();
     return { client: cached.client, identity };
   };
-  const omitShopId = (listing: ListingSummary): PublicListing => ({
+  const omitShopId = (listing: ListingSummary, includeEditMetadata = false): PublicListing => ({
     listingId: listing.listingId,
+    ...(!includeEditMetadata || listing.lastModifiedTimestamp === undefined
+      ? {}
+      : { lastModifiedTimestamp: listing.lastModifiedTimestamp }),
     title: listing.title,
     description: listing.description,
     tags: listing.tags,
@@ -120,11 +123,14 @@ export function createReadService(options: ReadServiceOptions) {
     async listActiveListings(input: { readonly pageSize?: number; readonly offset?: number }) {
       return read(async (client) => {
         const result = await client.listActiveListings({ ...input, maxPages: 1 });
-        return { listings: result.listings.map(omitShopId), nextOffset: result.nextOffset };
+        return {
+          listings: result.listings.map((listing) => omitShopId(listing)),
+          nextOffset: result.nextOffset,
+        };
       });
     },
     async getListing(listingId: number): Promise<PublicListing> {
-      return read(async (client) => omitShopId(await client.getListing(listingId)));
+      return read(async (client) => omitShopId(await client.getListing(listingId), true));
     },
   };
 }
