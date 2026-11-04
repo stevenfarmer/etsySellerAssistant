@@ -21,7 +21,7 @@ resuming; historical evidence is valid only within its stated scope.
   tests**; `git diff --check` passed. No external mutation, credential/scope change or publication.
 - All five current-head CI checks passed, including Node 24/26 macOS and Windows validation and
   the repository secret scan. Mac checks passed after rerun following a GitHub Actions incident.
-  PR #32 documentation checks are being refreshed for the current test evidence and follow-ups.
+  PR #32 documentation reconciliation merged as `e40eee7d9658c87fa0f859c1b48cccc1e756852a`.
   No external mutation, credential/scope change or publication.
 - Owner-run Mac Codex Desktop check passed on 4 November 2026: the local alpha exposed listing,
   prepare and approve tools; accepting an exact proposal returned
@@ -33,10 +33,13 @@ resuming; historical evidence is valid only within its stated scope.
 - The owner clarified the product intent: a local Etsy seller-assistant MCP server for compatible
   clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
-- Current next chunk: **4A follow-up / T-032 confirmation usability**. Improve the form and
-  standard assistant flow, add offline coverage, then repeat the Codex Mac accept/decline check.
-  Then complete T-033 before Phase 4B / T-029. No apply tool or update transport exists; the live
-  listing remains unchanged.
+- Current chunk: **4A follow-up / T-032 confirmation usability**, in implementation. The prepare
+  tool now refreshes and validates the listing, then asks for host confirmation in the same call;
+  the form shows the listing and exact current/proposed fields without internal IDs/timestamps.
+  Local Mac acceptance and CI are not yet verified. Next: run `npm run validate`, finish the PR
+  and connected tracker update, wait for CI, then repeat the Mac accept/decline check. T-033 follows
+  before Phase 4B / T-029. No apply tool or update transport exists; the live listing remains
+  unchanged.
 
 ## Required replacement at each checkpoint
 

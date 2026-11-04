@@ -222,7 +222,6 @@ export async function runAlphaSmoke(options = {}) {
               'get_review_guidance',
               'validate_listing_draft',
               'prepare_listing_edit',
-              'approve_listing_edit',
             ].includes(name),
         ) ||
         expectedNames.some((name) => !names.includes(name)) ||
@@ -236,7 +235,7 @@ export async function runAlphaSmoke(options = {}) {
               (!isRecord(tool.annotations) ||
                 tool.annotations.readOnlyHint !== true ||
                 tool.annotations.destructiveHint !== false)) ||
-            ((tool.name === 'prepare_listing_edit' || tool.name === 'approve_listing_edit') &&
+            (tool.name === 'prepare_listing_edit' &&
               (!isRecord(tool.annotations) ||
                 tool.annotations.readOnlyHint !== false ||
                 tool.annotations.destructiveHint !== false)),

@@ -15,13 +15,16 @@ const snapshot = Object.freeze({
 
 function harness(options = {}) {
   const tools = new Map();
+  let nextId = 0;
   const service =
     options.proposalService ??
     createEditProposalService({
       now: options.now,
-      createId: options.createId ?? (() => 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'),
+      createId:
+        options.createId ?? (() => `aaaaaaaa-aaaa-4aaa-8aaa-${String(++nextId).padStart(12, '0')}`),
     });
   let current = options.current ?? snapshot;
+  let readCount = 0;
   const readService = {
     getConnectionStatus: () => ({
       etsyAccess: 'verified_this_session',
@@ -31,13 +34,19 @@ function harness(options = {}) {
         lastVerifiedAt: '2026-11-04T00:00:00.000Z',
       },
     }),
-    getListing: async () => ({
-      listingId: current.listingId,
-      lastModifiedTimestamp: current.lastModifiedTimestamp,
-      title: current.title,
-      description: current.description,
-      tags: [...current.tags],
-    }),
+    getListing: async () => {
+      readCount += 1;
+      options.afterRead?.(readCount, (value) => {
+        current = value;
+      });
+      return {
+        listingId: current.listingId,
+        lastModifiedTimestamp: current.lastModifiedTimestamp,
+        title: current.title,
+        description: current.description,
+        tags: [...current.tags],
+      };
+    },
   };
   const server = {
     registerTool(name, config, handler) {
@@ -63,105 +72,112 @@ function body(result) {
   return JSON.parse(result.content[0].text);
 }
 
-test('proposal binds exact fields, configured identity and timestamp, and approval returns no copy', async () => {
+test('prepare presents exact readable values and requests approval in the same tool call', async () => {
   const h = harness();
-  const prepared = await h.call('prepare_listing_edit', {
-    listingId: snapshot.listingId,
-    changes: { title: 'Fabricated blue mug' },
-  });
-  const proposal = body(prepared);
-  assert.equal(proposal.ownerId, snapshot.ownerId);
-  assert.equal(proposal.shopId, snapshot.shopId);
-  assert.equal(proposal.lastModifiedTimestamp, snapshot.lastModifiedTimestamp);
-  assert.deepEqual(proposal.before, { title: snapshot.title });
-  assert.deepEqual(proposal.after, { title: 'Fabricated blue mug' });
-
+  assert.deepEqual([...h.tools.keys()], ['prepare_listing_edit']);
   let elicitation;
   const approved = await h.call(
-    'approve_listing_edit',
-    { proposalId: proposal.proposalId },
+    'prepare_listing_edit',
+    {
+      listingId: snapshot.listingId,
+      changes: { title: 'Fabricated blue mug', description: 'Updated fabricated description' },
+    },
     async (request) => {
       elicitation = request;
       return { action: 'accept', content: { confirm: true } };
     },
   );
-  assert.deepEqual(body(approved), {
-    proposalId: proposal.proposalId,
-    status: 'approved_for_later_apply',
-    listingChanged: false,
-  });
-  assert.match(elicitation.message, /Fabricated mug/);
-  assert.match(elicitation.message, /Fabricated blue mug/);
+  const result = body(approved);
+  assert.match(result.proposalId, /^[0-9a-f-]{36}$/);
+  assert.equal(result.status, 'approved_for_later_apply');
+  assert.equal(result.listingChanged, false);
+  assert.match(elicitation.message, /Listing: Fabricated mug/);
+  assert.match(elicitation.message, /Listing ID: 93003/);
+  assert.match(
+    elicitation.message,
+    /Title\n\nCURRENT VALUE\nFabricated mug\n\nPROPOSED VALUE\nFabricated blue mug/,
+  );
+  assert.match(
+    elicitation.message,
+    /Description\n\nCURRENT VALUE\nFabricated description\n\nPROPOSED VALUE\nUpdated fabricated description/,
+  );
+  assert.match(elicitation.message, /does not change Etsy/);
+  assert.doesNotMatch(
+    elicitation.message,
+    /proposalId|ownerId|shopId|lastModifiedTimestamp|expiresAt/,
+  );
   assert.deepEqual(elicitation.requestedSchema.required, ['confirm']);
-  assert.deepEqual(h.service.takeApproved(proposal.proposalId).after, {
+  assert.deepEqual(h.service.takeApproved(result.proposalId).after, {
     title: 'Fabricated blue mug',
+    description: 'Updated fabricated description',
   });
-  assert.throws(() => h.service.takeApproved(proposal.proposalId), ProposalError);
+  assert.throws(() => h.service.takeApproved(result.proposalId), ProposalError);
 });
 
-test('decline, cancel, false confirmation and unsupported elicitation fail closed and consume the proposal', async () => {
+test('tag changes are readable and acceptance still changes no listing', async () => {
+  const h = harness();
+  let confirmationMessage;
+  const approved = await h.call(
+    'prepare_listing_edit',
+    { listingId: snapshot.listingId, changes: { tags: ['blue mug', 'handmade'] } },
+    async ({ message }) => {
+      confirmationMessage = message;
+      return { action: 'accept', content: { confirm: true } };
+    },
+  );
+  assert.match(confirmationMessage, /Tags\n\nCURRENT VALUE\n• blue mug\n• stoneware/);
+  assert.match(confirmationMessage, /PROPOSED VALUE\n• blue mug\n• handmade/);
+  assert.equal(body(approved).listingChanged, false);
+});
+
+test('decline, cancel, false confirmation and unsupported elicitation fail closed', async () => {
   for (const answer of [
     { action: 'decline' },
     { action: 'cancel' },
     { action: 'accept', content: { confirm: false } },
   ]) {
     const h = harness();
-    const proposal = body(
-      await h.call('prepare_listing_edit', {
-        listingId: snapshot.listingId,
-        changes: { description: 'Changed description' },
-      }),
-    );
     const rejected = await h.call(
-      'approve_listing_edit',
-      { proposalId: proposal.proposalId },
+      'prepare_listing_edit',
+      { listingId: snapshot.listingId, changes: { description: 'Changed description' } },
       async () => answer,
     );
     assert.equal(rejected.isError, true);
-    assert.throws(() => h.service.takeApproved(proposal.proposalId), ProposalError);
-    assert.equal(
-      (
-        await h.call(
-          'approve_listing_edit',
-          { proposalId: proposal.proposalId },
-          async () => answer,
-        )
-      ).isError,
-      true,
+    assert.match(rejected.content[0].text, /No listing was changed/);
+    assert.throws(
+      () => h.service.takeApproved('aaaaaaaa-aaaa-4aaa-8aaa-000000000001'),
+      ProposalError,
     );
   }
 
   const unavailable = harness();
-  const proposal = body(
-    await unavailable.call('prepare_listing_edit', {
-      listingId: snapshot.listingId,
-      changes: { title: 'Another title' },
-    }),
-  );
-  const result = await unavailable.call(
-    'approve_listing_edit',
-    { proposalId: proposal.proposalId },
-    async () => {
-      throw new Error('client has no elicitation capability');
-    },
-  );
+  const result = await unavailable.call('prepare_listing_edit', {
+    listingId: snapshot.listingId,
+    changes: { title: 'Another title' },
+  });
   assert.equal(result.isError, true);
-  assert.throws(() => unavailable.service.takeApproved(proposal.proposalId), ProposalError);
+  assert.match(result.content[0].text, /Approval was not recorded/);
+  assert.throws(
+    () => unavailable.service.takeApproved('aaaaaaaa-aaaa-4aaa-8aaa-000000000001'),
+    ProposalError,
+  );
 });
 
-test('fresh snapshot mismatch rejects stale proposal before requesting approval', async () => {
-  const h = harness();
-  const proposal = body(
-    await h.call('prepare_listing_edit', {
-      listingId: snapshot.listingId,
-      changes: { description: 'New description' },
-    }),
-  );
-  h.setCurrent({ ...snapshot, description: 'Updated elsewhere' });
+test('a changed listing between proposal and confirmation rejects before displaying the form', async () => {
   let requested = false;
+  const h = harness({
+    afterRead(readCount, setCurrent) {
+      if (readCount === 2)
+        setCurrent({
+          ...snapshot,
+          description: 'Changed elsewhere',
+          lastModifiedTimestamp: snapshot.lastModifiedTimestamp + 1,
+        });
+    },
+  });
   const result = await h.call(
-    'approve_listing_edit',
-    { proposalId: proposal.proposalId },
+    'prepare_listing_edit',
+    { listingId: snapshot.listingId, changes: { title: 'New title' } },
     async () => {
       requested = true;
       return { action: 'accept', content: { confirm: true } };
@@ -169,61 +185,52 @@ test('fresh snapshot mismatch rejects stale proposal before requesting approval'
   );
   assert.equal(result.isError, true);
   assert.equal(requested, false);
-  assert.throws(() => h.service.getPending(proposal.proposalId), ProposalError);
+  assert.match(result.content[0].text, /listing changed/);
 });
 
-test('concurrent approval calls cannot obtain two confirmations for one proposal', async () => {
-  const h = harness();
-  const proposal = body(
-    await h.call('prepare_listing_edit', {
-      listingId: snapshot.listingId,
-      changes: { title: 'Concurrent title' },
-    }),
+test('concurrent confirmations cannot obtain two approvals for one proposal', async () => {
+  const service = createEditProposalService({
+    createId: () => 'aaaaaaaa-aaaa-4aaa-8aaa-000000000001',
+  });
+  const proposal = service.prepare(
+    {
+      ...snapshot,
+      lastModifiedTimestamp: snapshot.lastModifiedTimestamp,
+    },
+    { title: 'Concurrent title' },
   );
   let signalStarted;
   const started = new Promise((resolve) => {
     signalStarted = resolve;
   });
   let answerFirst;
-  const firstApproval = h.call(
-    'approve_listing_edit',
-    { proposalId: proposal.proposalId },
-    async () => {
-      signalStarted();
-      return new Promise((resolve) => {
-        answerFirst = resolve;
-      });
-    },
-  );
+  const firstApproval = service.requestApproval(proposal.proposalId, async () => {
+    signalStarted();
+    return new Promise((resolve) => {
+      answerFirst = resolve;
+    });
+  });
   await started;
-  let secondPrompted = false;
-  const secondApproval = await h.call(
-    'approve_listing_edit',
-    { proposalId: proposal.proposalId },
-    async () => {
-      secondPrompted = true;
-      return { action: 'accept', content: { confirm: true } };
-    },
+  await assert.rejects(
+    service.requestApproval(proposal.proposalId, async () => ({
+      action: 'accept',
+      confirm: true,
+    })),
+    ProposalError,
   );
-  assert.equal(secondApproval.isError, true);
-  assert.equal(secondPrompted, false);
-  answerFirst({ action: 'accept', content: { confirm: true } });
-  assert.equal(body(await firstApproval).status, 'approved_for_later_apply');
+  answerFirst({ action: 'accept', confirm: true });
+  assert.equal(await firstApproval, 'approved');
 });
 
-test('expiry, proposal replay, malformed changes and missing timestamp fail closed', async () => {
+test('expiry, malformed changes, missing timestamp and storage limits fail closed', async () => {
   let time = 1000;
-  const expired = harness({ now: () => time });
-  const proposal = body(
-    await expired.call('prepare_listing_edit', {
-      listingId: snapshot.listingId,
-      changes: { title: 'Later title' },
-    }),
-  );
-  time += 5 * 60 * 1000;
-  assert.throws(() => expired.service.getPending(proposal.proposalId), {
-    code: 'proposal_expired',
+  const expired = createEditProposalService({
+    now: () => time,
+    createId: () => 'aaaaaaaa-aaaa-4aaa-8aaa-000000000001',
   });
+  const proposal = expired.prepare(snapshot, { title: 'Later title' });
+  time += 5 * 60 * 1000;
+  assert.throws(() => expired.getPending(proposal.proposalId), { code: 'proposal_expired' });
 
   const malformed = harness();
   assert.equal(
@@ -245,20 +252,17 @@ test('expiry, proposal replay, malformed changes and missing timestamp fail clos
     ).isError,
     true,
   );
-});
 
-test('proposal storage is bounded and removes expired entries before accepting more', () => {
-  let time = 1000;
   let sequence = 0;
-  const service = createEditProposalService({
+  const bounded = createEditProposalService({
     now: () => time,
     createId: () => `00000000-0000-4000-8000-${String(++sequence).padStart(12, '0')}`,
   });
   for (let index = 0; index < 128; index += 1)
-    service.prepare(snapshot, { title: `Changed title ${index}` });
-  assert.throws(() => service.prepare(snapshot, { title: 'One too many' }), {
+    bounded.prepare(snapshot, { title: `Changed title ${index}` });
+  assert.throws(() => bounded.prepare(snapshot, { title: 'One too many' }), {
     code: 'proposal_limit',
   });
   time += 5 * 60 * 1000;
-  assert.doesNotThrow(() => service.prepare(snapshot, { title: 'Reclaimed capacity' }));
+  assert.doesNotThrow(() => bounded.prepare(snapshot, { title: 'Reclaimed capacity' }));
 });

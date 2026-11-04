@@ -62,7 +62,7 @@ flowchart LR
   write -.-> verify[Verify API result]
 ```
 
-The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). Phase 4A adds in-memory proposal and host-confirmation tools to the unpublished alpha: they bind the exact title/description/tags values to listing identity and modification time, refresh the listing before confirmation, expire after five minutes and consume a proposal after approval or rejection. Owner-run Mac Codex confirmation verification passed on 4 November 2026: explicit acceptance records approval for later apply, decline records no approval, and neither changes a listing. No apply tool or mutation transport is registered. T-032 tracks a more readable confirmation and automatic request after a proposal is prepared. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is exposed.
+The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). The unpublished alpha prepares an in-memory, five-minute proposal, refreshes the listing, checks identity/values, then asks the connected MCP client for confirmation in the same tool call. The form presents the listing and exact changed fields; proposal IDs and identity/timestamp bindings stay server-side. A confirmed proposal can be consumed once by a later step. There is no apply tool or mutation transport. The earlier two-call confirmation flow passed the owner-run Mac Codex check on 4 November 2026; the updated readable one-call form still needs direct Mac verification. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is exposed.
 
 ## Platform and local data design
 
