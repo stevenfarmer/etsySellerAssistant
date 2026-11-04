@@ -33,13 +33,16 @@ resuming; historical evidence is valid only within its stated scope.
 - The owner clarified the product intent: a local Etsy seller-assistant MCP server for compatible
   clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
-- Current chunk: **4A follow-up / T-032 confirmation usability**, in implementation. The prepare
-  tool now refreshes and validates the listing, then asks for host confirmation in the same call;
-  the form shows the listing and exact current/proposed fields without internal IDs/timestamps.
-  Local Mac acceptance and CI are not yet verified. Next: run `npm run validate`, finish the PR
-  and connected tracker update, wait for CI, then repeat the Mac accept/decline check. T-033 follows
-  before Phase 4B / T-029. No apply tool or update transport exists; the live listing remains
-  unchanged.
+- Current chunk: **4A follow-up / T-032 confirmation usability**, in review on
+  [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
+  `codex/t032-readable-confirmation` (the initial implementation commit is `05ab83e476dbd116bcdf8d6fca1a0d9a9b7a9463`).
+  `prepare_listing_edit` refreshes and validates the listing, then asks for host confirmation in
+  the same call; the form shows the listing and exact current/proposed fields without internal
+  IDs/timestamps. `npm run validate` passed format, lint, typecheck, build and 248/248 offline
+  tests; `git diff --check` passed. T-024/T-032 tracker updates were read back. PR checks and
+  owner Mac acceptance of the new form are pending. Next: monitor PR checks, then have the owner
+  repeat Mac Codex accept/decline using a test-only proposal; stop before T-033. No apply tool or
+  update transport exists; the live listing remains unchanged.
 
 ## Required replacement at each checkpoint
 
