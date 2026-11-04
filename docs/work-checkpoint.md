@@ -35,14 +35,15 @@ resuming; historical evidence is valid only within its stated scope.
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
 - Current chunk: **4A follow-up / T-032 confirmation usability**, on
   [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
-  `codex/t032-readable-confirmation`. Live PR head is `fb905707bb33af39de1b5c7f4fc0939d9b8ed69a`;
-  all five jobs passed there. On the Mac, the readable same-call form accepted a proposal and
+  `codex/t032-readable-confirmation`. Current PR head is
+  `6e635b52478883f9e8bd43e07110f48c4e31573b`; all five jobs passed there (run 41937019258).
+  On the Mac, the readable same-call form accepted a proposal and
   rejected a negative confirmation, with a fresh read showing the listing unchanged. The owner
   found the form confusing because it required both a yes/no field and a host Accept/Deny action.
   The follow-up is in commit `130bd6ebc6018eadcab0eec4e07a01e4296bce5d`; it removes that field
   and treats the host `accept` action as the sole approval. `npm run validate` passed format,
   lint, typecheck, build and 248/248 offline tests; `git diff --check` and format check passed.
-  All five CI jobs pass on that code head. T-024/T-032 tracker evidence was updated and read back.
+  All five CI jobs also pass on the code head. T-024/T-032 tracker evidence was updated and read back.
   Next: the owner restarts the local server connection so it loads the revised form; then run a
   test-only proposal and confirm the host presents one choice. Keep T-032 in review until that Mac
   check and PR completion; do not start T-033 yet. No apply tool or update transport exists; no
