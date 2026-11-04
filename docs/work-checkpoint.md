@@ -21,9 +21,10 @@ resuming; historical evidence is valid only within its stated scope.
   PR #28 contain checkpoint-only synchronization; all five checks passed on each. Latest
   confirmed main at resume was `87c87b013082bddb8ce81909236c8f27136e1cd9`.
 - Owner-directed project-record cleanup is in progress on branch
-  `codex/project-record-scope-cleanup`. It removes external stakeholder material from tool
-  requirements and records; runtime behavior is unchanged. Latest validation passed after
-  this change. Complete its PR review/CI/merge and connected-record readback before more work.
+  `codex/project-record-scope-cleanup`; PR #29 was opened from commit
+  `1394b502115b014f36c10e67b528bf7ba5c83d07`. It aligns project requirements and records with
+  the tool's scope; runtime behavior is unchanged. Latest validation passed. Complete PR
+  review/CI/merge and connected-record readback before more work.
 - Exact next chunk: **4A / T-028 proposal and approval implementation**, beginning offline.
   Verify host-mediated confirmation behavior before relying on it; keep write capability
   closed until the Phase 4A–4C technical tests/reviews pass. Any concrete credential, scope,
