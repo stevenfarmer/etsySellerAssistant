@@ -18,13 +18,13 @@ resuming; historical evidence is valid only within its stated scope.
   rerun with local loopback access passed. `git diff --check` passed. All five PR checks passed.
   No test contacts Etsy or mutates a shop.
 - No runtime, OAuth scope, credentials, live Etsy access, or publication changed. PR #27 and
-  PR #28 contain checkpoint-only synchronization; all five checks passed on each. Latest
-  confirmed main at resume was `87c87b013082bddb8ce81909236c8f27136e1cd9`.
-- Owner-directed project-record cleanup is in progress on branch
-  `codex/project-record-scope-cleanup`; PR #29 was opened from commit
-  `1394b502115b014f36c10e67b528bf7ba5c83d07`. It aligns project requirements and records with
-  the tool's scope; runtime behavior is unchanged. Latest validation passed. Complete PR
-  review/CI/merge and connected-record readback before more work.
+  PR #28 contain checkpoint-only synchronization; all five checks passed on each. PR #29
+  aligned project requirements and records with the tool's scope; it merged as
+  `ef6c5f9944472e8d0027bbd85995c8ccbe56bfe6` after all five checks passed. Connected tracker
+  and steering updates were read back on 4 November.
+- At the final local check, branch `codex/project-record-scope-cleanup` was clean at
+  `4cd11870d8247338cbe2ae53710f843785a4acb8`; its tree contains the PR #29 changes. Recheck
+  and synchronize local main before further repository work.
 - Exact next chunk: **4A / T-028 proposal and approval implementation**, beginning offline.
   Verify host-mediated confirmation behavior before relying on it; keep write capability
   closed until the Phase 4A–4C technical tests/reviews pass. Any concrete credential, scope,
