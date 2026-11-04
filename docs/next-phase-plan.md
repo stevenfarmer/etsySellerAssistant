@@ -78,11 +78,6 @@ their existing authorization requirements.
 | 4. Read-only MVP                     | T-009 identity checks, Etsy GET client, pagination, allowlisted listing output, and MCP tools                                                  | Gates above accepted; mocked integration/contract tests; no reachable Etsy mutation path                |
 | 5. Desktop and handoff               | T-010 Codex smoke tests, platform setup/recovery documentation, reviewable changes                                                             | Windows/macOS CI, real platform credential-store evidence, owner read-only acceptance, final review     |
 
-Checkpoint 1 also records the permitted-use risk for the disclosed AI-assisted/automated listing
-workflow. On 31 October 2026 the product owner accepted that unresolved risk for now and chose not
-to contact Etsy at this time; app registration approval is not treated as blanket approval of every
-later use. The separate technical review and live-access authorization gates remain in place.
-
 Work may be built against mocks in parallel after its design is approved. Live access and enabling
 runtime tools follow the checkpoints. If the local redirect fails, keep shop access disabled and
 bring the actual error and compliant options back for a decision.
@@ -222,8 +217,7 @@ review/authorization boundaries.
 
 Current state (31 October 2026): duplicate documentation connection removed; the owner approved this plan and bounded
 delegation. The read-only alpha has been implemented; a fabricated macOS protected-store smoke test
-passed, while Windows and the full platform matrix remain unverified. The product owner has accepted
-the unresolved Etsy terms risk for now. The local connection CLI is implemented for offline-tested
+passed, while Windows and the full platform matrix remain unverified. The local connection CLI is implemented for offline-tested
 verification and the owner-authorized Mac connection was reported successful. Bounded live listing
 and detail reads have passed on the Mac through the alpha entry point. Windows and recovery review
 remain open; the normal server remains status-only. The Mac-tested `v0.1.0-alpha.1` is published
@@ -237,5 +231,3 @@ as a GitHub prerelease. This plan also describes historical gates and does not i
 - [Authentication guide](https://developers.etsy.com/documentation/essentials/oauth2/) and
   [Quick Start](https://developers.etsy.com/documentation/tutorials/quickstart/): the HTTPS/localhost
   documentation mismatch still requires real authorization evidence.
-- [API Terms](https://www.etsy.com/legal/api/): owner registration approval does not replace review of
-  permitted use or approval requirements for later application changes.

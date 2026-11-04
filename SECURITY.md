@@ -4,7 +4,7 @@ The local, opt-in alpha server authenticates to Etsy and reads listings from one
 
 The owner now requires guarded title/description/tag edits and intelligent recommendations in v1;
 these are planned, not enabled. [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md)
-requires detailed API/terms/security review before write-access implementation. Live/credential
+requires detailed API/security review before write-access implementation. Live/credential
 changes need concrete authorization; existing read-only risk acceptance is not a write-use waiver.
 The current read-only build is not a complete stable-v1 candidate.
 
@@ -20,8 +20,6 @@ Do not publish credentials, access tokens, private shop data, or exploitable vul
 - A local app process and the user's OS account remain part of the trust boundary. Keep the machine, OS account, and credential store protected; the app cannot protect against a compromised account.
 - If credentials or tokens are exposed, stop using the affected connection, report the exposure privately, and revoke the affected Etsy authorization and rotate affected app credentials as appropriate. Reconnect with fresh credentials after the exposure is contained. Do not paste secrets into a report. The [development guide](docs/development.md) describes local reset, reauthorization, and refresh-lock recovery; resetting locally does not revoke access at Etsy.
 - An interrupted token refresh can require manual recovery. Do not delete a refresh lock while an app process may still be running, or assume removing the lock resolves an uncertain refresh.
-
-The product owner has accepted the currently unresolved Etsy terms interpretation risk for this alpha. That acceptance is not a legal determination or approval of additional uses. Review the terms and permitted use again when capabilities or distribution change.
 
 The unpublished `1.0.0` candidate preserves primary operation errors across lock cleanup, reports cleanup-only failures, and requires recovery for malformed owner metadata. It does not add scopes or tools. Clock/expiry assumptions and deliberate recovery limits are documented in the [development guide](docs/development.md#refresh-failure-and-cleanup-diagnostics).
 

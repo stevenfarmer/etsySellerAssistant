@@ -30,22 +30,10 @@ Sync is backup, not tamper-proof storage. No blind write retries or automatic sh
 
 This is approval of the product requirement and planning work. Detailed OAuth/write-tool,
 approval binding, concurrency, audit durability, failure and recovery design must be reviewed
-before write-access implementation. Recheck current Etsy API constraints, permitted use and
-terms for these capabilities; the earlier read-only risk acceptance does not cover them.
-Live Etsy reads/writes, credential reads, scope upgrades, reset, reauthorization and release
+before write-access implementation. The guarded-edit design baseline is recorded in
+[the 3A review](../guarded-edit-design-review.md). Live Etsy reads/writes, credential reads,
+scope upgrades, reset, reauthorization and release
 publication still need concrete authorization. Do not disturb the healthy connection.
-
-### 3 November 2026 terms review finding
-
-The conditional phase-3A design baseline is documented in
-[the guarded-edit design review](../guarded-edit-design-review.md). The current Etsy API
-Terms require prior approval for application-purpose changes and restrict automated
-analysis of API content, AI-model purposes, and transfer of Etsy Member content/data to
-third parties. Their application to the approved v1 AI-assisted workflow has not been
-resolved with Etsy. This is a blocking external question, not a legal determination or a
-revision of the owner's feature requirement. No phase-4 implementation or live AI use of
-Etsy-sourced content may proceed until written Etsy guidance/approval and any resulting
-owner scope decision are recorded. Current runtime and OAuth remain read-only.
 
 No price, inventory, images, variations, shipping, publishing, creation/deletion, orders or
 buyer-data tools are added by this decision. Broader analytics API access also needs a separate

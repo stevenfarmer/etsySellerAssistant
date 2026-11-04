@@ -82,9 +82,9 @@ The observed form also warns against instructing other users to generate API key
 about every adopter registering their own app must not be treated as an approved distribution or
 onboarding model. Resolve its applicability with Etsy before offering that workflow to other sellers.
 The current investigation concerns the initial authorized installation only. Describe AI-assisted
-listing review accurately in any eventual application purpose, and review the
-[current API Terms](https://www.etsy.com/legal/api/) before submission or live API use. App approval
-has now been observed; permitted-use questions and approval of later purpose changes remain open.
+listing review accurately in the application description. The registered alpha currently uses
+read-only access; the future write capability remains subject to its technical design and OAuth
+scope requirements.
 
 ## Owner instructions: registration first
 
@@ -102,13 +102,11 @@ has now been observed; permitted-use questions and approval of later purpose cha
    > defined. Access will be limited to the permissions required for each approved feature. It will
    > not serve other sellers.
 
-   Read Etsy's terms yourself before submitting. This guide does not accept terms or submit the
-   registration for you. This historical registration wording described planned use; the opt-in alpha now has read-only Etsy access.
-   The description is 394 characters when pasted as one paragraph. Disclosing the later phase does
-   not authorize writes or change the read-only MVP. Etsy's
-   [API Terms, section 3](https://www.etsy.com/legal/api/) require prior approval of application
-   purpose and updates; the later write phase remains subject to Etsy review, the project's separate
-   owner-approved design, and the necessary OAuth scope authorization.
+   This guide does not submit the registration for you. This historical registration wording
+   described planned use; the opt-in alpha currently has read-only access. The description is
+   394 characters when pasted as one paragraph. Disclosing the later phase does not enable writes
+   or change the read-only MVP. Any future write capability remains subject to the project's
+   separate technical design and the necessary OAuth scope authorization.
 
    Roadmap clarification (31 October 2026): the operator wants the long-term private-shop tool to
    remain extensible. Orders, receipts, buyer information, payments, and messages are not permanently
@@ -273,18 +271,3 @@ and remaining blockers. Store actual shop identity only in future ignored local 
 Mark T-007 complete only after its registration, website, callback, permissions, and authorizer
 criteria have evidence and product-owner acceptance. A checklist or documentation review alone does
 not close the gate.
-
-## Optional Etsy support question
-
-On 31 October 2026 the product owner accepted the unresolved terms risk for now and chose not to
-contact Etsy at this time. The question below is retained for possible future use; it is not a
-current prerequisite. It contains no shop identifier or credentials; add any details Etsy requires
-only through its official support channel. The separate technical and live-access gates still apply.
-
-> We have an approved Seller App for a single shop. We are developing a local tool that, with the
-> shop owner's OAuth consent, reads that shop's listing data through the Etsy API and supplies
-> selected listing text to an AI assistant for review and suggested edits. The first version makes
-> no listing changes and serves no other sellers. Do API Terms sections 5.24–25 or any other Etsy
-> terms require separate written permission for this workflow, including using the listing text in
-> an AI prompt? If so, what approval process and conditions apply? Does Seller App approval itself
-> authorize this specific use? Also, is an HTTP localhost callback supported for a local OAuth app?

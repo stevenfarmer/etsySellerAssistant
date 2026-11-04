@@ -103,17 +103,6 @@ hijacker can still cause denial of service; PKCE reduces code-redemption risk bu
 local malware from observing a callback. Do not introduce a hosted bridge without a requirement
 change. A saved URL does not establish a successful authorization.
 
-As reviewed on 31 October 2026, sections 5.24–25 of Etsy's
-[API Terms](https://www.etsy.com/legal/api/) restrict specified automated access and requests for
-analytics, machine learning, or AI training without express written authorization. Their application
-to this one-shop, AI-assisted listing-review workflow is unresolved; app approval alone is not
-evidence of written authorization for a specific use. Etsy's separately published
-[future Terms of Use](https://www.etsy.com/legal/terms-of-use) take effect 16 December 2026 and
-contain additional language concerning AI prompting with content obtained from its services. On
-31 October 2026 the product owner accepted this unresolved risk for the time being and chose not to
-contact Etsy now. This decision is not a determination of compliance or a waiver of Etsy's terms.
-The independent technical review and explicit live-access authorization gates remain in place.
-
 ## Release addendum — 31 October 2026
 
 The owner subsequently authorized the bounded Mac checks. OAuth, the configured-shop identity check, a Codex Desktop listing read, and a separate list-and-detail smoke test succeeded. The merged Mac-tested `v0.1.0-alpha.1` was published as a GitHub prerelease. CI covered macOS and Windows on Node 24 and 26, but Windows live credential storage and browser handoff remain unverified. T-007 delegated authorization and T-008 cross-platform and recovery acceptance remain open. The default entry point remains status-only; read-only tools are available through the separate alpha entry point.

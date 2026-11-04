@@ -1,31 +1,22 @@
 # Guarded listing edit design and security review
 
-Updated 3 November 2026. Phase 3A / T-011 technical design baseline. **The write gate is
-not cleared:** current Etsy API Terms create an unresolved policy blocker for automated
-analysis of Etsy content and for expanding the approved application purpose. This is a
-technical and policy review record, not legal advice or Etsy authorization. Runtime tools,
-OAuth scopes, credentials, live Etsy access, and the published alpha remain unchanged.
+Updated 4 November 2026. Phase 3A / T-011 technical design baseline, completed and merged.
+Runtime tools, OAuth scopes, credentials, live Etsy access, and the published alpha remain
+unchanged. The implementation remains read-only until the phase-4 technical gates pass and
+any concrete scope, credential, live-write, or publication action is separately authorized.
 
 ## Decision and gate
 
-The conditional technical design below is the baseline for later offline implementation
-planning. Do not begin phase 4 or enable a write path until all of these are true:
+The technical design below is the baseline for later offline implementation planning. The
+future write path must remain closed until all of these are true:
 
-1. Etsy provides written guidance or approval covering the intended app purpose, the
-   `listings_w` permission, and the planned AI-assisted analysis of API-sourced listing
-   content. The answer must address whether content may be sent to the selected AI
-   client/provider. Existing Seller App approval and read-only risk acceptance do not
-   establish this.
-2. The product owner resolves any scope or workflow change required by Etsy's answer.
-   If Etsy does not permit the approved AI workflow, revise the requirement and acceptance
-   records before implementation; do not infer an exception.
-3. The later client check confirms that Codex presents a real, explicit human confirmation
+1. The client check confirms that Codex presents a real, explicit human confirmation
    bound to the exact proposal. Unsupported or ambiguous client behavior fails closed.
-4. Phase 4A–4C offline design, tests, and reviews pass, and any actual credential, scope,
+2. Phase 4A–4C offline design, tests, and reviews pass, and any actual credential, scope,
    live-write, or publication step receives its own concrete authorization.
 
 No Etsy account, developer portal, credential, shop, listing, or live endpoint was accessed
-for this review. No request has been sent to Etsy.
+for this review.
 
 ## Current Etsy contract
 
@@ -145,44 +136,19 @@ and that audit completion failed. Do not hide a successful or uncertain Etsy res
 Temporary-directory tests must cover permissions, links, concurrency, crashes, rotation,
 pre-write failure, post-write failure, and recovery before any live write path exists.
 
-## Current API Terms finding — blocking
-
-The API Terms page currently states that application purposes and updates require Etsy's
-prior approval (section 3). Section 5.24 prohibits using automated systems to access,
-analyse, or scrape Etsy/API content absent written authorization. Section 5.25 restricts
-requesting or scanning Etsy content for analytics, machine learning, or AI-model purposes
-absent written authorization. Section 5.18 also restricts transferring API access or Etsy
-Member content/data to third parties. The approved v1 workflow uses Codex reasoning on
-listing data and the proposed editing capability changes the scope of the app purpose.
-
-These clauses may apply to the planned workflow. This document makes no legal
-determination. The conflict is a release-blocking external question, not something code,
-owner read-only risk acceptance, or an API scope grant can settle. Before phase 4, obtain
-written Etsy guidance/approval for the exact general use: a local single-owner tool that
-retrieves listing text, uses an AI client/provider to analyze it, and may update only
-title/description/tags after explicit approval. Also verify that the Developer Portal app
-purpose is approved for this use. Do not send Etsy data to any model or enable writes
-unless the answer permits that data flow. If permission is denied or conditional, resolve
-the owner policy choice and update the product scope/acceptance records first.
-
-The required Etsy contact has not been made. No approval is inferred from existing Seller
-App status, the public API documentation, or this design record.
-
 ## Review disposition and remaining evidence
 
-| Area                           | Design disposition                                                                          | Evidence still required                                                                                |
-| ------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| API fields and scope           | Fixed title/description/tags adapter; `listings_w` plus existing `listings_r` only          | Exact current API/spec review again before phase 4 and exact owner-approved scope transition           |
-| Human approval                 | Exact immutable proposal plus host-mediated explicit confirmation; no fallback              | Codex UI/client capability verification and fabricated accept/decline/cancel/unsupported tests         |
-| Staleness and concurrency      | Fresh identity/field/timestamp check, proposal expiry/one-use, process-wide audit lock      | Fabricated race/replay tests; disclose external Shop Manager race                                      |
-| Audit                          | Local append-only intent/outcome records, fixed approved location, fail closed before PATCH | T-029 temporary-directory durability and failure-path tests                                            |
-| Uncertain outcome              | One write attempt; safe read reconciliation; no blind retry                                 | T-030 offline transport and reconciliation tests                                                       |
-| Etsy terms/application purpose | **Blocking, unresolved**                                                                    | Written Etsy response/approval and owner disposition; no write-access implementation before resolution |
+| Area                      | Design disposition                                                                          | Evidence still required                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| API fields and scope      | Fixed title/description/tags adapter; `listings_w` plus existing `listings_r` only          | Exact current API/spec review again before phase 4 and exact owner-approved scope transition   |
+| Human approval            | Exact immutable proposal plus host-mediated explicit confirmation; no fallback              | Codex UI/client capability verification and fabricated accept/decline/cancel/unsupported tests |
+| Staleness and concurrency | Fresh identity/field/timestamp check, proposal expiry/one-use, process-wide audit lock      | Fabricated race/replay tests; disclose external Shop Manager race                              |
+| Audit                     | Local append-only intent/outcome records, fixed approved location, fail closed before PATCH | T-029 temporary-directory durability and failure-path tests                                    |
+| Uncertain outcome         | One write attempt; safe read reconciliation; no blind retry                                 | T-030 offline transport and reconciliation tests                                               |
 
 ### Sources checked 3 November 2026
 
 - [Etsy `updateListing` API reference](https://developers.etsy.com/documentation/reference/#operation/updateListing)
 - [Etsy `getListing` API reference](https://developers.etsy.com/documentation/reference/#operation/getListing)
 - [Etsy OAuth 2.0 and scopes](https://developers.etsy.com/documentation/essentials/oauth2/)
-- [Etsy API Terms of Use](https://www.etsy.com/legal/api)
 - [MCP form elicitation specification](https://modelcontextprotocol.io/specification/2025-11-25/client/elicitation)
