@@ -38,7 +38,8 @@ T-024 (guarded edits after review) and T-025 (measurement/usefulness) are active
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
-readable same-call confirmation implementation, pending its repeat Mac check. T-033 is next for
+readable same-call confirmation flow. The owner found the extra checkbox and host buttons confusing;
+T-032 now removes the extra field and is pending a repeat Mac check. T-033 is next for
 client-neutral positioning/editorial cleanup. T-028/T-029/T-030 split T-024;
 T-031 tracks concrete separately authorized Mac/usefulness/edit acceptance. Chunk 1A/T-026 implements private storage/template only: 12 fabricated tests; full validation
 passed 212 offline tests. Chunk 1B adds get_review_guidance to alpha, generic by default;

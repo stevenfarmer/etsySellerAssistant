@@ -33,16 +33,18 @@ resuming; historical evidence is valid only within its stated scope.
 - The owner clarified the product intent: a local Etsy seller-assistant MCP server for compatible
   clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
-- Current chunk: **4A follow-up / T-032 confirmation usability**, implemented on
+- Current chunk: **4A follow-up / T-032 confirmation usability**, on
   [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
-  `codex/t032-readable-confirmation`. The Mac connection was restarted by quitting and reopening
-  Codex. `prepare_listing_edit` opened the readable confirmation in the same call. Acceptance
-  returned `approved_for_later_apply` and `listingChanged:false`; the negative confirmation
-  failed closed; a fresh read confirmed the description was unchanged. All five PR checks passed
-  on head `296bd9fca4d4ee4f3c008b3c34c2fca1f65b4ede`; local `npm run validate` passed 248/248
-  tests and `git diff --check` passed. T-024/T-032 tracker updates were read back. The owner is
-  reviewing the form's readability; do not merge until that feedback is received. No apply tool or
-  update transport exists; the live listing remains unchanged. Stop after T-032; T-033 is next.
+  `codex/t032-readable-confirmation`. Live PR head is `fb905707bb33af39de1b5c7f4fc0939d9b8ed69a`;
+  all five jobs passed there. On the Mac, the readable same-call form accepted a proposal and
+  rejected a negative confirmation, with a fresh read showing the listing unchanged. The owner
+  found the form confusing because it required both a yes/no field and a host Accept/Deny action.
+  Current local follow-up removes that field and treats the host `accept` action as the sole
+  approval. `npm run validate` passes format, lint, typecheck, build and 248/248 offline tests;
+  `git diff --check` passes. This follow-up is not yet committed or reflected in the tracker.
+  Next: commit the local code/docs to PR #33, wait for all CI, then have the owner check the revised
+  one-action form on Mac. Keep T-032 in review until that check and PR completion; do not start
+  T-033 yet. No apply tool or update transport exists; no listing changed.
 
 ## Required replacement at each checkpoint
 

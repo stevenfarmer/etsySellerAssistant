@@ -129,14 +129,10 @@ export function registerEditProposalTools(
             message: reviewMessage(freshListing, proposal),
             requestedSchema: {
               type: 'object',
-              properties: {
-                confirm: { type: 'boolean', title: 'I approve these exact changes' },
-              },
-              required: ['confirm'],
+              properties: {},
             },
           });
-          if (result.action !== 'accept') return { action: result.action };
-          return { action: 'accept', confirm: result.content?.confirm === true };
+          return { action: result.action };
         });
         return outcome === 'approved'
           ? success({

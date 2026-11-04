@@ -26,11 +26,12 @@ The Etsy documentation MCP and this project’s shop-connected local MCP are sep
 The unpublished development alpha's `prepare_listing_edit` tool creates an in-memory, five-minute
 proposal and immediately asks the connected MCP client for explicit confirmation after a fresh
 listing read. The form shows the listing and exact current/proposed values without exposing the
-proposal's internal binding data. Accepting records approval for a later step; it does not update
-Etsy. There is no apply tool. Clients without MCP form-elicitation support fail closed. The
-single-call confirmation flow is new in T-032 and still needs a repeat Mac Codex check; the earlier
-two-call flow was verified on 4 November 2026. This development workflow is not part of published
-alpha.1.
+proposal's internal binding data. The form uses one host-level Accept/Deny choice, with no extra
+yes/no field. Accepting records approval for a later step; it does not update Etsy. There is no
+apply tool. Clients without MCP form-elicitation support fail closed. The Mac check confirmed that
+the readable form opens in the same call, but the owner found its checkbox plus footer buttons
+confusing. T-032 removes the redundant field and is awaiting another Mac check. This development
+workflow is not part of published alpha.1.
 
 ## Work toward v1
 

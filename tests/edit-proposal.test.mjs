@@ -84,7 +84,7 @@ test('prepare presents exact readable values and requests approval in the same t
     },
     async (request) => {
       elicitation = request;
-      return { action: 'accept', content: { confirm: true } };
+      return { action: 'accept' };
     },
   );
   const result = body(approved);
@@ -106,7 +106,8 @@ test('prepare presents exact readable values and requests approval in the same t
     elicitation.message,
     /proposalId|ownerId|shopId|lastModifiedTimestamp|expiresAt/,
   );
-  assert.deepEqual(elicitation.requestedSchema.required, ['confirm']);
+  assert.deepEqual(elicitation.requestedSchema.properties, {});
+  assert.equal(elicitation.requestedSchema.required, undefined);
   assert.deepEqual(h.service.takeApproved(result.proposalId).after, {
     title: 'Fabricated blue mug',
     description: 'Updated fabricated description',
@@ -122,7 +123,7 @@ test('tag changes are readable and acceptance still changes no listing', async (
     { listingId: snapshot.listingId, changes: { tags: ['blue mug', 'handmade'] } },
     async ({ message }) => {
       confirmationMessage = message;
-      return { action: 'accept', content: { confirm: true } };
+      return { action: 'accept' };
     },
   );
   assert.match(confirmationMessage, /Tags\n\nCURRENT VALUE\n• blue mug\n• stoneware/);
@@ -130,12 +131,8 @@ test('tag changes are readable and acceptance still changes no listing', async (
   assert.equal(body(approved).listingChanged, false);
 });
 
-test('decline, cancel, false confirmation and unsupported elicitation fail closed', async () => {
-  for (const answer of [
-    { action: 'decline' },
-    { action: 'cancel' },
-    { action: 'accept', content: { confirm: false } },
-  ]) {
+test('decline, cancel and unsupported elicitation fail closed', async () => {
+  for (const answer of [{ action: 'decline' }, { action: 'cancel' }]) {
     const h = harness();
     const rejected = await h.call(
       'prepare_listing_edit',
@@ -180,7 +177,7 @@ test('a changed listing between proposal and confirmation rejects before display
     { listingId: snapshot.listingId, changes: { title: 'New title' } },
     async () => {
       requested = true;
-      return { action: 'accept', content: { confirm: true } };
+      return { action: 'accept' };
     },
   );
   assert.equal(result.isError, true);
@@ -214,11 +211,10 @@ test('concurrent confirmations cannot obtain two approvals for one proposal', as
   await assert.rejects(
     service.requestApproval(proposal.proposalId, async () => ({
       action: 'accept',
-      confirm: true,
     })),
     ProposalError,
   );
-  answerFirst({ action: 'accept', confirm: true });
+  answerFirst({ action: 'accept' });
   assert.equal(await firstApproval, 'approved');
 });
 
