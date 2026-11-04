@@ -23,7 +23,7 @@ Complete this checklist for every release, including prereleases. A release is b
 - Requirements/use cases/acceptance: [current matrix](requirements-and-acceptance.md) and [review requirements](intelligent-listing-review.md). T-011 design/security review, T-023 intelligent review, T-024 guarded implementation and T-025 measurement/usefulness remain incomplete; T-012 is In Progress.
 - Existing read/setup/recovery acceptance remains valid within its documented limits. Prior runtime evidence does not verify planned write or intelligence features.
 - Last actual audit: production-only exited 0 with zero findings; full audit exited 1 with 11 moderate development findings and no high/critical findings. Remediation is T-021/Backlog; no fix or waiver claimed.
-- Before the next candidate: complete the detailed write security/API/terms review; verify approval binding, stale/replay handling, audit-before-write, uncertain outcomes and recovery; evaluate recommendation quality using fabricated cases and obtain owner usefulness acceptance. Any live/credential step requires concrete authorization.
+- Before the next candidate: complete the detailed write security/API review; verify approval binding, stale/replay handling, audit-before-write, uncertain outcomes and recovery; evaluate recommendation quality using fabricated cases and obtain owner usefulness acceptance. Any live/credential step requires concrete authorization.
 - Reconcile exact implementation, version, docs and connected records again, run all required checks and prepare replacement release notes before requesting publication authorization. No v1 tag/release exists; published alpha.1 remains unchanged.
 
 ## Historical candidate milestones

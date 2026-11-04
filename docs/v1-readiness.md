@@ -62,7 +62,6 @@ There is no stable publication target now; do not publish the previous read-only
   accepted isolated drill. Extra isolated terminal coverage is T-022/Backlog.
 - Persisted expiry still uses wall time and post-transport anchoring: T-020/Backlog.
 - Moderate development dependency advisory remediation is T-021/Backlog; no fix is claimed.
-- Existing Etsy terms uncertainty retains the previously recorded owner decision.
 - Delegated access is T-016/P3 backlog, outside v1. Guarded editing is now planned for v1; other clients remain deferred.
 
 There is no demonstrated missing website/domain setup requirement for the already approved,
