@@ -10,10 +10,10 @@ AI tools have helped with parts of development. The owner sets product direction
 
 There are two server entry points:
 
-| Entry point         | Behavior                                                                                                                                                         |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                                                                  |
-| `dist/src/alpha.js` | Opt-in development alpha; bounded listing reads, review guidance, draft checks, and offline edit proposal/host-confirmation tools. It has no listing apply tool. |
+| Entry point         | Behavior                                                                                                                                                                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dist/src/index.js` | Default status-only scaffold; no Etsy requests.                                                                                                                                                                                       |
+| `dist/src/alpha.js` | Opt-in development alpha; bounded listing reads, review guidance, draft checks, and guarded title/description/tag proposal and apply tools. Applying requires a separately authorized edit grant and a configured local audit folder. |
 
 In the unpublished development candidate, alpha `get_setup_status` starts with
 `etsyAccess: not_checked`. After a complete successful listing read, it reports
@@ -29,16 +29,22 @@ The unpublished development alpha's `prepare_listing_edit` tool creates an in-me
 proposal and immediately asks the connected MCP client for explicit confirmation after a fresh
 listing read. The form shows the listing and exact current/proposed values without exposing the
 proposal's internal binding data. The form uses one host-level Accept/Deny choice, with no extra
-yes/no field. Accepting records approval for a later step; it does not update Etsy. There is no
-apply tool. Clients without MCP form-elicitation support fail closed. The Mac check confirmed that
+yes/no field. Accepting records approval for a later step; it does not update Etsy. The later
+`apply_listing_edit` tool accepts only the approved proposal ID and consumes that approval once.
+It rechecks identity and listing state, writes an audit intent, sends one fixed
+title/description/tags update, then verifies or reconciles the result. Clients without MCP
+form-elicitation support fail closed. The Mac check confirmed that
 the readable form opens in the same call. The owner found the earlier checkbox plus footer buttons
 confusing; T-032 removed the redundant field. In the follow-up Mac check, the single host choice
 was accepted and a fresh read confirmed no listing change. The owner found the revised prompt clear
-enough to merge. This development workflow is not part of published alpha.1.
+enough to merge. This development workflow is not part of published alpha.1. T-030's offline
+implementation and repository gates are in progress; no edit grant has been requested and no Etsy
+listing has been changed through this workflow. See [guarded editing](docs/local-editing.md) for
+local setup and recovery.
 
 ## Work toward v1
 
-The development version still reads `1.0.0`, but the current read-only build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). No write capability or broader permissions have been implemented or enabled. Published alpha.1 installation remains below.
+The development version still reads `1.0.0`, but the current build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). T-030's guarded apply implementation is under offline verification; the published alpha remains read-only. Published alpha.1 installation remains below.
 
 For the small deliverables and gates to stable v1, see the [phase-gated plan](docs/v1-phase-gates.md) and [current checkpoint](docs/work-checkpoint.md). Work proceeds one chunk per continuation by default. The plan also separates a public generic guidance template from a private customizable playbook outside the repository; the storage foundation and [generic template](templates/playbook.example.md) are implemented in chunk 1A, and `get_review_guidance` delivery is implemented in chunk 1B. Guidance is generic by default; private files require explicit client settings and a tool call. Startup/status do not load guidance. See [the storage contract](docs/private-playbooks.md). See [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md).
 
@@ -63,13 +69,13 @@ custom guidance. Owner usefulness and live-edit acceptance remain later work.
 
 ## Version roadmap
 
-- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. Reads are delivered; recommendations and editing are still being developed.
+- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. Reads are delivered; recommendation and edit acceptance remains in progress.
 - **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.
 - **Exploratory:** Linux, subject to a credential-store design and explicit platform acceptance; no version commitment.
 
-The server already uses standard MCP over STDIO. Client packaging and compatibility checks are separate work; T-015 tracks acceptance beyond the current Codex Desktop setup. Existing Windows adapters and CI are regression coverage, not a Windows support claim. The editing requirement does not authorize live writes or credential changes; scope and security/design review must precede implementation of write access. [ADR 0004](docs/decisions/0004-v1-platform-scope.md) retains the v1 acceptance target; ADR 0005 changes the v1 feature boundary.
+The server already uses standard MCP over STDIO. Client packaging and compatibility checks are separate work; T-015 tracks acceptance beyond the current Codex Desktop setup. Existing Windows adapters and CI are regression coverage, not a Windows support claim. The reviewed design in [T-011](docs/guarded-edit-design-review.md) and offline implementation do not themselves authorize a new credential grant or live listing change. [ADR 0004](docs/decisions/0004-v1-platform-scope.md) retains the v1 acceptance target; ADR 0005 changes the v1 feature boundary.
 
 ## First-time Mac alpha setup
 

@@ -6,6 +6,8 @@ import {
   ProposalError,
   type ListingEditChanges,
 } from '../edits/proposal-service.js';
+import type { ListingEditProposal } from '../edits/proposal-service.js';
+import { ListingApplyError, type ListingApplyResult } from '../edits/apply-service.js';
 
 const changeSchema = z
   .object({
@@ -57,6 +59,9 @@ export function registerEditProposalTools(
   dependencies: {
     readonly readService: ReadOnlyListingService;
     readonly proposalService?: ReturnType<typeof createEditProposalService>;
+    readonly applyService?: {
+      apply(proposal: ListingEditProposal): Promise<ListingApplyResult>;
+    };
   },
 ): void {
   const proposalService = dependencies.proposalService ?? createEditProposalService();
@@ -164,4 +169,86 @@ export function registerEditProposalTools(
       }
     },
   );
+
+  if (dependencies.applyService) {
+    const applySchema = z.object({ proposalId: z.string().uuid() }).strict();
+    server.registerTool(
+      'apply_listing_edit',
+      {
+        description:
+          'Apply the exact one-use proposal that the seller explicitly accepted through prepare_listing_edit. Accepts only its proposal ID, rechecks identity and listing state, records a durable audit intent, sends one title/description/tags update, and verifies or reconciles the result. Requires a separately authorized edit grant and configured local audit folder. Never retries an uncertain update.',
+        inputSchema: applySchema,
+        annotations: {
+          readOnlyHint: false,
+          destructiveHint: true,
+          idempotentHint: false,
+          openWorldHint: true,
+        },
+      },
+      async (rawInput) => {
+        const parsed = applySchema.safeParse(rawInput);
+        if (!parsed.success) return failure('Provide one approved proposal ID only.');
+        let proposal: ListingEditProposal;
+        try {
+          proposal = proposalService.takeApproved(parsed.data.proposalId);
+        } catch {
+          return failure(
+            'This proposal is not available for applying. Prepare and explicitly approve a new proposal. No listing change was sent.',
+          );
+        }
+        try {
+          const result = await dependencies.applyService!.apply(proposal);
+          return success(applyMessage(result));
+        } catch (error) {
+          if (error instanceof ListingApplyError) {
+            if (error.code === 'authorization_required')
+              return failure(
+                'Editing is not authorized or its local setup is incomplete. Configure the audit folder and separately authorize editing; no listing change was sent.',
+              );
+            if (error.code === 'audit_unavailable')
+              return failure(
+                'The local audit record could not be started. No listing change was sent.',
+              );
+            if (error.code === 'proposal_stale')
+              return failure(
+                'The listing has changed since this proposal was approved. Prepare and approve a new proposal. No listing change was sent.',
+              );
+            if (error.code === 'identity_mismatch')
+              return failure(
+                'The configured owner, shop or listing did not match. No listing change was sent.',
+              );
+            if (error.code === 'invalid_copy')
+              return failure(
+                'The proposed text no longer passes local checks. No listing change was sent.',
+              );
+            if (error.code === 'verification_failed')
+              return failure(
+                'The current listing could not be verified. No listing change was sent.',
+              );
+            if (error.code === 'audit_failed')
+              return failure(
+                error.mayHaveChanged
+                  ? 'The update may have reached Etsy, but audit completion failed. Do not retry. Check the listing directly and preserve the audit files.'
+                  : 'The update request was sent, but its final audit record could not be saved. Check the listing before trying again and preserve the audit files.',
+              );
+            return failure('The local audit operation failed. No listing change was sent.');
+          }
+          return failure(
+            'The update could not be safely completed. Do not retry; inspect the listing first.',
+          );
+        }
+      },
+    );
+  }
+}
+
+function applyMessage(result: ListingApplyResult): string {
+  const fields = result.changedFields.join(', ');
+  if (result.outcome === 'verified')
+    return `Listing ${result.listingId} updated and verified for ${fields}. The audit outcome was recorded.`;
+  if (result.outcome === 'reconciled')
+    return `Listing ${result.listingId} shows the approved ${fields} values on a fresh read after the write response was lost. The outcome was reconciled and recorded; no retry was sent.`;
+  if (result.outcome === 'rejected')
+    return `Etsy rejected the update and a fresh read confirmed the original ${fields} values remain. The rejection was recorded; no retry was sent.`;
+  return `The result for listing ${result.listingId} is uncertain. Do not retry. Check the current values in Etsy and resolve the state before preparing another proposal.`;
 }

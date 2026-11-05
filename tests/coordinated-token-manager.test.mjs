@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -43,6 +43,46 @@ test('concurrent requests share a persisted fresh token after a single refresh',
     ['123.new-access', '123.new-access'],
   );
   assert.equal(calls, 1);
+});
+
+test('edit refresh is isolated from the healthy read-only token pair and requires both exact scopes', async (t) => {
+  const { directory, store } = await fixture(t);
+  await mkdir(join(directory, 'edit-token-state'));
+  await mkdir(join(directory, 'invalid-edit-state'));
+  await store.set('editAccessToken', '123.old-edit-access');
+  await store.set('editRefreshToken', '123.old-edit-refresh');
+  const token = await getCoordinatedAccessToken({
+    directory: join(directory, 'edit-token-state'),
+    ownerId: 123,
+    store,
+    profile: 'edit',
+    refresh: async () => ({
+      accessToken: '123.new-edit-access',
+      refreshToken: '123.new-edit-refresh',
+      expiresIn: 3600,
+      scope: ['listings_w', 'listings_r'],
+    }),
+  });
+  assert.equal(token, '123.new-edit-access');
+  assert.equal(await store.get('editRefreshToken'), '123.new-edit-refresh');
+  assert.equal(await store.get('accessToken'), '123.old-access');
+  assert.equal(await store.get('refreshToken'), '123.old-refresh');
+
+  await assert.rejects(
+    getCoordinatedAccessToken({
+      directory: join(directory, 'invalid-edit-state'),
+      ownerId: 123,
+      store,
+      profile: 'edit',
+      refresh: async () => ({
+        accessToken: '123.bad',
+        refreshToken: '123.bad',
+        expiresIn: 3600,
+        scope: ['listings_r', 'listings_w', 'shops_w'],
+      }),
+    }),
+    { code: 'invalid_state' },
+  );
 });
 
 test('a caller-held lease remains held across token refresh', async (t) => {

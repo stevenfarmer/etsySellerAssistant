@@ -42,7 +42,7 @@ readable same-call confirmation flow. The owner found the extra checkbox and hos
 T-032 removed the extra field, passed the repeat Mac check without changing the listing, and was
 accepted as clear enough to merge. T-033 completed in PR #35: the product is described as a local
 STDIO MCP server, with Codex Desktop/macOS as the current v1 acceptance target. T-029 audit
-durability is next, followed by T-030 guarded apply/reconciliation; both remain under T-024.
+durability is complete; T-030 guarded apply/reconciliation is in progress under T-024.
 T-031 tracks concrete separately authorized Mac/usefulness/edit acceptance. Chunk 1A/T-026 implements private storage/template only: 12 fabricated tests; full validation
 passed 212 offline tests. Chunk 1B adds get_review_guidance to alpha, generic by default;
 full validation now passes 222 offline tests with actual STDIO coverage. After app restart, actual Codex discovery/default-generic invocation also passed on

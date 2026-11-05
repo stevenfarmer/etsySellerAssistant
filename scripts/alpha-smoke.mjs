@@ -222,6 +222,7 @@ export async function runAlphaSmoke(options = {}) {
               'get_review_guidance',
               'validate_listing_draft',
               'prepare_listing_edit',
+              'apply_listing_edit',
             ].includes(name),
         ) ||
         expectedNames.some((name) => !names.includes(name)) ||
@@ -238,7 +239,11 @@ export async function runAlphaSmoke(options = {}) {
             (tool.name === 'prepare_listing_edit' &&
               (!isRecord(tool.annotations) ||
                 tool.annotations.readOnlyHint !== false ||
-                tool.annotations.destructiveHint !== false)),
+                tool.annotations.destructiveHint !== false)) ||
+            (tool.name === 'apply_listing_edit' &&
+              (!isRecord(tool.annotations) ||
+                tool.annotations.readOnlyHint !== false ||
+                tool.annotations.destructiveHint !== true)),
         )
       ) {
         throw new Error('smoke_failed');

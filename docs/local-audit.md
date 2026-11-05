@@ -1,8 +1,9 @@
 # Local audit records
 
-The audit store is a local foundation for the later guarded-apply work. The current alpha does
-not connect this store to Etsy requests and does not make listing changes. Listing reads do not
-create audit records.
+The audit store supports the guarded apply flow in the unpublished development alpha. Listing
+reads and proposal preparation do not create audit records; applying an explicitly approved
+proposal requires the configured audit store and writes an intent before the update request.
+The published alpha remains read-only.
 
 ## Choose the local folder
 

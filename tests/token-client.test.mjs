@@ -5,6 +5,7 @@ import {
   refreshAuthorization,
   TokenGrantError,
 } from '../dist/src/auth/token-client.js';
+import { EDIT_SCOPES } from '../dist/src/auth/oauth.js';
 
 const grant = {
   access_token: 'fake-access',
@@ -39,10 +40,46 @@ test('refresh uses refresh grant with a mock transport', async () => {
   assert.equal(result.refreshToken, 'fake-refresh');
 });
 
+test('accepts only the exact edit profile returned by Etsy and preserves the read-only default', async () => {
+  const editGrant = { ...grant, scope: 'listings_r listings_w' };
+  const result = await exchangeAuthorizationCode(
+    'fake-client',
+    'fake-code',
+    verifier,
+    async (_url, init) => {
+      assert.equal(init.body.has('scope'), false);
+      return globalThis.Response.json(editGrant);
+    },
+    EDIT_SCOPES,
+  );
+  assert.deepEqual(result.scope, EDIT_SCOPES);
+
+  const reversed = await exchangeAuthorizationCode(
+    'fake-client',
+    'fake-code',
+    verifier,
+    async () => globalThis.Response.json({ ...editGrant, scope: 'listings_w listings_r' }),
+    EDIT_SCOPES,
+  );
+  assert.deepEqual(reversed.scope, ['listings_w', 'listings_r']);
+
+  await assert.rejects(
+    exchangeAuthorizationCode(
+      'fake-client',
+      'fake-code',
+      verifier,
+      async () =>
+        globalThis.Response.json({ ...editGrant, scope: 'listings_r listings_w shops_w' }),
+      EDIT_SCOPES,
+    ),
+    { code: 'invalid_scope' },
+  );
+});
+
 test('missing or broader permissions and malformed responses fail closed', async () => {
   for (const invalid of [
     { ...grant, scope: '' },
-    { ...grant, scope: 'listings_r listings_w' },
+    { ...grant, scope: 'listings_r shops_w' },
   ]) {
     await assert.rejects(
       exchangeAuthorizationCode('fake', 'fake', verifier, async () =>

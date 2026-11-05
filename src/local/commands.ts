@@ -8,11 +8,21 @@ export interface LocalCommandsOptions {
   readonly secretStore: SecretStore;
   readonly readHiddenInput: (prompt: string) => Promise<string>;
   readonly connect: () => Promise<{ readonly status: 'connected' | 'failed' }>;
+  readonly authorizeEdits?:
+    (() => Promise<{ readonly status: 'connected' | 'failed' }>) | undefined;
+  readonly clearEditTokenState?: (() => Promise<void>) | undefined;
   readonly lookupFetch?: (url: string, init: RequestInit) => Promise<Response>;
 }
 
 export type CommandResult =
-  | { readonly status: 'configured' | 'connected' | 'audit_directory_configured' }
+  | {
+      readonly status:
+        | 'configured'
+        | 'connected'
+        | 'edit_authorized'
+        | 'edit_disabled'
+        | 'audit_directory_configured';
+    }
   | { readonly status: 'failed'; readonly reason: string };
 
 /** A new connection must not inherit expiry information from an earlier token pair. */
@@ -29,7 +39,14 @@ export async function runLocalCommand(
 ): Promise<CommandResult> {
   if (
     args.length !== 1 ||
-    !['setup', 'connect', 'guided', 'set-audit-directory'].includes(args[0] ?? '')
+    ![
+      'setup',
+      'connect',
+      'enable-edits',
+      'disable-edits',
+      'guided',
+      'set-audit-directory',
+    ].includes(args[0] ?? '')
   ) {
     return { status: 'failed', reason: 'invalid_command' };
   }
@@ -55,6 +72,33 @@ export async function runLocalCommand(
       return { status: 'failed', reason: 'connection_failed' };
     }
   }
+  if (args[0] === 'enable-edits') {
+    if (!options.authorizeEdits) return { status: 'failed', reason: 'authorization_unavailable' };
+    try {
+      const outcome = await options.authorizeEdits();
+      return outcome.status === 'connected'
+        ? { status: 'edit_authorized' }
+        : { status: 'failed', reason: 'editing_authorization_failed' };
+    } catch {
+      return { status: 'failed', reason: 'editing_authorization_failed' };
+    }
+  }
+  if (args[0] === 'disable-edits') {
+    if (!options.clearEditTokenState)
+      return { status: 'failed', reason: 'editing_recovery_unavailable' };
+    const confirmation = await options.readHiddenInput(
+      'Stop every local MCP server first. This removes only the separate editing grant. Type DISABLE EDITING to continue: ',
+    );
+    if (confirmation !== 'DISABLE EDITING') return { status: 'failed', reason: 'cancelled' };
+    try {
+      await options.secretStore.delete('editAccessToken');
+      await options.secretStore.delete('editRefreshToken');
+      await options.clearEditTokenState();
+      return { status: 'edit_disabled' };
+    } catch {
+      return { status: 'failed', reason: 'editing_disable_failed' };
+    }
+  }
   if (args[0] === 'guided') {
     if (!options.lookupFetch) return { status: 'failed', reason: 'lookup_unavailable' };
     try {
@@ -65,6 +109,8 @@ export async function runLocalCommand(
         'appSharedSecret',
         'accessToken',
         'refreshToken',
+        'editAccessToken',
+        'editRefreshToken',
       ] as const) {
         if ((await options.secretStore.get(key)) !== undefined)
           return { status: 'failed', reason: 'existing_credentials' };

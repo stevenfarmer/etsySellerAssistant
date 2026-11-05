@@ -1,3 +1,5 @@
+import { isSupportedScopeSet } from '../auth/oauth.js';
+
 const API_ROOT = 'https://openapi.etsy.com/v3/application';
 const REQUEST_TIMEOUT_MS = 15_000;
 const MAX_PAGE_SIZE = 100;
@@ -108,8 +110,7 @@ function validateConfiguration(options: EtsyReadClientOptions): void {
     !isRecord(options.grant) ||
     !requiredString(options.grant.accessToken) ||
     !Array.isArray(options.grant.scopes) ||
-    options.grant.scopes.length !== 1 ||
-    options.grant.scopes[0] !== 'listings_r' ||
+    !isSupportedScopeSet(options.grant.scopes) ||
     !requiredString(options.apiKeystring) ||
     !requiredString(options.apiSharedSecret) ||
     /[\r\n]/.test(options.grant.accessToken) ||

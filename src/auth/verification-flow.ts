@@ -1,9 +1,13 @@
 import type { CallbackReceiver } from './callback-server.js';
-import type { OAuthAttempt, ValidatedCallback } from './oauth.js';
+import {
+  isSupportedScopeSet,
+  scopesForProfile,
+  type AuthorizationProfile,
+  type OAuthAttempt,
+  type ValidatedCallback,
+} from './oauth.js';
 import type { TokenGrant } from './token-client.js';
 import type { SecretStore } from '../secret-store.js';
-
-const REQUIRED_SCOPE = 'listings_r';
 
 export type VerificationFailureCode =
   | 'invalid_input'
@@ -25,6 +29,7 @@ export type VerificationOutcome =
 export interface VerificationFlowOptions {
   readonly attempt: OAuthAttempt;
   readonly expectedShopId: number;
+  readonly profile?: AuthorizationProfile;
   readonly receiverFactory: (attempt: OAuthAttempt) => Promise<CallbackReceiver>;
   readonly openBrowser: (localStartUrl: string) => Promise<void>;
   readonly exchange: (code: string, verifier: string) => Promise<TokenGrant>;
@@ -44,10 +49,10 @@ function getTokenOwnerId(accessToken: unknown): number | undefined {
   return Number.isSafeInteger(ownerId) && ownerId > 0 ? ownerId : undefined;
 }
 
-function hasRequiredGrant(grant: unknown): grant is TokenGrant {
+function hasRequiredGrant(grant: unknown, expectedScopes: readonly string[]): grant is TokenGrant {
+  if (typeof grant !== 'object' || grant === null || !('scope' in grant)) return false;
+  const scopes = grant.scope;
   return (
-    typeof grant === 'object' &&
-    grant !== null &&
     'accessToken' in grant &&
     typeof grant.accessToken === 'string' &&
     grant.accessToken.length > 0 &&
@@ -58,10 +63,11 @@ function hasRequiredGrant(grant: unknown): grant is TokenGrant {
     typeof grant.expiresIn === 'number' &&
     Number.isSafeInteger(grant.expiresIn) &&
     grant.expiresIn > 0 &&
-    'scope' in grant &&
-    Array.isArray(grant.scope) &&
-    grant.scope.length === 1 &&
-    grant.scope[0] === REQUIRED_SCOPE
+    Array.isArray(scopes) &&
+    isSupportedScopeSet(scopes) &&
+    scopes.length === expectedScopes.length &&
+    new Set(scopes).size === scopes.length &&
+    expectedScopes.every((scope) => scopes.includes(scope))
   );
 }
 
@@ -83,6 +89,8 @@ function isAuthorizedCallback(
 export async function runVerificationFlow(
   options: VerificationFlowOptions,
 ): Promise<VerificationOutcome> {
+  const profile = options.profile ?? 'read';
+  const expectedScopes = scopesForProfile(profile);
   if (!Number.isSafeInteger(options.expectedShopId) || options.expectedShopId <= 0) {
     return { status: 'failed', reason: 'invalid_input' };
   }
@@ -132,7 +140,7 @@ export async function runVerificationFlow(
       } catch {
         return { status: 'failed', reason: 'exchange_failed' };
       }
-      if (!hasRequiredGrant(exchangedGrant)) {
+      if (!hasRequiredGrant(exchangedGrant, expectedScopes)) {
         return { status: 'failed', reason: 'invalid_scope' };
       }
 
@@ -151,9 +159,18 @@ export async function runVerificationFlow(
       }
 
       try {
-        await options.store.set('refreshToken', exchangedGrant.refreshToken);
-        await options.store.set('accessToken', exchangedGrant.accessToken);
+        const refreshKey = profile === 'edit' ? 'editRefreshToken' : 'refreshToken';
+        const accessKey = profile === 'edit' ? 'editAccessToken' : 'accessToken';
+        await options.store.set(refreshKey, exchangedGrant.refreshToken);
+        await options.store.set(accessKey, exchangedGrant.accessToken);
       } catch {
+        if (profile === 'edit') {
+          // This grant was verified in this operation and the edit keys were empty beforehand.
+          await Promise.all([
+            options.store.delete('editAccessToken').catch(() => false),
+            options.store.delete('editRefreshToken').catch(() => false),
+          ]);
+        }
         return { status: 'failed', reason: 'storage_failed' };
       }
       return { status: 'passed' };

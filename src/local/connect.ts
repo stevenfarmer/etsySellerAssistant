@@ -1,5 +1,5 @@
 import type { LocalConfig, LocalConfigStore } from './config.js';
-import { createOAuthAttempt } from '../auth/oauth.js';
+import { createOAuthAttempt, scopesForProfile, type AuthorizationProfile } from '../auth/oauth.js';
 import type { CallbackReceiver } from '../auth/callback-server.js';
 import { exchangeAuthorizationCode } from '../auth/token-client.js';
 import type { TokenGrant } from '../auth/token-client.js';
@@ -33,6 +33,7 @@ export interface LocalConnectOptions {
   readonly openBrowser: (localStartUrl: string) => Promise<void>;
   readonly tokenFetch: (url: string, init: RequestInit) => Promise<Response>;
   readonly shopFetch: typeof fetch;
+  readonly profile?: AuthorizationProfile;
 }
 
 function isPositiveSafeInteger(value: unknown): value is number {
@@ -52,6 +53,12 @@ function isValidStoredCredential(value: unknown): value is string {
 
 /** Coordinates one bounded local OAuth exchange and configured-shop identity read. */
 export async function connectLocal(options: LocalConnectOptions): Promise<LocalConnectResult> {
+  const profile = options.profile ?? 'read';
+  const tokenKeys =
+    profile === 'edit'
+      ? { access: 'editAccessToken' as const, refresh: 'editRefreshToken' as const }
+      : { access: 'accessToken' as const, refresh: 'refreshToken' as const };
+  const scopes = scopesForProfile(profile);
   let configuration: LocalConfig | undefined;
   try {
     configuration = await options.configStore.read();
@@ -70,8 +77,8 @@ export async function connectLocal(options: LocalConnectOptions): Promise<LocalC
     [appKeystring, appSharedSecret, accessToken, refreshToken] = await Promise.all([
       options.secretStore.get('appKeystring'),
       options.secretStore.get('appSharedSecret'),
-      options.secretStore.get('accessToken'),
-      options.secretStore.get('refreshToken'),
+      options.secretStore.get(tokenKeys.access),
+      options.secretStore.get(tokenKeys.refresh),
     ]);
   } catch {
     return { status: 'failed', reason: 'store_failed' };
@@ -90,7 +97,7 @@ export async function connectLocal(options: LocalConnectOptions): Promise<LocalC
 
   let attempt: ReturnType<typeof createOAuthAttempt>;
   try {
-    attempt = createOAuthAttempt({ clientId: validatedAppKeystring, scopes: ['listings_r'] });
+    attempt = createOAuthAttempt({ clientId: validatedAppKeystring, scopes });
   } catch {
     return { status: 'failed', reason: 'invalid_credentials' };
   }
@@ -100,8 +107,9 @@ export async function connectLocal(options: LocalConnectOptions): Promise<LocalC
     expectedShopId: configuration.expectedShopId,
     receiverFactory: options.receiverFactory,
     openBrowser: options.openBrowser,
+    profile,
     exchange: (code, verifier) =>
-      exchangeAuthorizationCode(validatedAppKeystring, code, verifier, options.tokenFetch),
+      exchangeAuthorizationCode(validatedAppKeystring, code, verifier, options.tokenFetch, scopes),
     store: options.secretStore,
     verifyShop: async ({
       expectedShopId,

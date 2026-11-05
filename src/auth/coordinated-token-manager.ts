@@ -1,5 +1,6 @@
 import type { SecretStore } from '../secret-store.js';
 import type { TokenGrant } from './token-client.js';
+import { scopesForProfile, type AuthorizationProfile } from './oauth.js';
 import { resolve } from 'node:path';
 import {
   acquireRefreshLock,
@@ -17,6 +18,7 @@ export interface CoordinatedTokenOptions {
   readonly refresh: (refreshToken: string) => Promise<TokenGrant>;
   readonly now?: () => number;
   readonly lease?: RefreshLockLease;
+  readonly profile?: AuthorizationProfile;
 }
 
 function validToken(token: unknown, ownerId: number): token is string {
@@ -30,6 +32,12 @@ export async function getCoordinatedAccessToken(options: CoordinatedTokenOptions
     throw new RefreshCoordinationError('invalid_input');
   }
   const now = options.now ?? Date.now;
+  const profile = options.profile ?? 'read';
+  const scopes = scopesForProfile(profile);
+  const keys =
+    profile === 'edit'
+      ? { access: 'editAccessToken' as const, refresh: 'editRefreshToken' as const }
+      : { access: 'accessToken' as const, refresh: 'refreshToken' as const };
   const lease =
     options.lease ??
     (await acquireRefreshLock({ directory: options.directory, waitTimeoutMs: 10_000 }));
@@ -42,8 +50,8 @@ export async function getCoordinatedAccessToken(options: CoordinatedTokenOptions
       const state = await stateStore.read(lease);
       if (state?.status === 'refreshing') throw new RefreshCoordinationError('recovery_required');
       const [accessToken, refreshToken] = await Promise.all([
-        options.store.get('accessToken'),
-        options.store.get('refreshToken'),
+        options.store.get(keys.access),
+        options.store.get(keys.refresh),
       ]);
       if (!validToken(refreshToken, options.ownerId))
         throw new RefreshCoordinationError('invalid_state');
@@ -66,15 +74,16 @@ export async function getCoordinatedAccessToken(options: CoordinatedTokenOptions
         !validToken(grant.accessToken, options.ownerId) ||
         !validToken(grant.refreshToken, options.ownerId) ||
         !Array.isArray(grant.scope) ||
-        grant.scope.length !== 1 ||
-        grant.scope[0] !== 'listings_r' ||
+        grant.scope.length !== scopes.length ||
+        new Set(grant.scope).size !== grant.scope.length ||
+        scopes.some((scope) => !grant.scope.includes(scope)) ||
         !Number.isSafeInteger(grant.expiresIn) ||
         grant.expiresIn <= 0 ||
         !Number.isSafeInteger(expiresAt)
       )
         throw new RefreshCoordinationError('invalid_state');
-      await options.store.set('refreshToken', grant.refreshToken);
-      await options.store.set('accessToken', grant.accessToken);
+      await options.store.set(keys.refresh, grant.refreshToken);
+      await options.store.set(keys.access, grant.accessToken);
       await stateStore.markReady(lease, expiresAt);
       return grant.accessToken;
     } catch (error) {

@@ -3,6 +3,20 @@ import { createHash, randomBytes } from 'node:crypto';
 export const ETSY_AUTHORIZATION_ENDPOINT = 'https://www.etsy.com/oauth/connect';
 export const LOCAL_REDIRECT_URI = 'http://localhost:3003/oauth/redirect';
 export const REQUIRED_SCOPES = ['listings_r'] as const;
+export const EDIT_SCOPES = ['listings_r', 'listings_w'] as const;
+export type AuthorizationProfile = 'read' | 'edit';
+
+export function scopesForProfile(profile: AuthorizationProfile = 'read'): readonly string[] {
+  return profile === 'edit' ? EDIT_SCOPES : REQUIRED_SCOPES;
+}
+
+export function isSupportedScopeSet(scopes: readonly unknown[]): boolean {
+  const matches = (expected: readonly string[]) =>
+    scopes.length === expected.length &&
+    new Set(scopes).size === scopes.length &&
+    expected.every((scope) => scopes.includes(scope));
+  return matches(REQUIRED_SCOPES) || matches(EDIT_SCOPES);
+}
 
 export type OAuthErrorCode =
   | 'invalid_input'
@@ -54,11 +68,7 @@ export function createOAuthAttempt(options: OAuthAttemptOptions): OAuthAttempt {
     throw new OAuthError('invalid_input');
   }
   validateRedirectUri(redirectUri);
-  if (
-    scopes.length !== REQUIRED_SCOPES.length ||
-    scopes.some((scope, index) => scope !== REQUIRED_SCOPES[index]) ||
-    new Set(scopes).size !== scopes.length
-  ) {
+  if (!isSupportedScopeSet(scopes) || new Set(scopes).size !== scopes.length) {
     throw new OAuthError('invalid_input');
   }
 

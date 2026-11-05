@@ -137,3 +137,54 @@ test('connection errors are sanitized', async () => {
     reason: 'connection_failed',
   });
 });
+
+test('edit authorization is a separate explicit command and never reuses read connect', async () => {
+  const h = harness();
+  assert.deepEqual(await runLocalCommand(['enable-edits'], h.options), {
+    status: 'failed',
+    reason: 'authorization_unavailable',
+  });
+  h.options.authorizeEdits = async () => {
+    h.state.calls += 1;
+    return { status: 'connected' };
+  };
+  assert.deepEqual(await runLocalCommand(['enable-edits'], h.options), {
+    status: 'edit_authorized',
+  });
+  assert.equal(h.state.calls, 1);
+  assert.equal(h.state.prompts.length, 0);
+});
+
+test('disabling edits removes only the separate edit grant after exact confirmation', async () => {
+  const h = harness(['DISABLE EDITING']);
+  for (const [key, value] of [
+    ['accessToken', 'fake-read-access'],
+    ['refreshToken', 'fake-read-refresh'],
+    ['editAccessToken', 'fake-edit-access'],
+    ['editRefreshToken', 'fake-edit-refresh'],
+  ]) {
+    await h.options.secretStore.set(key, value);
+  }
+  let cleared = 0;
+  h.options.clearEditTokenState = async () => {
+    cleared += 1;
+  };
+  assert.deepEqual(await runLocalCommand(['disable-edits'], h.options), {
+    status: 'edit_disabled',
+  });
+  assert.equal(await h.options.secretStore.get('accessToken'), 'fake-read-access');
+  assert.equal(await h.options.secretStore.get('refreshToken'), 'fake-read-refresh');
+  assert.equal(await h.options.secretStore.get('editAccessToken'), undefined);
+  assert.equal(await h.options.secretStore.get('editRefreshToken'), undefined);
+  assert.equal(cleared, 1);
+  assert.match(h.state.prompts[0], /Stop every local MCP server first/);
+
+  const cancelled = harness(['NO']);
+  cancelled.options.clearEditTokenState = async () => {
+    throw new Error('must not clear');
+  };
+  assert.deepEqual(await runLocalCommand(['disable-edits'], cancelled.options), {
+    status: 'failed',
+    reason: 'cancelled',
+  });
+});

@@ -5,17 +5,17 @@ small deliverables and exit gates. The [work checkpoint](work-checkpoint.md) rec
 resume. Use the [current matrix](requirements-and-acceptance.md) for requirements/acceptance
 and the connected tracker for execution state.
 
-| Phase                             | State                            | Tasks / result                                                                                                               |
-| --------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Read/setup/recovery foundation    | Delivered within recorded limits | Existing accepted evidence retained; final T-008 limitations review remains.                                                 |
-| 1. Private playbooks              | 1A and 1B Done                   | T-026 storage/template Done; T-027 implementation/STDIO checks and actual Codex discovery/default-generic invocation passed. |
-| 2. Useful recommendations         | 2A and 2B delivered              | T-023 Done for development deliverables; owner usefulness/private-mode/client/edit acceptance remains T-031.                 |
-| 3. Editing design/security        | Done                             | T-011 design review completed in PR #26.                                                                                     |
-| 4. Guarded editing                | In Progress                      | T-024 umbrella; T-028 proposal/approval and T-032 confirmation UX done; T-029 audit and T-030 apply/reconciliation remain.   |
-| 5. Measurement and Mac acceptance | Next                             | T-025 aggregate measurement; T-031 concrete separately authorized Mac/usefulness/live-edit acceptance.                       |
-| 6. Release-ready and publication  | In Progress (planning only)      | T-012 exact candidate, checks, risk disposition/docs reconciliation, then separately authorized publication.                 |
+| Phase                             | State                            | Tasks / result                                                                                                                      |
+| --------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Read/setup/recovery foundation    | Delivered within recorded limits | Existing accepted evidence retained; final T-008 limitations review remains.                                                        |
+| 1. Private playbooks              | 1A and 1B Done                   | T-026 storage/template Done; T-027 implementation/STDIO checks and actual Codex discovery/default-generic invocation passed.        |
+| 2. Useful recommendations         | 2A and 2B delivered              | T-023 Done for development deliverables; owner usefulness/private-mode/client/edit acceptance remains T-031.                        |
+| 3. Editing design/security        | Done                             | T-011 design review completed in PR #26.                                                                                            |
+| 4. Guarded editing                | In Progress                      | T-024 umbrella; T-028 proposal/approval, T-032 confirmation UX and T-029 audit are done; T-030 apply/reconciliation is in progress. |
+| 5. Measurement and Mac acceptance | Next                             | T-025 aggregate measurement; T-031 concrete separately authorized Mac/usefulness/live-edit acceptance.                              |
+| 6. Release-ready and publication  | In Progress (planning only)      | T-012 exact candidate, checks, risk disposition/docs reconciliation, then separately authorized publication.                        |
 
-**Current status:** T-032 and T-033 are complete. T-029 audit durability is the next implementation chunk; T-030 guarded apply/reconciliation follows it.
+**Current status:** T-032, T-033 and T-029 are complete. T-030 guarded apply/reconciliation is the current implementation chunk.
 Chunk 2B adds [eight fabricated cases, evaluation checks/rubric and recorded evidence](review-evaluation.md)
 and an initial private local playbook outside Git. Eight private reviews passed declared checks
 and self-review threshold; that same-assistant run is not an independent model benchmark or
