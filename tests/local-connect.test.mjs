@@ -75,7 +75,7 @@ function makeHarness({
     assert.equal(url, `https://openapi.etsy.com/v3/application/users/${OWNER_ID}/shops`);
     assert.equal(init.method, 'GET');
     assert.equal(init.redirect, 'error');
-    assert.equal(init.headers.authorization, `Bearer ${OWNER_ID}.fabricated-access-token`);
+    assert.equal(init.headers.authorization, `Bearer ${tokenResponse.access_token}`);
     assert.equal(init.headers['x-api-key'], `${CLIENT_ID}:${APP_SHARED_SECRET}`);
     return globalThis.Response.json({
       shop_id: shopId,
@@ -110,6 +110,9 @@ function makeHarness({
     requests,
     browserUrls,
     secretStore,
+    get attempt() {
+      return attempt;
+    },
     get receiverClosed() {
       return receiverClosed;
     },
@@ -163,6 +166,51 @@ test('existing access or refresh tokens refuse connect before receiver, browser,
       assert.equal(harness.receiverClosed, false);
     });
   }
+});
+
+test('edit authorization uses a separate exact-scope token pair and leaves the read grant unchanged', async () => {
+  const secretStore = new InMemorySecretStore();
+  await secretStore.set('appKeystring', CLIENT_ID);
+  await secretStore.set('appSharedSecret', APP_SHARED_SECRET);
+  await secretStore.set('accessToken', `${OWNER_ID}.fabricated-read-access`);
+  await secretStore.set('refreshToken', `${OWNER_ID}.fabricated-read-refresh`);
+  const harness = makeHarness({
+    secretStore,
+    tokenResponse: {
+      access_token: `${OWNER_ID}.fabricated-edit-access`,
+      refresh_token: `${OWNER_ID}.fabricated-edit-refresh`,
+      token_type: 'Bearer',
+      expires_in: 3600,
+      scope: 'listings_r listings_w',
+    },
+  });
+
+  const result = await connectLocal({ ...harness.options, profile: 'edit' });
+
+  assert.deepEqual(result, { status: 'connected' });
+  assert.equal(
+    new globalThis.URL(harness.attempt.authorizationUrl).searchParams.get('scope'),
+    'listings_r listings_w',
+  );
+  assert.equal(await secretStore.get('accessToken'), `${OWNER_ID}.fabricated-read-access`);
+  assert.equal(await secretStore.get('refreshToken'), `${OWNER_ID}.fabricated-read-refresh`);
+  assert.equal(await secretStore.get('editAccessToken'), `${OWNER_ID}.fabricated-edit-access`);
+  assert.equal(await secretStore.get('editRefreshToken'), `${OWNER_ID}.fabricated-edit-refresh`);
+});
+
+test('an incomplete edit grant cannot be silently overwritten', async () => {
+  const secretStore = new InMemorySecretStore();
+  await secretStore.set('appKeystring', CLIENT_ID);
+  await secretStore.set('appSharedSecret', APP_SHARED_SECRET);
+  await secretStore.set('editRefreshToken', `${OWNER_ID}.fabricated-partial-edit-refresh`);
+  const harness = makeHarness({ secretStore });
+
+  assert.deepEqual(await connectLocal({ ...harness.options, profile: 'edit' }), {
+    status: 'failed',
+    reason: 'already_connected',
+  });
+  assert.deepEqual(harness.events, ['read-config']);
+  assert.equal(harness.requests.length, 0);
 });
 
 test('missing configuration or app credentials fails before any external side effect', async () => {

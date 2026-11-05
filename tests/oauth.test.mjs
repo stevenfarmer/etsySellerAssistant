@@ -8,6 +8,7 @@ import { URL } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
 import {
   createOAuthAttempt,
+  EDIT_SCOPES,
   LOCAL_REDIRECT_URI,
   OAuthError,
   validateCallbackTarget,
@@ -52,11 +53,31 @@ test('authorization attempt refuses alternate redirects and malformed scopes', (
     OAuthError,
   );
   assert.throws(
-    () => createOAuthAttempt({ clientId: 'x', scopes: ['listings_r', 'listings_w'] }),
+    () => createOAuthAttempt({ clientId: 'x', scopes: ['listings_r', 'shops_w'] }),
     OAuthError,
   );
   assert.throws(
     () => createOAuthAttempt({ clientId: 'x', scopes: ['listings_r', 'listings_r'] }),
+    OAuthError,
+  );
+});
+
+test('edit authorization allows only the established read and write listing scopes', () => {
+  const attempt = createOAuthAttempt({ clientId: 'fabricated-client-id', scopes: EDIT_SCOPES });
+  assert.equal(
+    new URL(attempt.authorizationUrl).searchParams.get('scope'),
+    'listings_r listings_w',
+  );
+  const reversed = createOAuthAttempt({
+    clientId: 'fabricated-client-id',
+    scopes: ['listings_w', 'listings_r'],
+  });
+  assert.equal(
+    new URL(reversed.authorizationUrl).searchParams.get('scope'),
+    'listings_w listings_r',
+  );
+  assert.throws(
+    () => createOAuthAttempt({ clientId: 'x', scopes: ['listings_r', 'listings_w', 'shops_r'] }),
     OAuthError,
   );
 });

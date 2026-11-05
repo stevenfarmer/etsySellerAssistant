@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createEditProposalService, ProposalError } from '../dist/src/edits/proposal-service.js';
+import { ListingApplyError } from '../dist/src/edits/apply-service.js';
 import { registerEditProposalTools } from '../dist/src/mcp/edit-proposal-tools.js';
 
 const snapshot = Object.freeze({
@@ -53,7 +54,11 @@ function harness(options = {}) {
       tools.set(name, { config, handler });
     },
   };
-  registerEditProposalTools(server, { readService, proposalService: service });
+  registerEditProposalTools(server, {
+    readService,
+    proposalService: service,
+    ...(options.applyService ? { applyService: options.applyService } : {}),
+  });
   const call = (name, input, elicitInput) =>
     tools.get(name).handler(input, {
       mcpReq: { elicitInput },
@@ -216,6 +221,91 @@ test('concurrent confirmations cannot obtain two approvals for one proposal', as
   );
   answerFirst({ action: 'accept' });
   assert.equal(await firstApproval, 'approved');
+});
+
+test('an accepted proposal applies only through the one-use apply tool', async () => {
+  const applied = [];
+  const h = harness({
+    applyService: {
+      async apply(proposal) {
+        applied.push(proposal);
+        return {
+          proposalId: proposal.proposalId,
+          listingId: proposal.listingId,
+          outcome: 'verified',
+          changedFields: ['description'],
+        };
+      },
+    },
+  });
+  assert.deepEqual([...h.tools.keys()], ['prepare_listing_edit', 'apply_listing_edit']);
+  const prepared = await h.call(
+    'prepare_listing_edit',
+    { listingId: snapshot.listingId, changes: { description: 'Approved description' } },
+    async () => ({ action: 'accept' }),
+  );
+  const { proposalId, listingChanged } = body(prepared);
+  assert.equal(listingChanged, false);
+  assert.equal(applied.length, 0);
+
+  const result = await h.call('apply_listing_edit', { proposalId });
+  assert.equal(result.isError, undefined);
+  assert.match(result.content[0].text, /updated and verified/);
+  assert.equal(applied.length, 1);
+  assert.equal(applied[0].proposalId, proposalId);
+  assert.equal(applied[0].after.description, 'Approved description');
+
+  const replay = await h.call('apply_listing_edit', { proposalId });
+  assert.equal(replay.isError, true);
+  assert.match(replay.content[0].text, /not available for applying/);
+  assert.equal(applied.length, 1);
+});
+
+test('a declined proposal cannot be consumed by the apply tool', async () => {
+  let applyCalls = 0;
+  const h = harness({
+    applyService: {
+      async apply() {
+        applyCalls += 1;
+        throw new Error('must not execute');
+      },
+    },
+  });
+  const declined = await h.call(
+    'prepare_listing_edit',
+    { listingId: snapshot.listingId, changes: { description: 'Declined description' } },
+    async () => ({ action: 'decline' }),
+  );
+  assert.equal(declined.isError, true);
+  const replay = await h.call('apply_listing_edit', {
+    proposalId: 'aaaaaaaa-aaaa-4aaa-8aaa-000000000001',
+  });
+  assert.equal(replay.isError, true);
+  assert.equal(applyCalls, 0);
+});
+
+test('a failed final audit record tells the seller to inspect before retrying', async () => {
+  const h = harness({
+    applyService: {
+      async apply() {
+        throw new ListingApplyError('audit_failed', false);
+      },
+    },
+  });
+  const prepared = await h.call(
+    'prepare_listing_edit',
+    { listingId: snapshot.listingId, changes: { description: 'Approved description' } },
+    async () => ({ action: 'accept' }),
+  );
+  const { proposalId } = body(prepared);
+  const result = await h.call('apply_listing_edit', { proposalId });
+  assert.equal(result.isError, true);
+  assert.match(
+    result.content[0].text,
+    /request was sent, but its final audit record could not be saved/,
+  );
+  assert.match(result.content[0].text, /Check the listing before trying again/);
+  assert.doesNotMatch(result.content[0].text, /No listing change was sent/);
 });
 
 test('expiry, malformed changes, missing timestamp and storage limits fail closed', async () => {

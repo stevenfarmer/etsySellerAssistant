@@ -141,6 +141,21 @@ test('unexpected scope is rejected before identity verification or storage', asy
   assert.equal(flow.events.at(-1), 'close');
 });
 
+test('scope order in a valid edit grant does not affect profile validation', async () => {
+  const flow = makeFlow({
+    profile: 'edit',
+    async exchange() {
+      flow.events.push('exchange');
+      return makeGrant({ scope: ['listings_w', 'listings_r'] });
+    },
+  });
+
+  const result = await runVerificationFlow(flow.options);
+
+  assert.deepEqual(result, { status: 'passed' });
+  assert.equal(flow.events.includes('verify-shop'), true);
+});
+
 test('malformed token owner identity is rejected without shop lookup', async () => {
   const flow = makeFlow({
     async exchange() {

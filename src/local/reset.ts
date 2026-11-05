@@ -9,7 +9,14 @@ export async function resetLocalSetup(options: {
 }): Promise<'reset' | 'cancelled' | 'failed'> {
   if (options.confirmation !== 'RESET') return 'cancelled';
   try {
-    for (const key of ['accessToken', 'refreshToken', 'appKeystring', 'appSharedSecret'] as const) {
+    for (const key of [
+      'accessToken',
+      'refreshToken',
+      'editAccessToken',
+      'editRefreshToken',
+      'appKeystring',
+      'appSharedSecret',
+    ] as const) {
       await options.secretStore.delete(key);
     }
     await options.clearTokenState();

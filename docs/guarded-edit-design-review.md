@@ -146,6 +146,27 @@ pre-write failure, post-write failure, and recovery before any live write path e
 | Audit                     | Local append-only intent/outcome records, fixed approved location, fail closed before PATCH | T-029 temporary-directory durability and failure-path tests                                    |
 | Uncertain outcome         | One write attempt; safe read reconciliation; no blind retry                                 | T-030 offline transport and reconciliation tests                                               |
 
+## T-030 implementation addendum — confirmation and authorization boundaries
+
+Updated 5 November 2026 for the implementation plan. T-032's owner-accepted Mac check established
+that the readable confirmation should appear automatically in `prepare_listing_edit` and use the
+host's single Accept/Deny choice. Therefore acceptance records a one-use approval for the exact
+in-memory proposal; a later explicit `apply_listing_edit` call consumes it. Applying does not open a
+second confirmation form. This preserves the human approval step while avoiding the confusing
+double-confirmation flow. Neither tool call alone can construct or alter the approved fields.
+
+The opt-in alpha obtains write credentials only from a separate explicit local `enable-edits`
+authorization profile with exactly `listings_r` and `listings_w`; the existing read-only token pair
+and refresh state remain separate. The `disable-edits` command removes only the edit grant and its
+refresh state after local server processes are stopped. The apply tool requires the configured
+local audit folder and fails closed when the grant is absent. The default server remains status-only.
+No authorization flow, credential change, live Etsy request, or listing update is run as part of
+offline implementation or CI.
+
+The addendum changes the timing of the already-required human confirmation to match the verified
+T-032 interaction; it does not change the immutable proposal, one-use, field allowlist, identity,
+stale-check, audit-before-write, no-retry, or reconciliation requirements above.
+
 ### Sources checked 3 November 2026
 
 - [Etsy `updateListing` API reference](https://developers.etsy.com/documentation/reference/#operation/updateListing)

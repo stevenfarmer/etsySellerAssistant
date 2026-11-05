@@ -65,12 +65,15 @@ The browser may retain the Etsy authorization URL in history or diagnostics; do 
 
 ### Local audit folder
 
-For the later guarded-apply workflow, configure the Drive-synced audit folder with
+For guarded apply, configure the Drive-synced audit folder with
 `npm run local -- set-audit-directory`. Enter the absolute path ending in
 `github/etsySellerAssistant/auditTrail` at the hidden prompt. The setting is stored only in local
 application configuration; the command neither contacts Etsy nor writes audit records. The
-current alpha remains read-only and does not use the audit store yet. See [local audit records](local-audit.md)
-for record contents, file protections, and recovery steps.
+unpublished alpha requires this setting before applying an approved proposal. The edit grant is a
+separate explicit local authorization (`npm run local -- enable-edits`). To remove only that grant,
+stop all local server processes and run `npm run local -- disable-edits`; the read grant and audit
+records remain. See [guarded editing](local-editing.md) and [local audit records](local-audit.md)
+for the complete flow, record contents, file protections, and recovery steps.
 
 All guided prompts hide input, including the shop URL and confirmation words. Paste or type once,
 then press Return even though nothing appears. Single-line bracketed paste is supported; multiline

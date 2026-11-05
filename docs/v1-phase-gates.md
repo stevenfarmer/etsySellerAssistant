@@ -13,8 +13,8 @@ or release publication. See [current requirements](requirements-and-acceptance.m
 T-033 client-neutrality and editorial cleanup merged in PR #35 as
 `265995f1a08da916c09c1f831de27c58fa86a701`. T-011, T-028, T-032, T-033 and T-029 are
 complete. T-029 audit durability merged in PR #37 as
-`e6a71f704fa938248b7e938115ea316d96eb398c`; guarded apply (T-030), measurement and final
-acceptance remain ahead.
+`e6a71f704fa938248b7e938115ea316d96eb398c`. T-030 guarded apply and reconciliation is now in
+progress; measurement and final acceptance remain ahead.
 Recheck live state on each resume.
 
 Only `v0.1.0-alpha.1` is published and must remain unchanged. Development version `1.0.0`

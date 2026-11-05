@@ -3,6 +3,8 @@ export const SECRET_KEYS = [
   'appSharedSecret',
   'accessToken',
   'refreshToken',
+  'editAccessToken',
+  'editRefreshToken',
 ] as const;
 
 export type SecretKey = (typeof SECRET_KEYS)[number];

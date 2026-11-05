@@ -67,6 +67,7 @@ test('the default STDIO server remains status-only', async () => {
 
 test('the explicit alpha entry point exposes read and proposal tools without starting a read', async () => {
   assert.deepEqual(await readInventory('./dist/src/alpha.js'), [
+    'apply_listing_edit',
     'get_listing',
     'get_review_guidance',
     'get_setup_status',

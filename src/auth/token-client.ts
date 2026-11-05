@@ -1,6 +1,7 @@
+import { isSupportedScopeSet, REQUIRED_SCOPES } from './oauth.js';
+
 const TOKEN_ENDPOINT = 'https://api.etsy.com/v3/public/oauth/token';
 const CALLBACK_URL = 'http://localhost:3003/oauth/redirect';
-const REQUIRED_SCOPE = 'listings_r';
 
 export interface TokenGrant {
   readonly accessToken: string;
@@ -20,7 +21,11 @@ export class TokenGrantError extends Error {
 
 type TokenFetch = (url: string, init: RequestInit) => Promise<Response>;
 
-async function requestGrant(body: URLSearchParams, tokenFetch: TokenFetch): Promise<TokenGrant> {
+async function requestGrant(
+  body: URLSearchParams,
+  tokenFetch: TokenFetch,
+  expectedScopes: readonly string[],
+): Promise<TokenGrant> {
   let response: Response;
   try {
     response = await tokenFetch(TOKEN_ENDPOINT, {
@@ -60,7 +65,12 @@ async function requestGrant(body: URLSearchParams, tokenFetch: TokenFetch): Prom
     throw new TokenGrantError('invalid_response');
   }
   const scopes = record.scope.trim().split(/\s+/).filter(Boolean);
-  if (scopes.length !== 1 || scopes[0] !== REQUIRED_SCOPE) {
+  if (
+    !isSupportedScopeSet(scopes) ||
+    scopes.length !== expectedScopes.length ||
+    new Set(scopes).size !== scopes.length ||
+    expectedScopes.some((scope) => !scopes.includes(scope))
+  ) {
     throw new TokenGrantError('invalid_scope');
   }
   return {
@@ -76,6 +86,7 @@ export async function exchangeAuthorizationCode(
   code: string,
   verifier: string,
   tokenFetch: TokenFetch,
+  expectedScopes: readonly string[] = REQUIRED_SCOPES,
 ): Promise<TokenGrant> {
   if (!validInput(clientId) || !validInput(code) || !/^[A-Za-z0-9._~-]{43,128}$/.test(verifier)) {
     throw new TokenGrantError('invalid_request');
@@ -89,6 +100,7 @@ export async function exchangeAuthorizationCode(
       code_verifier: verifier,
     }),
     tokenFetch,
+    expectedScopes,
   );
 }
 
@@ -96,6 +108,7 @@ export async function refreshAuthorization(
   clientId: string,
   refreshToken: string,
   tokenFetch: TokenFetch,
+  expectedScopes: readonly string[] = REQUIRED_SCOPES,
 ): Promise<TokenGrant> {
   if (!validInput(clientId) || !validInput(refreshToken)) {
     throw new TokenGrantError('invalid_request');
@@ -107,6 +120,7 @@ export async function refreshAuthorization(
       refresh_token: refreshToken,
     }),
     tokenFetch,
+    expectedScopes,
   );
 }
 
