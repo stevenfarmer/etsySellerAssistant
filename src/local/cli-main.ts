@@ -15,10 +15,12 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (
     args.length !== 1 ||
-    !['guided', 'setup', 'connect', 'lookup', 'reset'].includes(args[0] ?? '')
+    !['guided', 'setup', 'connect', 'lookup', 'reset', 'set-audit-directory'].includes(
+      args[0] ?? '',
+    )
   ) {
     process.stderr.write(
-      'Usage: local guided | local lookup | local setup | local connect | local reset\n',
+      'Usage: local guided | local lookup | local setup | local connect | local reset | local set-audit-directory\n',
     );
     process.exitCode = 1;
     return;
@@ -37,6 +39,21 @@ async function main(): Promise<void> {
     } else {
       process.stderr.write(`Shop lookup failed (${lookup.reason}).\n`);
       process.exitCode = 1;
+    }
+    return;
+  }
+  if (args[0] === 'set-audit-directory') {
+    const result = await runLocalCommand(args, {
+      configStore: createLocalConfigStore(),
+      secretStore: createOsSecretStore(),
+      readHiddenInput: hidden,
+      connect: async () => ({ status: 'failed' }),
+    });
+    if (result.status === 'failed') {
+      process.stderr.write(`Local operation failed (${result.reason}).\n`);
+      process.exitCode = 1;
+    } else {
+      process.stdout.write('Local audit folder configured.\n');
     }
     return;
   }

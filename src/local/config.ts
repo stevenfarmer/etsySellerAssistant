@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto';
 
 export interface LocalConfig {
   readonly expectedShopId: number;
+  readonly auditDirectory?: string;
 }
 
 export type LocalConfigStatus = 'missing' | 'configured' | 'invalid';
@@ -14,6 +15,7 @@ export type LocalConfigErrorCode =
   | 'unsupported_platform'
   | 'invalid_path'
   | 'invalid_shop_id'
+  | 'invalid_audit_directory'
   | 'invalid_config'
   | 'unsafe_path'
   | 'io_failed';
@@ -55,13 +57,14 @@ export interface LocalConfigStore {
   read(): Promise<LocalConfig | undefined>;
   status(): Promise<LocalConfigStatus>;
   write(expectedShopId: number): Promise<void>;
+  setAuditDirectory(auditDirectory: string): Promise<void>;
   delete(): Promise<void>;
 }
 
 const CONFIG_FILENAME = 'config.json';
 const DIRECTORY_MODE = 0o700;
 const FILE_MODE = 0o600;
-const MAX_CONFIG_BYTES = 1024;
+const MAX_CONFIG_BYTES = 4096;
 const O_NOFOLLOW = fsConstants.O_NOFOLLOW ?? 0;
 
 function isMissing(error: unknown): boolean {
@@ -72,7 +75,20 @@ function isPositiveSafeInteger(value: unknown): value is number {
   return Number.isSafeInteger(value) && typeof value === 'number' && value > 0;
 }
 
-function parseConfig(serialized: string): LocalConfig {
+function isApprovedAuditDirectory(
+  value: string,
+  pathApi: Pick<typeof defaultPath, 'isAbsolute'>,
+): boolean {
+  return (
+    pathApi.isAbsolute(value) &&
+    value.replace(/\\/g, '/').replace(/\/+$/, '').endsWith('/github/etsySellerAssistant/auditTrail')
+  );
+}
+
+function parseConfig(
+  serialized: string,
+  pathApi: Pick<typeof defaultPath, 'isAbsolute'>,
+): LocalConfig {
   let value: unknown;
   try {
     value = JSON.parse(serialized);
@@ -83,13 +99,23 @@ function parseConfig(serialized: string): LocalConfig {
     typeof value !== 'object' ||
     value === null ||
     Array.isArray(value) ||
-    Object.keys(value).length !== 1 ||
+    Object.keys(value).some((key) => !['expectedShopId', 'auditDirectory'].includes(key)) ||
     !Object.hasOwn(value, 'expectedShopId') ||
-    !isPositiveSafeInteger((value as { readonly expectedShopId?: unknown }).expectedShopId)
+    !isPositiveSafeInteger((value as { readonly expectedShopId?: unknown }).expectedShopId) ||
+    (Object.hasOwn(value, 'auditDirectory') &&
+      (typeof (value as { readonly auditDirectory?: unknown }).auditDirectory !== 'string' ||
+        !isApprovedAuditDirectory(
+          (value as { readonly auditDirectory: string }).auditDirectory,
+          pathApi,
+        )))
   ) {
     throw new LocalConfigError('invalid_config');
   }
-  return { expectedShopId: (value as { readonly expectedShopId: number }).expectedShopId };
+  const config = value as { readonly expectedShopId: number; readonly auditDirectory?: string };
+  return {
+    expectedShopId: config.expectedShopId,
+    ...(config.auditDirectory === undefined ? {} : { auditDirectory: config.auditDirectory }),
+  };
 }
 
 export function resolveLocalConfigDirectory(options: LocalConfigOptions = {}): string {
@@ -156,6 +182,38 @@ export function createLocalConfigStore(options: LocalConfigOptions = {}): LocalC
     }
   };
 
+  const persist = async (config: LocalConfig): Promise<void> => {
+    const temporaryPath = pathApi.join(directory, `.config.${randomUUID()}.tmp`);
+    let handle: FileHandle | undefined;
+    try {
+      await ensureSafeDirectory(true);
+      await ensureSafeTarget();
+      handle = await fileSystem.open(temporaryPath, 'wx', FILE_MODE);
+      await handle.writeFile(`${JSON.stringify(config, null, 2)}\n`, 'utf8');
+      await handle.sync();
+      await handle.close();
+      handle = undefined;
+      if (!isWindows) await fileSystem.chmod(temporaryPath, FILE_MODE);
+      await ensureSafeTarget();
+      await fileSystem.rename(temporaryPath, configPath);
+    } catch (error) {
+      throw asIoError(error);
+    } finally {
+      if (handle !== undefined) {
+        try {
+          await handle.close();
+        } catch {
+          // Preserve the sanitized primary result.
+        }
+      }
+      try {
+        await fileSystem.unlink(temporaryPath);
+      } catch {
+        // The temp file is already renamed or absent.
+      }
+    }
+  };
+
   return {
     async delete(): Promise<void> {
       try {
@@ -175,7 +233,7 @@ export function createLocalConfigStore(options: LocalConfigOptions = {}): LocalC
           if ((await handle.stat()).size > MAX_CONFIG_BYTES) {
             throw new LocalConfigError('invalid_config');
           }
-          return parseConfig(await handle.readFile('utf8'));
+          return parseConfig(await handle.readFile('utf8'), pathApi);
         } finally {
           await handle.close();
         }
@@ -197,35 +255,26 @@ export function createLocalConfigStore(options: LocalConfigOptions = {}): LocalC
 
     async write(expectedShopId: number): Promise<void> {
       if (!isPositiveSafeInteger(expectedShopId)) throw new LocalConfigError('invalid_shop_id');
-      const temporaryPath = pathApi.join(directory, `.config.${randomUUID()}.tmp`);
-      let handle: FileHandle | undefined;
-      try {
-        await ensureSafeDirectory(true);
-        await ensureSafeTarget();
-        handle = await fileSystem.open(temporaryPath, 'wx', FILE_MODE);
-        await handle.writeFile(`${JSON.stringify({ expectedShopId }, null, 2)}\n`, 'utf8');
-        await handle.sync();
-        await handle.close();
-        handle = undefined;
-        if (!isWindows) await fileSystem.chmod(temporaryPath, FILE_MODE);
-        await ensureSafeTarget();
-        await fileSystem.rename(temporaryPath, configPath);
-      } catch (error) {
-        throw asIoError(error);
-      } finally {
-        if (handle !== undefined) {
-          try {
-            await handle.close();
-          } catch {
-            // Preserve the sanitized primary result.
-          }
-        }
-        try {
-          await fileSystem.unlink(temporaryPath);
-        } catch {
-          // The temp file is already renamed or absent.
-        }
+      const current = await this.read();
+      await persist({
+        expectedShopId,
+        ...(current?.auditDirectory === undefined
+          ? {}
+          : { auditDirectory: current.auditDirectory }),
+      });
+    },
+
+    async setAuditDirectory(auditDirectory: string): Promise<void> {
+      if (
+        typeof auditDirectory !== 'string' ||
+        auditDirectory.length === 0 ||
+        !isApprovedAuditDirectory(auditDirectory, pathApi)
+      ) {
+        throw new LocalConfigError('invalid_audit_directory');
       }
+      const current = await this.read();
+      if (current === undefined) throw new LocalConfigError('invalid_config');
+      await persist({ expectedShopId: current.expectedShopId, auditDirectory });
     },
   };
 }

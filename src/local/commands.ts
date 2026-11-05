@@ -12,7 +12,7 @@ export interface LocalCommandsOptions {
 }
 
 export type CommandResult =
-  | { readonly status: 'configured' | 'connected' }
+  | { readonly status: 'configured' | 'connected' | 'audit_directory_configured' }
   | { readonly status: 'failed'; readonly reason: string };
 
 /** A new connection must not inherit expiry information from an earlier token pair. */
@@ -27,8 +27,23 @@ export async function runLocalCommand(
   args: readonly string[],
   options: LocalCommandsOptions,
 ): Promise<CommandResult> {
-  if (args.length !== 1 || !['setup', 'connect', 'guided'].includes(args[0] ?? '')) {
+  if (
+    args.length !== 1 ||
+    !['setup', 'connect', 'guided', 'set-audit-directory'].includes(args[0] ?? '')
+  ) {
     return { status: 'failed', reason: 'invalid_command' };
+  }
+  if (args[0] === 'set-audit-directory') {
+    let directory: string;
+    try {
+      directory = await options.readHiddenInput(
+        'Absolute Drive-synced folder ending in github/etsySellerAssistant/auditTrail: ',
+      );
+      await options.configStore.setAuditDirectory(directory);
+      return { status: 'audit_directory_configured' };
+    } catch {
+      return { status: 'failed', reason: 'audit_directory_configuration_failed' };
+    }
   }
   if (args[0] === 'connect') {
     try {
