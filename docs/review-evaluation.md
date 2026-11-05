@@ -76,8 +76,8 @@ reproducible standalone model-generation run. The manual scores are self-entered
 Eight of eight passed the declared-evidence checks and self-review threshold; self-scored totals
 ranged from 13 to 15/16 with no recorded critical failure. These are development observations,
 not an estimated real-world success rate. The two draft decisions passed the production copy
-validator; other cases appropriately asked or kept copy. Independent/owner usefulness remains
-T-031 and final release acceptance; actual sales performance is not established here.
+validator; other cases appropriately asked or kept copy. Owner usefulness was accepted in T-031;
+final release acceptance remains T-012, and actual sales performance is not established here.
 
 ## Sources and maintenance
 

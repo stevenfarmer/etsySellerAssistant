@@ -18,18 +18,35 @@ resuming; historical evidence is valid only within its stated scope.
   and covered by the rerun. No OAuth grant, live Etsy request or listing change was performed.
 - Documentation and tracking closeout merged in PR #40 as `8496625073a83d65bb8108489a29a25bd435b109`
   from head `4d6991a87c0ae73d47f6e3c32498b8223bf48398`. Its CI run 42086762473 passed all five
-  checks; Prettier and `git diff --check` passed locally. Final checkpoint PR #41 merged as
+  checks; Prettier and `git diff --check` passed locally. Earlier checkpoint PR #41 merged as
   `f23d220f703a1f19631b7e49627b7602dfa3dfb7` from head `c4b2f80bcf714d3c4b3dd71d13a6859a8fb95324`;
-  CI run 42088042063 passed all five checks. Local main is synchronized through PR #41.
+  CI run 42088042063 passed all five checks; local `main` then pointed through PR #41.
 - The T-030 tracker row is Done and links PR #39; its evidence and the current steering record were
   read back. The local matrix, README, operator guides, readiness/phase plan and this checkpoint
   agree that T-030 implementation/verification is complete and T-031 owner acceptance is separate.
   No owner action was needed for T-030.
 - Owner moved T-025 measurement design to the backlog on 5 November 2026 because repeat-item sales
   comparisons do not fit one-off handmade inventory. T-025 is not a current release gate.
-- Next active acceptance gate: T-031 Mac review of useful output using the configured private seller
-  guidance/playbook and guarded-edit workflow. T-025 is not a prerequisite for this scoped gate.
-  Do not infer live acceptance or publication from repository checks.
+- T-031 Mac acceptance is complete. The owner found the private-guidance review useful and explicitly
+  authorized the edit grant and exact listing change. The host confirmation succeeded; the fixed
+  apply flow reported success, a fresh read verified the approved fields, and the local audit
+  outcome was recorded. No seller-specific content or audit record is retained in project files.
+- T-035 is the active follow-up from the owner's review of the confirmation screen. Its first draft
+  removes the model-safety warning from the seller-facing form and says that Accept approves the
+  exact displayed change, after which the assistant immediately applies it to Etsy and verifies it. The tool
+  description retains the untrusted-listing-text instruction and tells the assistant not to apply
+  after decline, cancellation, unavailable confirmation or stale data. Offline tests and the
+  revised Mac prompt review are still required; T-035 is not complete yet.
+- T-034 remains Open / Next and follows T-035. It covers design of a user-led first-run interview,
+  fact checking, private-document review and safe save/update to the existing fixed location; no
+  implementation has started. T-025 remains deferred and is not a current release gate.
+- Current branch: `codex/confirmation-copy-workflow`, based on `main` at
+  `11dc9732be517646f942cbc75b9d252f0d395698`. T-034/T-035 connected tracker rows were read back;
+  T-035 is In Progress and T-034 follows it. Formatting, `npm run validate` with loopback enabled
+  and `git diff --check` passed; all 287 offline tests passed. The T-035 code and synchronized
+  documentation are uncommitted; no PR exists. Exact next action: review the final diff, commit and
+  push the focused branch, open a PR, then wait for CI and owner review of the revised confirmation
+  wording before deciding whether T-035 is complete.
 
 ## Required replacement at each checkpoint
 

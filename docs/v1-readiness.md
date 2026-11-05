@@ -18,7 +18,7 @@ release summary, not a second requirements list.
 - M3: bounded configured-shop listing pages/detail. Existing owner-authorized Mac reads and
   restart/status acceptance remain accepted; T-009/T-010 are Done.
 - M4: fabricated list/detail path and [worked fact-grounded review](listing-review-example.md)
-  demonstrated. Scoped owner review remains in T-031; final product acceptance remains with T-012.
+  demonstrated. Owner usefulness was accepted in T-031; final product acceptance remains T-012.
 - M5: read-only inventory, constrained inputs/outputs, secret handling, and actionable sanitized
   authorization/access/rate-limit/timeout/service/data diagnostics.
 
@@ -34,9 +34,11 @@ This was a fresh checkout on the existing Mac, not a new clean-machine/live OAut
 The owner confirmed editing and intelligent sales-oriented recommendations are expected in v1.
 [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) supersedes the read-only-only
 release recommendation. T-023 (intelligent review), T-011 (guarded-write design/security review),
-T-024 (guarded edit acceptance) is active v1 work. T-025 measurement design was moved to the
+and T-024 (guarded edits) are complete for their stated criteria. T-025 measurement design was moved to the
 backlog by the owner on 5 November 2026; its method does not fit unique, one-off handmade items
-yet and it is not a current release gate. T-031 remains for scoped Mac/usefulness acceptance.
+yet and it is not a current release gate. T-031 Mac usefulness and guarded-edit acceptance passed
+on 5 November 2026. T-035 is a confirmation-copy and follow-through refinement; T-034 will then
+design the first-run private-guidance setup.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
@@ -44,9 +46,10 @@ readable same-call confirmation flow. The owner found the extra checkbox and hos
 T-032 removed the extra field, passed the repeat Mac check without changing the listing, and was
 accepted as clear enough to merge. T-033 completed in PR #35: the product is described as a local
 STDIO MCP server, with Codex Desktop/macOS as the current v1 acceptance target. T-029 audit
-durability and T-030 guarded apply/reconciliation implementation are complete under T-024. T-031
-tracks separate owner usefulness and Mac/live-edit acceptance; it is the next active owner gate.
-T-025 measurement design is deferred and is not a prerequisite for T-031. Chunk 1A/T-026 implements private storage/template only: 12 fabricated tests; full validation
+durability and T-030 guarded apply/reconciliation implementation are complete under T-024. In
+T-031, the owner accepted the review's usefulness and a separately authorized Mac edit completed
+with verified values and an audit outcome. T-025 measurement design is deferred and is not a
+prerequisite for T-031. Chunk 1A/T-026 implements private storage/template only: 12 fabricated tests; full validation
 passed 212 offline tests. Chunk 1B adds get_review_guidance to alpha, generic by default;
 full validation now passes 222 offline tests with actual STDIO coverage. After app restart, actual Codex discovery/default-generic invocation also passed on
 1 November 2026. T-027 is Done for that scoped client gate; advanced review usefulness remains later work. Chunk 2A adds the [workflow/brief/draft checker](draft-review-workflow.md), fabricated
@@ -57,8 +60,8 @@ client settings. T-023 Done is scoped to those development criteria; no independ
 advanced owner usefulness, private-mode client, live-edit or sales-uplift acceptance is inferred. Other listed capabilities remain planned.
 Their [requirements](intelligent-listing-review.md) distinguish planned capabilities from the
 existing deployed alpha.1 read-only implementation. The unpublished development alpha contains
-guarded edit tools, but no edit grant or live listing change has been made; implementation evidence
-does not satisfy T-031 owner acceptance.
+guarded edit tools; the scoped Mac acceptance edit was completed under T-031. T-035 refines the
+confirmation copy without changing the approval, audit, or apply boundaries.
 
 T-007 remains Done; accepted read/setup/recovery evidence is retained. T-008 remains In Review
 for disclosed recovery limits. T-012 is In Progress, pending the expanded features and final
