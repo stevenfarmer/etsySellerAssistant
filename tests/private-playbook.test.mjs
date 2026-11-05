@@ -259,16 +259,14 @@ test('detects substituted identity and modified files during reads', async () =>
           const info = await h.stat();
           stats += 1;
           const adjustModificationTime = kind === 'modified' && stats === 2;
-          return new Proxy(info, {
-            get(target, property) {
-              if (kind === 'identity' && property === 'ino') return target.ino + 1;
-              if (adjustModificationTime && property === 'mtimeMs') {
-                return target.mtimeMs + 1;
-              }
-              const value = Reflect.get(target, property, target);
-              return typeof value === 'function' ? value.bind(target) : value;
-            },
-          });
+          const altered = Object.create(info);
+          if (kind === 'identity') {
+            Object.defineProperty(altered, 'ino', { value: info.ino + 1 });
+          }
+          if (adjustModificationTime) {
+            Object.defineProperty(altered, 'mtimeMs', { value: info.mtimeMs + 1 });
+          }
+          return altered;
         },
       }));
       await assert.rejects(
