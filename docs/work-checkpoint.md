@@ -33,19 +33,19 @@ resuming; historical evidence is valid only within its stated scope.
 - The owner clarified the product intent: a local Etsy seller-assistant MCP server for compatible
   clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
-- Current chunk: **4A follow-up / T-032 confirmation usability**, on
-  [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
-  `codex/t032-readable-confirmation`. PR head before the current synchronization is
-  `e86f6681855c7bfaf7017043d4a2cf52fcb6f5ad`; all five jobs passed there (run 41946457996).
-  Earlier Mac verification caught the redundant yes/no field plus host buttons. Code commit
-  `130bd6ebc6018eadcab0eec4e07a01e4296bce5d` removed it and uses the host action as the sole
-  approval. After restart, the test proposal returned `approved_for_later_apply` with
-  `listingChanged:false`; a fresh listing read confirmed no change. The owner found the revised
-  one-choice prompt clear enough to merge. Local `npm run validate` passed format, lint, typecheck,
-  build and 248/248 offline tests; formatting and diff checks pass. The owner accepted the revised
-  prompt as clear enough to merge. T-024/T-032 evidence was updated and read back. Next: commit this
-  final checkpoint/status update, wait for its CI, merge PR #33, then stop before T-033. No apply tool
-  or update transport exists; no listing changed.
+- Last completed chunk: **4A follow-up / T-032 confirmation usability**, merged in
+  [PR #33](https://github.com/stevenfarmer/etsySellerAssistant) as
+  `3d05711627e839021768cd6daa5e26fa9ef3a572` from reviewed head
+  `d026500d4fa1e0ab5bd17f6b44adf5f36ade8cd1`.
+- `prepare_listing_edit` now presents readable exact values and requests confirmation in the same
+  call, with the host Accept/Deny action as the sole choice. The Mac test returned
+  `approved_for_later_apply`/`listingChanged:false`; a fresh read confirmed the listing unchanged.
+  The owner found the one-choice prompt clear enough to merge. Local `npm run validate` passed
+  248/248 offline tests, and all five CI jobs passed on the reviewed head (run 41948328199).
+- T-032 is Done. T-024/T-032 tracker evidence records the Mac check and merge; the final readback is
+  being synchronized in this checkpoint closeout. No apply tool or update transport exists.
+- Next numbered chunk: **4A follow-up / T-033 client-neutral wording and editorial cleanup**.
+  Do not start it automatically. No listing changed, credential/scope change or publication occurred.
 
 ## Required replacement at each checkpoint
 
