@@ -290,17 +290,13 @@ test('smoke accepts known review and proposal tools without invoking them, but r
           name: 'prepare_listing_edit',
           annotations: { readOnlyHint: false, destructiveHint: false },
         },
-        {
-          name: 'approve_listing_edit',
-          annotations: { readOnlyHint: false, destructiveHint: false },
-        },
       ],
       'passed',
     ],
     [
       [
         {
-          name: 'approve_listing_edit',
+          name: 'prepare_listing_edit',
           annotations: { readOnlyHint: false, destructiveHint: true },
         },
       ],

@@ -28,8 +28,7 @@ export interface ListingEditProposal {
 }
 
 export type ApprovalResult =
-  | { readonly action: 'accept'; readonly confirm: unknown }
-  | { readonly action: 'decline' | 'cancel' };
+  { readonly action: 'accept' } | { readonly action: 'decline' | 'cancel' };
 
 type StoredProposal = {
   readonly proposal: ListingEditProposal;
@@ -218,7 +217,7 @@ export function createEditProposalService(
         stored.state = 'used';
         throw new ProposalError('proposal_expired');
       }
-      stored.state = answer.action === 'accept' && answer.confirm === true ? 'approved' : 'used';
+      stored.state = answer.action === 'accept' ? 'approved' : 'used';
       return stored.state === 'approved' ? 'approved' : 'declined';
     },
 

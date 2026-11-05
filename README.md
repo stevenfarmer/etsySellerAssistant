@@ -23,15 +23,16 @@ are not detected until a listing read or restart. The default scaffold's status 
 
 The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
 
-The unpublished development alpha also exposes `prepare_listing_edit` and
-`approve_listing_edit`. These create an in-memory, five-minute exact proposal and ask the
-connected MCP client for explicit form confirmation after a fresh listing read. The server
-does not send a listing update: there is no apply tool yet. Clients without MCP form-elicitation
-support fail closed. Owner-run Mac Codex Desktop confirmation verification passed on 4 November
-2026: explicit acceptance records approval for later apply, while decline records no approval;
-neither changes a listing. The current form presents raw JSON and the assistant needed a separate
-confirmation request. T-032 tracks a readable form and automatic confirmation request; this
-development workflow is not part of published alpha.1.
+The unpublished development alpha's `prepare_listing_edit` tool creates an in-memory, five-minute
+proposal and immediately asks the connected MCP client for explicit confirmation after a fresh
+listing read. The form shows the listing and exact current/proposed values without exposing the
+proposal's internal binding data. The form uses one host-level Accept/Deny choice, with no extra
+yes/no field. Accepting records approval for a later step; it does not update Etsy. There is no
+apply tool. Clients without MCP form-elicitation support fail closed. The Mac check confirmed that
+the readable form opens in the same call. The owner found the earlier checkbox plus footer buttons
+confusing; T-032 removed the redundant field. In the follow-up Mac check, the single host choice
+was accepted and a fresh read confirmed no listing change. The owner found the revised prompt clear
+enough to merge. This development workflow is not part of published alpha.1.
 
 ## Work toward v1
 

@@ -21,7 +21,7 @@ resuming; historical evidence is valid only within its stated scope.
   tests**; `git diff --check` passed. No external mutation, credential/scope change or publication.
 - All five current-head CI checks passed, including Node 24/26 macOS and Windows validation and
   the repository secret scan. Mac checks passed after rerun following a GitHub Actions incident.
-  PR #32 documentation checks are being refreshed for the current test evidence and follow-ups.
+  PR #32 documentation reconciliation merged as `e40eee7d9658c87fa0f859c1b48cccc1e756852a`.
   No external mutation, credential/scope change or publication.
 - Owner-run Mac Codex Desktop check passed on 4 November 2026: the local alpha exposed listing,
   prepare and approve tools; accepting an exact proposal returned
@@ -33,10 +33,19 @@ resuming; historical evidence is valid only within its stated scope.
 - The owner clarified the product intent: a local Etsy seller-assistant MCP server for compatible
   clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
-- Current next chunk: **4A follow-up / T-032 confirmation usability**. Improve the form and
-  standard assistant flow, add offline coverage, then repeat the Codex Mac accept/decline check.
-  Then complete T-033 before Phase 4B / T-029. No apply tool or update transport exists; the live
-  listing remains unchanged.
+- Current chunk: **4A follow-up / T-032 confirmation usability**, on
+  [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
+  `codex/t032-readable-confirmation`. PR head before the current synchronization is
+  `e86f6681855c7bfaf7017043d4a2cf52fcb6f5ad`; all five jobs passed there (run 41946457996).
+  Earlier Mac verification caught the redundant yes/no field plus host buttons. Code commit
+  `130bd6ebc6018eadcab0eec4e07a01e4296bce5d` removed it and uses the host action as the sole
+  approval. After restart, the test proposal returned `approved_for_later_apply` with
+  `listingChanged:false`; a fresh listing read confirmed no change. The owner found the revised
+  one-choice prompt clear enough to merge. Local `npm run validate` passed format, lint, typecheck,
+  build and 248/248 offline tests; formatting and diff checks pass. The owner accepted the revised
+  prompt as clear enough to merge. T-024/T-032 evidence was updated and read back. Next: commit this
+  final checkpoint/status update, wait for its CI, merge PR #33, then stop before T-033. No apply tool
+  or update transport exists; no listing changed.
 
 ## Required replacement at each checkpoint
 
