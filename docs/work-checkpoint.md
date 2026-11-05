@@ -58,4 +58,3 @@ private playbook content, credentials, seller facts or logs.
 If interrupted mid-chunk, mark it incomplete and record the safe restart step. Never infer that a
 planned test ran, a PR merged or an owner accepted behavior merely because this file says so;
 compare the claim with actual source/PR/CI and task evidence.
-
