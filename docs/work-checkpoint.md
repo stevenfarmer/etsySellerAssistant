@@ -36,15 +36,16 @@ resuming; historical evidence is valid only within its stated scope.
 - Current chunk: **4A follow-up / T-032 confirmation usability**, on
   [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33), branch
   `codex/t032-readable-confirmation`. PR head before the current synchronization is
-  `4548331fe39ca2b75fbd1cc2a5450193f374637c`; all five jobs passed there (run 41937559303).
+  `e86f6681855c7bfaf7017043d4a2cf52fcb6f5ad`; all five jobs passed there (run 41946457996).
   Earlier Mac verification caught the redundant yes/no field plus host buttons. Code commit
   `130bd6ebc6018eadcab0eec4e07a01e4296bce5d` removed it and uses the host action as the sole
   approval. After restart, the test proposal returned `approved_for_later_apply` with
   `listingChanged:false`; a fresh listing read confirmed no change. The owner found the revised
   one-choice prompt clear enough to merge. Local `npm run validate` passed format, lint, typecheck,
-  build and 248/248 offline tests; formatting and diff checks pass. Next: synchronize the new Mac
-  acceptance in local and connected tracking, commit it, wait for CI on that commit, then merge PR
-  #33. Stop after T-032; T-033 is next. No apply tool or update transport exists; no listing changed.
+  build and 248/248 offline tests; formatting and diff checks pass. The owner accepted the revised
+  prompt as clear enough to merge. T-024/T-032 evidence was updated and read back. Next: commit this
+  final checkpoint/status update, wait for its CI, merge PR #33, then stop before T-033. No apply tool
+  or update transport exists; no listing changed.
 
 ## Required replacement at each checkpoint
 
