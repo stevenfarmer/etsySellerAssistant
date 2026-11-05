@@ -16,6 +16,7 @@ Read this file, the README, and relevant files under `docs/` before making chang
 
 - Every code change must have automated tests. Bug fixes need regression tests. Tests and CI must never call live Etsy endpoints or mutate a shop.
 - Run `npm run validate` before proposing code changes and report the actual result. Do not claim checks passed when they were not run.
+- In the managed development environment, run validation with loopback enabled from the outset: callback tests bind only to localhost, and the default sandboxed run predictably fails before completing. Do not waste a first run without loopback permission.
 - Use strict TypeScript, small modules, explicit input validation, least privilege, and typed errors. Keep Etsy transport, domain logic, and MCP tool definitions separated.
 - Do not expose arbitrary HTTP calls, generic endpoint execution, or unconstrained Etsy fields through tools.
 - Keep credentials, local settings, logs, generated output, and `auditTrail/` out of Git. Do not weaken ignore rules to make local data commit-able.

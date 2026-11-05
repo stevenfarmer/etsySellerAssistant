@@ -17,6 +17,10 @@ function harness(inputs = []) {
         async write(expectedShopId) {
           state.config = { expectedShopId };
         },
+        async setAuditDirectory(auditDirectory) {
+          if (!state.config) throw new Error('not configured');
+          state.config = { ...state.config, auditDirectory };
+        },
         async status() {
           return state.config ? 'configured' : 'missing';
         },
@@ -42,6 +46,24 @@ test('a new connection refuses to inherit any previous token expiry state', asyn
       throw new Error('unavailable');
     }),
   );
+});
+
+test('audit directory setup is a separate local setting and does not connect or expose its path', async () => {
+  const h = harness(['/private/Drive/github/etsySellerAssistant/auditTrail']);
+  h.state.config = { expectedShopId: 12345 };
+  const result = await runLocalCommand(['set-audit-directory'], h.options);
+  assert.deepEqual(result, { status: 'audit_directory_configured' });
+  assert.equal(h.state.prompts.length, 1);
+  assert.equal(h.state.config.expectedShopId, 12345);
+  assert.equal(h.state.config.auditDirectory.endsWith('/auditTrail'), true);
+  assert.equal(h.state.calls, 0);
+
+  const missing = harness(['/private/Drive/github/etsySellerAssistant/auditTrail']);
+  assert.deepEqual(await runLocalCommand(['set-audit-directory'], missing.options), {
+    status: 'failed',
+    reason: 'audit_directory_configuration_failed',
+  });
+  assert.equal(missing.state.calls, 0);
 });
 
 test('guided setup finds the shop and stores credentials without asking twice or displaying its ID', async () => {

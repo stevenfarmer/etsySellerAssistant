@@ -110,7 +110,7 @@ Windows is future work, tentatively v2 or later, and has not been manually teste
 
 For development updates, switch to the intended branch, pull its changes, and run `npm ci`, `npm run validate`, and `npm run build`. Rebuild after changes and update the MCP path if the checkout moves. A Git checkout at a release tag will not follow later documentation corrections automatically.
 
-To correct a shop selection or repeat setup, stop local app instances and follow the deliberate `npm run local -- reset` procedure in the [development guide](docs/development.md). Reset deletes this computer’s stored app credentials, tokens, and shop setting; it does not delete the Seller App or revoke Etsy authorization. Do not reset merely to retry a successful connection. For a stuck refresh or lock, follow the recovery guidance before removing anything.
+To correct a shop selection or repeat setup, stop local app instances and follow the deliberate `npm run local -- reset` procedure in the [development guide](docs/development.md). Reset deletes this computer’s stored app credentials, tokens, shop setting and local audit-folder selection; it does not delete audit files, the Seller App or revoke Etsy authorization. Do not reset merely to retry a successful connection. For a stuck refresh or lock, follow the recovery guidance before removing anything.
 
 If the server does not start, check the Node path, working directory and selected entry point, then run `npm ci` and `npm run build`. An STDIO server started manually waits for a client; stop it with Ctrl-C. Remove the local server using the client’s MCP settings when no longer needed.
 
@@ -120,6 +120,7 @@ If the server does not start, check the Node path, working directory and selecte
 - [Seller App registration and OAuth verification](docs/etsy-registration-verification.md)
 - [Mac alpha review and test plan](docs/mac-alpha-review.md)
 - [Development and recovery](docs/development.md)
+- [Local audit records](docs/local-audit.md)
 - [Current requirements, use cases and acceptance](docs/requirements-and-acceptance.md)
 - [Required tracking process](docs/project-tracking.md)
 - [v1 readiness evidence](docs/v1-readiness.md)

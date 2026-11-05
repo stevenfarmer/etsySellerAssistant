@@ -12,13 +12,19 @@ resuming; historical evidence is valid only within its stated scope.
   active delivery records and steering summary. The project describes a local STDIO MCP server;
   Codex Desktop/macOS remains the current v1 acceptance target. Other clients are not claimed as
   verified. No runtime behavior changed.
-- Local `npm run validate` passed formatting, lint, types, build and **248/248 offline tests** with
-  loopback enabled for callback tests. PR #35's final head `e1a18e267992b0f9313ea125b9c5089fc206be19`
-  passed all five checks in run 41986463564 (secret scan and macOS/Windows validation on Node 24/26).
-  No Etsy requests, listing changes, credential/scope changes or publication occurred.
-- The tracker and steering document record T-033 Done and PR #35's merge/check evidence; both have
-  been read back. Next numbered chunk: **4B / T-029 durable local audit records**. Do not start it
-  automatically. No live listing mutation is part of T-029.
+- Current numbered chunk: **4B / T-029 durable local audit records** on
+  `codex/t-029-audit-durability`, based on clean `main` at `979efe9881319f3b297c152decb986d6b43d2e44`.
+  No PR yet. The isolated store, local path setting/CLI, operator guide and temporary-directory tests
+  are in progress. The store is not connected to Etsy calls; no live edit or real audit record was
+  created. No owner action is currently required.
+- Pre-change `npm run validate` passed formatting, lint, types, build and **248/248 offline tests**
+  with loopback enabled. In this managed environment callback tests require loopback permission;
+  run future validation with loopback enabled from the outset. PR #35's final head
+  `e1a18e267992b0f9313ea125b9c5089fc206be19` passed all five checks in run 41986463564.
+- T-029 is In Progress in the connected tracker; the steering document has been updated. Readback
+  and final verification remain. Exact next action: finish audit safety tests/docs, run full
+  `npm run validate` with loopback enabled, review, then open and complete a focused PR with checks,
+  merge and synchronize final evidence. Do not start T-030 automatically.
 
 ## Required replacement at each checkpoint
 

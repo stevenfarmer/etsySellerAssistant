@@ -63,6 +63,15 @@ local confirmation, opens a localhost start page, then requests `listings_r` con
 one shop identity check. Do not run it until the concrete live step is authorized and reviewed.
 The browser may retain the Etsy authorization URL in history or diagnostics; do not share it.
 
+### Local audit folder
+
+For the later guarded-apply workflow, configure the Drive-synced audit folder with
+`npm run local -- set-audit-directory`. Enter the absolute path ending in
+`github/etsySellerAssistant/auditTrail` at the hidden prompt. The setting is stored only in local
+application configuration; the command neither contacts Etsy nor writes audit records. The
+current alpha remains read-only and does not use the audit store yet. See [local audit records](local-audit.md)
+for record contents, file protections, and recovery steps.
+
 All guided prompts hide input, including the shop URL and confirmation words. Paste or type once,
 then press Return even though nothing appears. Single-line bracketed paste is supported; multiline
 paste is rejected. Ctrl-C cancels the current attempt.
@@ -74,9 +83,10 @@ do not guess. The lookup does not save the shop name.
 
 To retest from a clean local state or correct an incorrect shop selection, stop other local app
 instances and run `npm run local -- reset`. The command requires the hidden confirmation `RESET`;
-it removes this computer's stored app keystring, shared secret, OAuth tokens, shop ID setting, and
-token state. It does not remove the Seller App or revoke Etsy-side authorization, and it does not
-affect other computers. If removal fails, it reports failure and may have removed some local values;
+it removes this computer's stored app keystring, shared secret, OAuth tokens, shop ID setting,
+local audit-folder selection, and token state. It does not delete audit files, remove the Seller
+App or revoke Etsy-side authorization, and it affects only this computer. If removal fails, it
+reports failure and may have removed some local values;
 retry the reset before starting setup. Then run `npm run local -- guided` to identify the shop again,
 followed by `npm run local -- connect` for owner authorization. This is the current way to correct
 the shop ID: it deliberately requires a new identity check instead of silently changing a connected

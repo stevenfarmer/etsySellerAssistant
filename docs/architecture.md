@@ -59,12 +59,12 @@ flowchart LR
   mcp -. "Phase 4A proposal tools in alpha; apply not implemented" .-> preview[Exact change preview]
   preview -.-> confirm[Explicit seller confirmation]
   confirm -.-> stale[Recheck listing state]
-  stale -.-> audit[Append audit record before write]
+  stale -.-> audit[T-029 local audit store, not yet wired]
   audit -.-> write[Allowlisted Etsy mutation]
   write -.-> verify[Verify API result]
 ```
 
-The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). The unpublished alpha prepares an in-memory, five-minute proposal, refreshes the listing, checks identity/values, then asks the connected MCP client for confirmation in the same tool call. The form presents the listing and exact changed fields; proposal IDs and identity/timestamp bindings stay server-side. It uses the host's Accept/Deny choice as the sole confirmation, without a redundant yes/no field. A confirmed proposal can be consumed once by a later step. There is no apply tool or mutation transport. The owner found the first readable form's extra yes/no field confusing, then accepted the revised one-choice form on Mac and said it was clear enough to merge; a fresh listing read confirmed no change. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is exposed.
+The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md). The unpublished alpha prepares an in-memory, five-minute proposal, refreshes the listing, checks identity/values, then asks the connected MCP client for confirmation in the same tool call. The form presents the listing and exact changed fields; proposal IDs and identity/timestamp bindings stay server-side. It uses the host's Accept/Deny choice as the sole confirmation, without a redundant yes/no field. A confirmed proposal can be consumed once by a later step. T-029 adds an isolated local audit store, but no apply workflow calls it yet. There is no apply tool or mutation transport. The owner found the first readable form's extra yes/no field confusing, then accepted the revised one-choice form on Mac and said it was clear enough to merge; a fresh listing read confirmed no change. No generic endpoint execution, listing deletion, publishing, order access, or buyer data access is exposed.
 
 ## Platform and local data design
 
@@ -74,7 +74,7 @@ Credentials use macOS Keychain or Windows Credential Manager through a protected
 Windows behavior is unverified. If the protected store is unavailable, setup fails closed. A
 plaintext or file-based fallback would require a separate approved decision.
 
-The planned v1 mutation audit trail is append-only JSON Lines stored under the operator's configured local Google Drive sync root at `github/etsySellerAssistant/auditTrail`. The absolute sync path differs by operating system and machine; store it only in ignored local configuration. Do not put audit records in Git or log secrets, prompts, or buyer data. A synced folder is a backup/synchronization location, not tamper-proof storage.
+T-029 implements the planned append-only JSON Lines audit store under the operator's configured local Google Drive sync root at `github/etsySellerAssistant/auditTrail`. Its machine-specific absolute path is set through the local CLI and kept only in ignored local configuration. The store uses one writer, restrictive permissions, UTC month files, no-follow append handling and explicit failure states. It is not yet connected to any Etsy request; T-030 carries that integration. Do not put audit records in Git or logs. A synced folder is a backup/synchronization location, not tamper-proof storage. See [local audit records](local-audit.md) for setup and recovery.
 
 ## Data boundaries
 

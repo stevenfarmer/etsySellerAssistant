@@ -109,6 +109,48 @@ test('writes use restrictive modes on POSIX', async (t) => {
   });
 });
 
+test('audit directory is an optional absolute local setting and shop writes preserve it', async () => {
+  await withTempDirectory(async (root) => {
+    const directory = path.join(root, 'application-config');
+    const store = createLocalConfigStore({ directory, platform: 'darwin' });
+    const auditDirectory = path.join(root, 'Drive', 'github', 'etsySellerAssistant', 'auditTrail');
+
+    await assert.rejects(store.setAuditDirectory(auditDirectory), {
+      name: 'LocalConfigError',
+      code: 'invalid_config',
+    });
+    await store.write(24681357);
+    await store.setAuditDirectory(auditDirectory);
+    assert.deepEqual(await store.read(), { expectedShopId: 24681357, auditDirectory });
+    await store.write(24681358);
+    assert.deepEqual(await store.read(), { expectedShopId: 24681358, auditDirectory });
+
+    for (const invalid of ['relative/auditTrail', '/tmp/not-audit', '/tmp/not-auditTrail']) {
+      await assert.rejects(store.setAuditDirectory(invalid), {
+        name: 'LocalConfigError',
+        code: 'invalid_audit_directory',
+      });
+    }
+  });
+});
+
+test('rejects audit config values with an unsafe shape', async () => {
+  await withTempDirectory(async (root) => {
+    const directory = path.join(root, 'application-config');
+    const store = createLocalConfigStore({ directory, platform: 'darwin' });
+    await fs.mkdir(directory, { recursive: true });
+    await fs.writeFile(
+      path.join(directory, 'config.json'),
+      JSON.stringify({ expectedShopId: 24681357, auditDirectory: 'relative/auditTrail' }),
+      'utf8',
+    );
+    await assert.rejects(store.read(), {
+      name: 'LocalConfigError',
+      code: 'invalid_config',
+    });
+  });
+});
+
 test('failed atomic rename reports sanitized IO failure and removes the temp file', async () => {
   await withTempDirectory(async (root) => {
     const directory = path.join(root, 'application-config');
