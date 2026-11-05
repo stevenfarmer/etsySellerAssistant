@@ -12,19 +12,20 @@ resuming; historical evidence is valid only within its stated scope.
   active delivery records and steering summary. The project describes a local STDIO MCP server;
   Codex Desktop/macOS remains the current v1 acceptance target. Other clients are not claimed as
   verified. No runtime behavior changed.
-- Current numbered chunk: **4B / T-029 durable local audit records** on
-  `codex/t-029-audit-durability`, based on clean `main` at `979efe9881319f3b297c152decb986d6b43d2e44`.
-  No PR yet. The isolated store, local path setting/CLI, operator guide and temporary-directory tests
-  are in progress. The store is not connected to Etsy calls; no live edit or real audit record was
-  created. No owner action is currently required.
-- Pre-change `npm run validate` passed formatting, lint, types, build and **248/248 offline tests**
-  with loopback enabled. In this managed environment callback tests require loopback permission;
-  run future validation with loopback enabled from the outset. PR #35's final head
-  `e1a18e267992b0f9313ea125b9c5089fc206be19` passed all five checks in run 41986463564.
-- T-029 is In Progress in the connected tracker; the steering document has been updated. Readback
-  and final verification remain. Exact next action: finish audit safety tests/docs, run full
-  `npm run validate` with loopback enabled, review, then open and complete a focused PR with checks,
-  merge and synchronize final evidence. Do not start T-030 automatically.
+- T-029 durable local audit records completed in PR #37, squash commit
+  `e6a71f704fa938248b7e938115ea316d96eb398c`. The implementation includes the isolated audit store,
+  local path setting/CLI, operator guide and temporary-directory safety/failure tests. The store is
+  not connected to Etsy calls; no live edit or real audit record was created.
+- Local `npm run validate` passed formatting, lint, types, build and **260/260 offline tests** with
+  loopback enabled; focused audit/config/command tests passed 25/25. PR #37 head
+  `bc1c8b5fd52bd608692119825fd7487c31d589b2` passed all five checks in run 41992904637: secret scan
+  and Node 24/26 validation on macOS/Windows. A Windows-only test fixture was made deterministic;
+  runtime behavior did not change. PR #35's final head also passed all five checks in run 41986463564.
+- Current branch: `codex/t-029-closeout`, based on main at `e6a71f704fa938248b7e938115ea316d96eb398c`;
+  documentation closeout is uncommitted and no PR is open yet. The local requirements mark T-029
+  Done; the connected tracker row and steering summary also mark it Done and were read back. No owner
+  action is required. Exact next action: review and commit this focused docs diff, open its PR, merge
+  after all checks pass, then stop. Next chunk is T-030; do not start it automatically.
 
 ## Required replacement at each checkpoint
 
