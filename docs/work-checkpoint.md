@@ -16,11 +16,15 @@ resuming; historical evidence is valid only within its stated scope.
   **287/287 offline tests**. CI run 42084391803 passed all five checks: secret scan and Node 24/26
   validation on macOS/Windows. The initial Windows-only file-identity fixture issue was corrected
   and covered by the rerun. No OAuth grant, live Etsy request or listing change was performed.
-- Local closeout is in progress on `codex/t-030-closeout`, based on merged main; documentation now
-  records implementation/verification as complete and owner acceptance as pending T-031. Connected
-  tracker/steering updates and the closeout PR/CI remain. No owner action is required for T-030.
-- Next planned work is Phase 5A/T-025 measurement, followed by T-031 Mac/usefulness acceptance;
-  do not begin either within this T-030 closeout.
+- Documentation and tracking closeout merged in PR #40 as `8496625073a83d65bb8108489a29a25bd435b109`
+  from head `4d6991a87c0ae73d47f6e3c32498b8223bf48398`. Its CI run 42086762473 passed all five
+  checks; Prettier and `git diff --check` passed locally. Main is synchronized at `8496625`.
+- The T-030 tracker row is Done and links PR #39; its evidence and the current steering record were
+  read back. The local matrix, README, operator guides, readiness/phase plan and this checkpoint
+  agree that T-030 implementation/verification is complete and T-031 owner acceptance is separate.
+  No owner action was needed for T-030.
+- Next planned chunk: Phase 5A/T-025 measurement; T-031 Mac/usefulness acceptance follows. Do not
+  infer live acceptance or publication from repository checks.
 
 ## Required replacement at each checkpoint
 
