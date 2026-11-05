@@ -6,24 +6,21 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current checkpoint
 
-- T-033 merged in PR #35 as `265995f1a08da916c09c1f831de27c58fa86a701`; T-029 merged in PR #37 as
-  `e6a71f704fa938248b7e938115ea316d96eb398c`. Their scoped acceptance evidence is retained above
-  in the commit history and requirements matrix.
-- T-030 is in progress on `codex/t-030-guarded-apply`, based on `main` at
-  `9b5f3bbad36d0b29f9f3c573b2f7a634f00bd5ee`. PR #39 is open at implementation commit
-  `24e3b65179b3c56d2975a75872cc347b63b47883`. It adds a fixed listing update adapter, separate
+- T-030 guarded apply/reconciliation is complete. PR #39 merged to `main` as
+  `dd77876d52c0a93db48bf95d61d0ca25f248f817` from head
+  `3909c0cc13d1714dd28c337fd81776beac71acfa`. It adds a fixed listing update adapter, separate
   edit-scope token storage and refresh state, explicit enable/disable commands, one-use apply
-  orchestration, audit integration and offline tests. Approval is requested during proposal
-  preparation; the later explicit apply call consumes that approval without opening a second form.
-- Local `npm run validate` passed after making the private-playbook file identity fixture
-  deterministic across platforms: formatting, lint, TypeScript, build and **287/287 offline tests**.
-  PR run 42081418077 passed secret scanning and Node 24 macOS; both Windows checks exposed the same
-  fixture failure, and Node 26 macOS was canceled by matrix fail-fast. The correction is now
-  validated; commit and push it, then monitor the latest PR run. The test preload blocks external
-  Etsy calls; no OAuth grant, live Etsy request or listing change was performed.
-- The connected tracker row and steering record currently show T-030 In Progress, read back before
-  implementation. No owner action is required now. Exact next action: commit and push the validated
-  Windows fixture correction, then record the exact PR/head and watch all checks.
+  orchestration and audit-backed reconciliation. Approval is requested during proposal preparation;
+  the later apply call consumes that approval once without opening a second form.
+- `npm run validate` passed with loopback enabled: formatting, lint, TypeScript, build and
+  **287/287 offline tests**. CI run 42084391803 passed all five checks: secret scan and Node 24/26
+  validation on macOS/Windows. The initial Windows-only file-identity fixture issue was corrected
+  and covered by the rerun. No OAuth grant, live Etsy request or listing change was performed.
+- Local closeout is in progress on `codex/t-030-closeout`, based on merged main; documentation now
+  records implementation/verification as complete and owner acceptance as pending T-031. Connected
+  tracker/steering updates and the closeout PR/CI remain. No owner action is required for T-030.
+- Next planned work is Phase 5A/T-025 measurement, followed by T-031 Mac/usefulness acceptance;
+  do not begin either within this T-030 closeout.
 
 ## Required replacement at each checkpoint
 

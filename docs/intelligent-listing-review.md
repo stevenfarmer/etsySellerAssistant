@@ -74,8 +74,9 @@ Owner usefulness acceptance remains distinct from those checks and from observed
 ## Guarded apply requirements (M6, T-011/T-024)
 
 The 3 November 2026 technical baseline is in [the guarded-edit design review](guarded-edit-design-review.md).
-It does not change the current read-only runtime. Phase 4A–4C offline implementation,
-verification, and review must pass before enabling a write path.
+Phase 4A–4C implementation, offline verification and review are complete; the unpublished
+development alpha has the guarded apply path. Live edit acceptance and owner usefulness remain
+separate under T-031. The published alpha.1 remains read-only.
 
 Before implementing write access, review the exact tool contracts and threat/failure model:
 

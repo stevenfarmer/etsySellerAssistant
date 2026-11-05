@@ -34,7 +34,7 @@ This was a fresh checkout on the existing Mac, not a new clean-machine/live OAut
 The owner confirmed editing and intelligent sales-oriented recommendations are expected in v1.
 [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) supersedes the read-only-only
 release recommendation. T-023 (intelligent review), T-011 (guarded-write design/security review),
-T-024 (guarded edits after review) and T-025 (measurement/usefulness) are active v1 work.
+T-024 (guarded edit acceptance) and T-025 (measurement/usefulness) are active v1 work.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
@@ -42,7 +42,8 @@ readable same-call confirmation flow. The owner found the extra checkbox and hos
 T-032 removed the extra field, passed the repeat Mac check without changing the listing, and was
 accepted as clear enough to merge. T-033 completed in PR #35: the product is described as a local
 STDIO MCP server, with Codex Desktop/macOS as the current v1 acceptance target. T-029 audit
-durability is complete; T-030 guarded apply/reconciliation is in progress under T-024.
+durability and T-030 guarded apply/reconciliation implementation are complete under T-024; T-031
+tracks separate owner usefulness and Mac/live-edit acceptance.
 T-031 tracks concrete separately authorized Mac/usefulness/edit acceptance. Chunk 1A/T-026 implements private storage/template only: 12 fabricated tests; full validation
 passed 212 offline tests. Chunk 1B adds get_review_guidance to alpha, generic by default;
 full validation now passes 222 offline tests with actual STDIO coverage. After app restart, actual Codex discovery/default-generic invocation also passed on
@@ -53,7 +54,9 @@ same-assistant self-assessment. The private file was created/loaded outside Git 
 client settings. T-023 Done is scoped to those development criteria; no independent benchmark,
 advanced owner usefulness, private-mode client, live-edit or sales-uplift acceptance is inferred. Other listed capabilities remain planned.
 Their [requirements](intelligent-listing-review.md) distinguish planned capabilities from the
-existing read-only implementation. No write tools/scopes have been enabled.
+existing deployed alpha.1 read-only implementation. The unpublished development alpha contains
+guarded edit tools, but no edit grant or live listing change has been made; implementation evidence
+does not satisfy T-031 owner acceptance.
 
 T-007 remains Done; accepted read/setup/recovery evidence is retained. T-008 remains In Review
 for disclosed recovery limits. T-012 is In Progress, pending the expanded features and final

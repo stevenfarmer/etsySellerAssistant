@@ -23,7 +23,7 @@ A later pending or failed read clears it; restarting starts fresh. Status itself
 credentials/settings and makes no Etsy request. Outside changes to authorization or configuration
 are not detected until a listing read or restart. The default scaffold's status remains unchanged.
 
-The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. No writes, orders, buyer data, or generic API tool are exposed.
+The Etsy documentation MCP and this project’s shop-connected local MCP are separate connections. Starting the alpha server does not itself contact Etsy; listing tools may refresh a token, verify shop identity, and read listings. Listing content is untrusted data. Only the opt-in unpublished development alpha exposes the fixed, guarded listing-edit flow described below; the default server remains status-only. Orders, buyer data, and arbitrary API calls are not exposed.
 
 The unpublished development alpha's `prepare_listing_edit` tool creates an in-memory, five-minute
 proposal and immediately asks the connected MCP client for explicit confirmation after a fresh
@@ -37,14 +37,14 @@ form-elicitation support fail closed. The Mac check confirmed that
 the readable form opens in the same call. The owner found the earlier checkbox plus footer buttons
 confusing; T-032 removed the redundant field. In the follow-up Mac check, the single host choice
 was accepted and a fresh read confirmed no listing change. The owner found the revised prompt clear
-enough to merge. This development workflow is not part of published alpha.1. T-030's offline
-implementation and repository gates are in progress; no edit grant has been requested and no Etsy
-listing has been changed through this workflow. See [guarded editing](docs/local-editing.md) for
-local setup and recovery.
+enough to merge. This development workflow is not part of published alpha.1. T-030's guarded apply
+implementation is merged and passed offline and repository checks; no edit grant has been requested
+and no Etsy listing has been changed through this workflow. Owner usefulness and live acceptance
+remain separate work. See [guarded editing](docs/local-editing.md) for local setup and recovery.
 
 ## Work toward v1
 
-The development version still reads `1.0.0`, but the current build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). T-030's guarded apply implementation is under offline verification; the published alpha remains read-only. Published alpha.1 installation remains below.
+The development version still reads `1.0.0`, but the current build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). T-030's guarded apply implementation is merged and verified; the published alpha remains read-only, and owner acceptance remains open. Published alpha.1 installation remains below.
 
 For the small deliverables and gates to stable v1, see the [phase-gated plan](docs/v1-phase-gates.md) and [current checkpoint](docs/work-checkpoint.md). Work proceeds one chunk per continuation by default. The plan also separates a public generic guidance template from a private customizable playbook outside the repository; the storage foundation and [generic template](templates/playbook.example.md) are implemented in chunk 1A, and `get_review_guidance` delivery is implemented in chunk 1B. Guidance is generic by default; private files require explicit client settings and a tool call. Startup/status do not load guidance. See [the storage contract](docs/private-playbooks.md). See [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md).
 
@@ -69,7 +69,7 @@ custom guidance. Owner usefulness and live-edit acceptance remain later work.
 
 ## Version roadmap
 
-- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. Reads are delivered; recommendation and edit acceptance remains in progress.
+- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. Implementation chunks are delivered; owner usefulness and edit acceptance remain in progress.
 - **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.
