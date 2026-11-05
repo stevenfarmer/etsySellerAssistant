@@ -19,8 +19,10 @@ resuming; historical evidence is valid only within its stated scope.
 - Local verification: `npm run validate` passed format, lint, typecheck, build and **248/248 offline
   tests** when run with loopback permitted for callback tests. `git diff --check` passed. No Etsy
   requests, listing changes, credential/scope changes or publication occurred.
-- Exact next action: finish the T-033 documentation review, synchronize the connected tracker and
-  steering record, then commit and open a focused PR. Await CI/review before merge. T-029 audit
+- PR #35 is open from `db3302876507881fcc1c9c253b6b995d59e5e9e0`. All five CI checks passed on
+  run 41985873984: secret scan and macOS/Windows validation on Node 24/26. The connected T-033
+  tracker row and steering summary were updated and read back. Final docs/checkpoint closeout is
+  pending. Next action: finish the last diff review, then merge if checks remain green. T-029 audit
   durability remains the next numbered implementation chunk after T-033 closes.
 
 ## Required replacement at each checkpoint
