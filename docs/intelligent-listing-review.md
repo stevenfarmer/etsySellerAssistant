@@ -95,19 +95,14 @@ Before implementing write access, review the exact tool contracts and threat/fai
 - All automated coverage uses fabricated responses, stores and temporary directories. Positive,
   rejection, stale-data, replay, wrong-shop, audit failure and uncertain-outcome paths are required.
 
-## Measurement and usefulness (M7, T-025)
+## Measurement and usefulness (M7, T-025) — deferred
 
-Use an owner-provided, date-bounded baseline and later comparison with the same metric definitions.
-Shop-level visits/orders/conversion and listing-level views/orders are different measures; never
-label orders/views as Etsy's shop conversion rate or mix shop totals into a listing result.
-Record changed fields/date, traffic mix, promotions/seasonality and missing evidence. Start with
-one listing or a small owner-approved batch; avoid repeated daily rewrites or claiming a causal
-A/B test from an uncontrolled before/after comparison. Low volume may make the outcome inconclusive.
-
-The v1 gate is a usable review/apply/measurement workflow with fabricated verification and owner
-acceptance of usefulness and limits, not a guaranteed sales uplift or a mandatory wait for orders.
-Manual entry of non-sensitive aggregate Stats is the initial option; automatic analytics and
-buyer/order access are not included. Real metrics and audit records stay out of the repository.
+On 5 November 2026 the owner moved T-025 to the backlog: this shop sells unique handmade items,
+so a repeat-item sales comparison is not a useful default. No metric or comparison method has been
+selected. Revisit the goal and agree how success should be assessed before designing a workflow.
+Do not treat sales of different one-off items as interchangeable or claim that an edit caused a
+sale. T-025 is not a current v1 release gate. Owner review of the guidance and guarded-edit
+workflow remains a separate T-031 acceptance activity.
 
 ## Official guidance checked 1 November 2026
 
