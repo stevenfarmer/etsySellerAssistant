@@ -43,10 +43,14 @@ resuming; historical evidence is valid only within its stated scope.
 - Current branch: `codex/confirmation-copy-workflow`, based on `main` at
   `11dc9732be517646f942cbc75b9d252f0d395698`. T-034/T-035 connected tracker rows were read back;
   T-035 is In Progress and T-034 follows it. Formatting, `npm run validate` with loopback enabled
-  and `git diff --check` passed; all 287 offline tests passed. The T-035 code and synchronized
-  documentation are uncommitted; no PR exists. Exact next action: review the final diff, commit and
-  push the focused branch, open a PR, then wait for CI and owner review of the revised confirmation
-  wording before deciding whether T-035 is complete.
+  and `git diff --check` passed; all 287 offline tests passed. PR #44 is open at
+  `3ef8f5ef28bfe58de32a42044bee8399e8a539dd` for the T-035 source change; CI run 42132299095 passed
+  all five checks, including both macOS jobs. The connected local MCP session still advertises the old tool description, so
+  revised Mac prompt review requires restarting its server process and preparing a harmless
+  test-only proposal; do not apply it. T-035 remains incomplete until the owner has seen and
+  accepted the revised form. Exact next action: after the owner restarts the MCP client, verify the
+  updated tool description, present the test-only confirmation for review, then merge PR #44 if the
+  owner finds the wording clear. T-034 remains next after T-035.
 
 ## Required replacement at each checkpoint
 
