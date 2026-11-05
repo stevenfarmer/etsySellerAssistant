@@ -6,24 +6,19 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current checkpoint
 
-- Current main is `248545eba5bce8ac3ac7fa55eb0c66b65bce625d` (PR #34, T-032 checkpoint closeout).
-  PR #34 is merged; no open PR was found. T-011, T-028 and T-032 are complete.
-- T-032 delivered the readable single-choice confirmation flow. The owner accepted it on Mac; a
-  fresh listing read confirmed no listing change. All five PR checks passed and the local
-  validation run passed 248/248 offline tests. No apply tool or update transport exists.
-- Current chunk: **T-033 client-neutral product wording and editorial cleanup**, on branch
-  `codex/t-033-client-neutral-editorial`, based on current `main`. The README, package description,
-  architecture, setup/review guides, agent instructions and active delivery records are being
-  aligned. The server is described as an MCP/STDIO service; Codex Desktop/macOS remains the current
-  v1 acceptance target. No cross-client support claim or runtime behavior change is intended.
-- Local verification: `npm run validate` passed format, lint, typecheck, build and **248/248 offline
-  tests** when run with loopback permitted for callback tests. `git diff --check` passed. No Etsy
-  requests, listing changes, credential/scope changes or publication occurred.
-- PR #35 is open from `db3302876507881fcc1c9c253b6b995d59e5e9e0`. All five CI checks passed on
-  run 41985873984: secret scan and macOS/Windows validation on Node 24/26. The connected T-033
-  tracker row and steering summary were updated and read back. Final docs/checkpoint closeout is
-  pending. Next action: finish the last diff review, then merge if checks remain green. T-029 audit
-  durability remains the next numbered implementation chunk after T-033 closes.
+- T-033 merged in PR #35 as `265995f1a08da916c09c1f831de27c58fa86a701`. T-011, T-028, T-032 and
+  T-033 are complete.
+- T-033 updated the README, package description, agent guidance, architecture, setup/review docs,
+  active delivery records and steering summary. The project describes a local STDIO MCP server;
+  Codex Desktop/macOS remains the current v1 acceptance target. Other clients are not claimed as
+  verified. No runtime behavior changed.
+- Local `npm run validate` passed formatting, lint, types, build and **248/248 offline tests** with
+  loopback enabled for callback tests. PR #35's final head `e1a18e267992b0f9313ea125b9c5089fc206be19`
+  passed all five checks in run 41986463564 (secret scan and macOS/Windows validation on Node 24/26).
+  No Etsy requests, listing changes, credential/scope changes or publication occurred.
+- The tracker and steering document record T-033 Done and PR #35's merge/check evidence; both have
+  been read back. Next numbered chunk: **4B / T-029 durable local audit records**. Do not start it
+  automatically. No live listing mutation is part of T-029.
 
 ## Required replacement at each checkpoint
 
