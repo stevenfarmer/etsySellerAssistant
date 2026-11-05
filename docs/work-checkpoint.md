@@ -34,7 +34,7 @@ resuming; historical evidence is valid only within its stated scope.
   clients, with Codex Desktop one currently tested client. T-033 tracks a client-neutral
   documentation/code pass and a natural editorial voice, with transparent AI-use disclosure.
 - Last completed chunk: **4A follow-up / T-032 confirmation usability**, merged in
-  [PR #33](https://github.com/stevenfarmer/etsySellerAssistant) as
+  [PR #33](https://github.com/stevenfarmer/etsySellerAssistant/pull/33) as
   `3d05711627e839021768cd6daa5e26fa9ef3a572` from reviewed head
   `d026500d4fa1e0ab5bd17f6b44adf5f36ade8cd1`.
 - `prepare_listing_edit` now presents readable exact values and requests confirmation in the same
@@ -42,8 +42,8 @@ resuming; historical evidence is valid only within its stated scope.
   `approved_for_later_apply`/`listingChanged:false`; a fresh read confirmed the listing unchanged.
   The owner found the one-choice prompt clear enough to merge. Local `npm run validate` passed
   248/248 offline tests, and all five CI jobs passed on the reviewed head (run 41948328199).
-- T-032 is Done. T-024/T-032 tracker evidence records the Mac check and merge; the final readback is
-  being synchronized in this checkpoint closeout. No apply tool or update transport exists.
+- T-032 is Done. T-024/T-032 tracker evidence records the Mac check and merge and was read back.
+  No apply tool or update transport exists.
 - Next numbered chunk: **4A follow-up / T-033 client-neutral wording and editorial cleanup**.
   Do not start it automatically. No listing changed, credential/scope change or publication occurred.
 
@@ -58,3 +58,4 @@ private playbook content, credentials, seller facts or logs.
 If interrupted mid-chunk, mark it incomplete and record the safe restart step. Never infer that a
 planned test ran, a PR merged or an owner accepted behavior merely because this file says so;
 compare the claim with actual source/PR/CI and task evidence.
+
