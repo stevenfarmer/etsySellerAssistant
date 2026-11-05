@@ -1,7 +1,7 @@
 {
   "name": "etsySellerAssistant",
   "version": "1.0.0",
-  "description": "A local-first MCP assistant for Etsy sellers.",
+  "description": "A local MCP server for Etsy listing review and seller assistance.",
   "license": "AGPL-3.0-only",
   "type": "module",
   "engines": {

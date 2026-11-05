@@ -96,7 +96,7 @@ scope requirements.
    stop and report the generic status rather than creating a different app type.
 3. Enter a seller-neutral app name accepted by Etsy. Suggested intended-use wording to review:
 
-   > A private assistant for managing my own Etsy shop, using a local MCP server and Codex Desktop.
+   > A private Etsy seller assistant that connects to a local MCP server for listing review.
    > Development will begin with AI-assisted listing review and suggestions. Planned expansion
    > includes owner-confirmed listing updates and other shop-management workflows as needs are
    > defined. Access will be limited to the permissions required for each approved feature. It will

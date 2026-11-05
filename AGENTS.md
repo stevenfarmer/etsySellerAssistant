@@ -5,7 +5,7 @@ Read this file, the README, and relevant files under `docs/` before making chang
 ## Product boundaries
 
 - Keep source, examples, documentation, tests, and repository metadata seller-neutral. Never add a real shop name, shop URL, shop ID, listing export, credential, token, buyer/customer data, or audit record.
-- This project is local-first and uses Codex Desktop with an MCP server launched over STDIO. Do not add OpenAI API credentials or hosted services without an approved requirement change.
+- This project is a local-first Etsy seller-assistant MCP server launched over STDIO. Codex Desktop is the current macOS v1 acceptance client; keep support claims for other clients evidence-based. Do not add OpenAI API credentials or hosted services without an approved requirement change.
 - v1 targets macOS with Codex Desktop only. Other local STDIO MCP clients come later, followed by Windows in v2 or later; Linux is exploratory. Keep paths and credential interfaces portable and retain existing cross-platform CI as regression coverage, without claiming Windows runtime acceptance or making Windows manual testing a v1 prerequisite.
 - The opt-in alpha connects to Etsy for bounded, owner-authorized listing reads; the default server remains status-only. Neither exposes Etsy write capability. Do not expand OAuth scopes, shop reads, or add mutation behavior without an approved requirement and the relevant security/design review.
 - The owner expects intelligent recommendations and guarded title/description/tag edits in v1 (ADR 0005). Current runtime remains read-only; the detailed write security/design review must precede write-access implementation. Live Etsy, credential/scope changes and publication still require concrete authorization.
@@ -21,6 +21,7 @@ Read this file, the README, and relevant files under `docs/` before making chang
 - Keep credentials, local settings, logs, generated output, and `auditTrail/` out of Git. Do not weaken ignore rules to make local data commit-able.
 - Prefer a feature branch and a small pull request. Do not push directly to the default branch.
 - Document externally visible behavior, configuration, security consequences, and recovery steps.
+- Write project-facing documentation in concise, natural language. Disclose AI assistance without presenting the product as an AI project.
 - Before every release, reconcile the README, security policy, relevant guides and diagrams, decision records, steering document, tracker, version, and release notes against the exact release candidate. Record the checks in the release checklist and do not publish with unresolved discrepancies. Preserve already-published tags.
 
 ## Required project tracking for every change

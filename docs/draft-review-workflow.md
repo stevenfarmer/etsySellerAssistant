@@ -24,8 +24,8 @@ notice/connector safeguards. Chunk 2B separately delivers a private local playbo
 6. Review product truth independently. Finish with open questions and optional aggregate
    measurement steps. A passing check does not authorize applying or publishing anything.
 
-Codex does the reasoning; this does not add a hosted model, OpenAI API key, keyword-volume
-service or model-generated suggestion endpoint. Completed briefs, real drafts and private
+The connected MCP client does the reasoning; this does not add a hosted model, OpenAI API key,
+keyword-volume service or model-generated suggestion endpoint. Completed briefs, real drafts and private
 playbooks remain outside Git, logs, audit and connected project records. The model/client
 already receives text submitted to its tools; this local checker does not send it to Etsy.
 
