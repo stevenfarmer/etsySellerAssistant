@@ -2,9 +2,9 @@
 
 ## Supported setup
 
-Use Node.js 24 LTS for the baseline development environment. Node.js 26 LTS is also tested. v1 supports macOS with Codex Desktop. Windows runtime acceptance is deferred to v2 or later; other local STDIO clients come first, and Linux remains exploratory.
+Use Node.js 24 LTS for the baseline development environment. Node.js 26 LTS is also tested. The server speaks MCP over local STDIO. The current v1 acceptance target is macOS with Codex Desktop; other clients have not been verified. Windows runtime acceptance is deferred to v2 or later, and Linux remains exploratory.
 
-Install Node.js using the official distribution or a trusted version manager for your operating system. Confirm that both `node` and `npm` are available in the terminal used by Codex Desktop.
+Install Node.js using the official distribution or a trusted version manager for your operating system. Confirm that `node` and `npm` are available in the environment from which your MCP client will launch the server.
 
 ## First run
 
@@ -16,7 +16,7 @@ npm start
 
 `npm ci` uses the committed lockfile for a clean, reproducible dependency install. `npm run validate` checks formatting, lint, TypeScript types, and automated tests. `npm start` builds and launches the local MCP process.
 
-## Codex Desktop configuration
+## Codex Desktop setup (current v1 acceptance client)
 
 In the Codex Desktop custom MCP setup, choose STDIO and provide:
 

@@ -14,8 +14,10 @@ does not establish completion; choose the next candidate version when preparing 
 Published `v0.1.0-alpha.1` and its tag remain unchanged.
 
 v1 combines listing facts, an owner-supplied buyer/product brief, dated official Etsy guidance,
-and optional owner-supplied aggregate performance evidence. Codex Desktop does the reasoning;
-the local MCP server supplies bounded data and enforces deterministic safety/validation rules.
+and optional owner-supplied aggregate performance evidence. The connected MCP client does the
+reasoning; Codex Desktop is the current v1 acceptance client. The local MCP server supplies bounded
+data and enforces deterministic safety/validation rules. Broader client acceptance remains tracked
+separately and this clarification does not expand v1's platform scope.
 No hosted AI service or OpenAI API account is added. Recommendations explain their evidence,
 buyer benefit, uncertainty and measurement plan, rather than promising rankings or sales.
 

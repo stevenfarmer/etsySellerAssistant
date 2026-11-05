@@ -1,10 +1,12 @@
 # etsySellerAssistant
 
-A local-first MCP assistant for reviewing listings in one owner-authorized Etsy shop. Codex Desktop communicates with the local server over STDIO. No listing changes are available in the read-only alpha.
+etsySellerAssistant is a local MCP server for Etsy sellers. It helps review listings in one owner-authorized shop and is being developed to prepare carefully guarded edits. It uses standard MCP over STDIO. The published alpha is read-only. Codex Desktop on macOS is the current verified setup; other clients have not been tested.
+
+AI tools have helped with parts of development. The owner sets product direction and accepts releases; the maintainer reviews the code and release evidence.
 
 ## Current release
 
-[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a public GitHub prerelease of a local, single-shop tool. The shop owner completed OAuth on a Mac; an owner-confirmed Codex Desktop listing read and a separate bounded list-and-detail check passed. CI tested macOS and Windows with Node 24 and 26, but Windows live credential storage and browser authorization remain unverified. v1 targets macOS with Codex Desktop only; Windows manual acceptance is deferred. The owner accepted the isolated Mac recovery drill; final v1 product/limits acceptance and publication remain pending.
+[`v0.1.0-alpha.1`](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is the only published release. It is a local, single-shop tool. The owner completed OAuth on a Mac, and Codex Desktop passed the owner-confirmed listing-read and bounded list-and-detail checks. CI covers macOS and Windows with Node 24 and 26; Windows live credential storage and browser authorization remain unverified. The current v1 acceptance target is macOS with Codex Desktop. Other clients and Windows have not been accepted for v1. The owner accepted the isolated Mac recovery drill; final v1 product/limits acceptance and publication remain pending.
 
 There are two server entry points:
 
@@ -61,13 +63,13 @@ custom guidance. Owner usefulness and live-edit acceptance remain later work.
 
 ## Version roadmap
 
-- **v1:** macOS with Codex Desktop, local STDIO, owner-authorized listing reads, evidence-based recommendations, guarded approved title/description/tag edits, local audit history, Keychain storage, and repeatable setup/recovery. Reads are delivered; the expanded intelligence/editing workflow remains to be built and reviewed.
+- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. Reads are delivered; recommendations and editing are still being developed.
 - **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.
 - **Exploratory:** Linux, subject to a credential-store design and explicit platform acceptance; no version commitment.
 
-The server already uses standard MCP over STDIO. Other clients need installation and compatibility acceptance work. Existing Windows adapters and CI remain regression coverage, not a support claim. The editing requirement does not authorize live writes or credential changes; scope and security/design review must precede implementation of write access. [ADR 0004](docs/decisions/0004-v1-platform-scope.md) retains the platform decision; ADR 0005 changes the v1 feature boundary.
+The server already uses standard MCP over STDIO. Client packaging and compatibility checks are separate work; T-015 tracks acceptance beyond the current Codex Desktop setup. Existing Windows adapters and CI are regression coverage, not a Windows support claim. The editing requirement does not authorize live writes or credential changes; scope and security/design review must precede implementation of write access. [ADR 0004](docs/decisions/0004-v1-platform-scope.md) retains the v1 acceptance target; ADR 0005 changes the v1 feature boundary.
 
 ## First-time Mac alpha setup
 

@@ -8,8 +8,9 @@ or final owner usefulness acceptance is established. See
 
 ## Inputs and reasoning
 
-The existing local server retrieves bounded listing facts; Codex Desktop provides reasoning.
-Use a repeatable client review workflow plus server-enforced field/safety checks. Do not add
+The local server retrieves bounded listing facts; the connected MCP client provides reasoning.
+Codex Desktop is the current v1 acceptance client. Use a repeatable review workflow plus
+server-enforced field and safety checks. Do not add
 an OpenAI API key or a hosted recommendation service. The intelligence workflow must be
 documented and evaluated, not depend on the owner inventing a good prompt each time.
 

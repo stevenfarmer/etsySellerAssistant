@@ -2,24 +2,26 @@
 
 ## Current implementation
 
-The default entry point is a local MCP process over STDIO with one status tool and no Etsy network
+The default entry point is a local MCP server over STDIO with one status tool and no Etsy network
 calls. The separate `dist/src/alpha.js` entry point exposes bounded read-only listing tools for one
 locally configured, owner-authorized shop, plus explicit review guidance (generic by default,
-private only by opt-in client configuration) and local bounded title/description/tag preflight. On the Mac, an owner-authorized listing and detail smoke
-test passed. v1 targets macOS with Codex Desktop. Windows is deferred to v2 or later; Linux is exploratory.
+private only by opt-in client configuration) and local bounded title/description/tag preflight.
+The current v1 client acceptance target is Codex Desktop on macOS. Windows remains deferred to v2
+or later; Linux is exploratory.
 
 ```mermaid
 flowchart LR
-  user[Seller] --> desktop[Codex Desktop]
-  desktop <-->|MCP messages over local STDIO| process[Local Node.js MCP process]
+  user[Seller] --> client[Local MCP client<br/>Codex Desktop for current v1 acceptance]
+  client <-->|MCP messages over local STDIO| process[Local Node.js MCP server]
   process --> sdk[MCP SDK]
   sdk --> tool[get_setup_status]
   tool --> response[Reports Etsy access is not configured]
   process -. "Default entry point sends no requests" .-> api[(Etsy Open API)]
 ```
 
-The diagram shows the default status-only entry point. The MCP SDK owns protocol framing;
-application/domain logic stays separate from MCP schemas and can be tested without a desktop client.
+The diagram shows the default status-only entry point. MCP defines the client/server boundary;
+the SDK owns protocol framing, while application logic stays separate from MCP schemas. Codex
+Desktop is the currently accepted v1 client, not a requirement of the server protocol.
 
 The read-server status displays only allowlisted identity and time from a complete successful listing read in this process. It performs no settings/credential/network I/O; pending/failed reads or restart clear confirmation. See [current requirements/use cases/acceptance](requirements-and-acceptance.md) for current evidence and task states.
 
@@ -37,23 +39,23 @@ flowchart LR
   seller[Seller] --> setup[Local guided setup and OAuth consent]
   setup --> store[OS credential store<br/>Windows Credential Manager or macOS Keychain]
   setup -->|short-lived localhost callback| etsyAuth[Etsy authorization]
-  seller --> codex[Codex Desktop]
-  codex <-->|local STDIO| mcp[Local MCP server]
+  seller --> client[Local MCP client<br/>Codex Desktop for current v1 acceptance]
+  client <-->|local STDIO| mcp[Local MCP server]
   mcp --> readTools[Read-only shop/listing tools]
   readTools --> oauth[OAuth token provider]
   oauth --> store
   readTools --> api[(Etsy Open API)]
   api --> allowlist[Allowlisted listing fields]
-  allowlist --> codex
+  allowlist --> client
   mcp --> guidance[get_review_guidance]
   guidance --> generic[Compiled generic template]
   guidance -->|Only if private mode explicitly selected| private[Bounded private file reader]
   generic --> labeled[Labeled guidance and fixed safety notice]
   private --> labeled
-  labeled --> codex
+  labeled --> client
   mcp --> preflight[validate_listing_draft]
   preflight --> checks[Pure copy constraints: counts and fixed issue codes]
-  checks --> codex
+  checks --> client
   mcp -. "Phase 4A proposal tools in alpha; apply not implemented" .-> preview[Exact change preview]
   preview -.-> confirm[Explicit seller confirmation]
   confirm -.-> stale[Recheck listing state]
@@ -66,7 +68,7 @@ The owner approved guarded edits as a v1 requirement in [ADR 0005](decisions/000
 
 ## Platform and local data design
 
-v1 supports macOS with Codex Desktop. Later releases verify other local STDIO clients, then Windows (v2 or later); Linux remains exploratory. Use Node's platform-neutral path APIs and explicit local configuration. Existing Windows CI and adapters remain regression coverage and future groundwork, not evidence of runtime support.
+v1 acceptance targets macOS with Codex Desktop. The server uses standard local STDIO MCP, but other clients have not been compatibility-tested; T-015 tracks that work. Windows runtime acceptance remains deferred to v2 or later, and Linux is exploratory. Use Node's platform-neutral path APIs and explicit local configuration. Existing Windows CI and adapters remain regression coverage, not evidence of runtime support.
 
 Credentials use macOS Keychain or Windows Credential Manager through a protected-store adapter;
 Windows behavior is unverified. If the protected store is unavailable, setup fails closed. A
@@ -109,8 +111,9 @@ Before publishing, complete the [release checklist](release-checklist.md) and re
 
 ## Recommendation intelligence (planned)
 
-Codex Desktop supplies reasoning using bounded listing facts, an owner brief, dated Etsy guidance
-and optional owner-provided aggregate Stats. The local server enforces validation and edit safety;
+The connected MCP client supplies reasoning using bounded listing facts, an owner brief, dated Etsy
+guidance and optional owner-provided aggregate Stats. Codex Desktop is the current v1 acceptance
+client. The local server enforces validation and edit safety;
 no hosted model service or OpenAI API key is added. Repeatable review, fabricated evaluations and
 measurement requirements are defined in [intelligent listing review](intelligent-listing-review.md).
 No new data reads, tools or permissions are enabled by the planning decision.
@@ -128,8 +131,8 @@ Actual Codex discovery/default-generic invocation passed after restart on 1 Nove
 separately from automated STDIO tests. This is scoped client evidence, not advanced-review acceptance. See the guide and T-027
 for current evidence. Delivery follows in the [gated plan](v1-phase-gates.md); safety/approval stays enforced independently.
 
-Chunk 2A adds [generic review workflow/draft validation](draft-review-workflow.md): Codex reasons
-from supplied facts and an owner brief, while the pure validator enforces documented copy
+Chunk 2A adds [generic review workflow/draft validation](draft-review-workflow.md): the connected
+MCP client reasons from supplied facts and an owner brief, while the pure validator enforces documented copy
 constraints. The MCP adapter exposes bounded three-field input and counts/issues only, with no
 filesystem, Etsy, credential, persistence, approval or connection-status effect. A valid result
 is not semantic truth or sales evidence; chunk 2B supplies the separate evaluation evidence and private strategy baseline.
