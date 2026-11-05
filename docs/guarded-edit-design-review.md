@@ -1,9 +1,11 @@
 # Guarded listing edit design and security review
 
-Updated 4 November 2026. Phase 3A / T-011 technical design baseline, completed and merged.
-Runtime tools, OAuth scopes, credentials, live Etsy access, and the published alpha remain
-unchanged. The implementation remains read-only until the phase-4 technical gates pass and
-any concrete scope, credential, live-write, or publication action is separately authorized.
+Updated 5 November 2026. Phase 3A / T-011 technical design baseline, completed and merged.
+This review records the design before implementation. The later T-030 implementation merged in
+PR #39 as `dd77876d52c0a93db48bf95d61d0ca25f248f817` after offline verification and all five CI
+checks passed. The opt-in unpublished development alpha now contains guarded apply; published
+alpha.1 remains read-only. No live grant or listing change was performed, and owner acceptance
+remains T-031.
 
 ## Decision and gate
 

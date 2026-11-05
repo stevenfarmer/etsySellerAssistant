@@ -57,6 +57,7 @@ month changes. It starts a new month file without replacing earlier files.
 
 Automated checks use fabricated proposals in temporary directories. They cover permissions,
 symlinks, hard links, concurrent writers, monthly rotation, torn records, lock recovery, and
-storage failures before and after a simulated operation. They do not call Etsy or create a live
-listing edit. T-030 will integrate this foundation with a guarded apply workflow after its own
-implementation and verification gates.
+storage failures before and after a simulated operation. The T-030 integration tests use mocked
+Etsy transport and temporary audit folders; they do not call Etsy or create a live listing edit.
+T-030 connected this store to the guarded apply workflow in PR #39. The separate owner acceptance
+gate remains T-031.
