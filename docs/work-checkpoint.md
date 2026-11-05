@@ -25,8 +25,11 @@ resuming; historical evidence is valid only within its stated scope.
   read back. The local matrix, README, operator guides, readiness/phase plan and this checkpoint
   agree that T-030 implementation/verification is complete and T-031 owner acceptance is separate.
   No owner action was needed for T-030.
-- Next planned chunk: Phase 5A/T-025 measurement; T-031 Mac/usefulness acceptance follows. Do not
-  infer live acceptance or publication from repository checks.
+- Owner moved T-025 measurement design to the backlog on 5 November 2026 because repeat-item sales
+  comparisons do not fit one-off handmade inventory. T-025 is not a current release gate.
+- Next active acceptance gate: T-031 Mac review of useful output using the configured private seller
+  guidance/playbook and guarded-edit workflow. T-025 is not a prerequisite for this scoped gate.
+  Do not infer live acceptance or publication from repository checks.
 
 ## Required replacement at each checkpoint
 

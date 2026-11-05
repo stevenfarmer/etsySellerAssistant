@@ -21,6 +21,14 @@ separately and this clarification does not expand v1's platform scope.
 No hosted AI service or OpenAI API account is added. Recommendations explain their evidence,
 buyer benefit, uncertainty and measurement plan, rather than promising rankings or sales.
 
+## Owner follow-up — measurement scope, 5 November 2026
+
+The owner moved T-025's success-measurement design to the backlog. The store's handmade items are
+unique, so a repeat-item sales comparison is not a suitable default. No metric or comparison method
+is selected yet, and M7 is not a current v1 release gate. Revisit measurement after discussing an
+approach that fits the products. T-031's scoped private-guidance and Mac workflow acceptance does
+not depend on T-025.
+
 Guarded edits initially cover title, description and tags only. The required workflow is exact
 before/after preview, explicit approval for the selected listing and values, stale-data checks,
 audit before mutation, narrowly scoped apply, and verification with clear uncertain outcomes.
@@ -47,8 +55,9 @@ pretend to inspect unavailable photos, policies, search volumes or competitor pe
 The [current matrix](../requirements-and-acceptance.md) maps the expanded M4 and new M6/M7
 criteria to tasks. T-011 covers detailed guarded-write design/security review; T-023 covers
 intelligent review and fabricated evaluations; T-024 covers guarded-edit implementation after
-review; T-025 covers bounded measurement and owner usefulness acceptance. T-012 remains open
-for the completed product's final acceptance and separately authorized publication.
+review. T-025's measurement design is in the backlog and is not a current v1 release gate; T-031
+tracks scoped owner review of private-guidance usefulness and Mac workflow acceptance. T-012
+remains open for the completed product's final acceptance and separately authorized publication.
 
 The [review requirements](../intelligent-listing-review.md) define recommendation quality.
 Passing format/unit tests alone cannot establish AI usefulness or sales improvement. Retain
