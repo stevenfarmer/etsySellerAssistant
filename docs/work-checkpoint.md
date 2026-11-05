@@ -18,7 +18,9 @@ resuming; historical evidence is valid only within its stated scope.
   and covered by the rerun. No OAuth grant, live Etsy request or listing change was performed.
 - Documentation and tracking closeout merged in PR #40 as `8496625073a83d65bb8108489a29a25bd435b109`
   from head `4d6991a87c0ae73d47f6e3c32498b8223bf48398`. Its CI run 42086762473 passed all five
-  checks; Prettier and `git diff --check` passed locally. Main is synchronized at `8496625`.
+  checks; Prettier and `git diff --check` passed locally. Final checkpoint PR #41 merged as
+  `f23d220f703a1f19631b7e49627b7602dfa3dfb7` from head `c4b2f80bcf714d3c4b3dd71d13a6859a8fb95324`;
+  CI run 42088042063 passed all five checks. Local main is synchronized through PR #41.
 - The T-030 tracker row is Done and links PR #39; its evidence and the current steering record were
   read back. The local matrix, README, operator guides, readiness/phase plan and this checkpoint
   agree that T-030 implementation/verification is complete and T-031 owner acceptance is separate.
