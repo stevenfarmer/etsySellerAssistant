@@ -29,9 +29,10 @@ listing read. The form shows the listing and exact current/proposed values witho
 proposal's internal binding data. The form uses one host-level Accept/Deny choice, with no extra
 yes/no field. Accepting records approval for a later step; it does not update Etsy. There is no
 apply tool. Clients without MCP form-elicitation support fail closed. The Mac check confirmed that
-the readable form opens in the same call, but the owner found its checkbox plus footer buttons
-confusing. T-032 removes the redundant field and is awaiting another Mac check. This development
-workflow is not part of published alpha.1.
+the readable form opens in the same call. The owner found the earlier checkbox plus footer buttons
+confusing; T-032 removed the redundant field. In the follow-up Mac check, the single host choice
+was accepted and a fresh read confirmed no listing change. The owner found the revised prompt clear
+enough to merge. This development workflow is not part of published alpha.1.
 
 ## Work toward v1
 
