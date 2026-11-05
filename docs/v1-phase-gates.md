@@ -10,10 +10,10 @@ or release publication. See [current requirements](requirements-and-acceptance.m
 
 ## Starting point
 
-At this checkpoint, `main` is `248545eba5bce8ac3ac7fa55eb0c66b65bce625d` (PR #34, T-032 closeout);
-PR #34 is merged and there is no open PR. T-011, T-028 and T-032 are complete. T-033 is the
-current editorial/client-neutrality chunk. The read foundation is delivered; audit durability,
-guarded apply, measurement and final acceptance remain ahead. Recheck live state on each resume.
+T-033 client-neutrality and editorial cleanup merged in PR #35 as
+`265995f1a08da916c09c1f831de27c58fa86a701`. T-011, T-028, T-032 and T-033 are complete.
+T-029 audit durability is next; guarded apply, measurement and final acceptance remain ahead.
+Recheck live state on each resume.
 
 Only `v0.1.0-alpha.1` is published and must remain unchanged. Development version `1.0.0`
 is unpublished and is not a completed v1 candidate. Existing Mac owner/read/restart and scoped

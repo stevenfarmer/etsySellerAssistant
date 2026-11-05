@@ -15,7 +15,7 @@ and the connected tracker for execution state.
 | 5. Measurement and Mac acceptance | Next                             | T-025 aggregate measurement; T-031 concrete separately authorized Mac/usefulness/live-edit acceptance.                       |
 | 6. Release-ready and publication  | In Progress (planning only)      | T-012 exact candidate, checks, risk disposition/docs reconciliation, then separately authorized publication.                 |
 
-**Current status:** T-032 is complete. T-033 is the current editorial/client-neutrality chunk; T-029 follows once it closes.
+**Current status:** T-032 and T-033 are complete. T-029 audit durability is the next implementation chunk; T-030 guarded apply/reconciliation follows it.
 Chunk 2B adds [eight fabricated cases, evaluation checks/rubric and recorded evidence](review-evaluation.md)
 and an initial private local playbook outside Git. Eight private reviews passed declared checks
 and self-review threshold; that same-assistant run is not an independent model benchmark or
