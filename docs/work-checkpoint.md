@@ -58,17 +58,18 @@ resuming; historical evidence is valid only within its stated scope.
   GitHub's repo-level secret-scanning, push-protection, and Dependabot-alert switches could not be
   verified through the connected API. Add code scanning and verify those settings before v1; do not
   describe the existing controls as complete security coverage.
-- PR #48's current head is `3d910339d4fe72cf41241c78fdde212834017659`; the previously reported CI
-  run 42142428469 passed all five checks on its earlier head. The connected tracker was read back
-  at T-034/T-036. The owner has now clarified V1: complete listing drafts from owner-provided
-  product photos, separate recommendations for each selected existing listing, and on-request
-  research for comparable prices, seasonal sales and marketing/video/theme ideas. Broader
-  listing/pricing management is future vision; no automatic creation, publishing or price change is
-  implied. Documentation and tracker changes for T-037 photo-based drafts and T-038 requested
-  research are being prepared locally and have not yet been synchronized. Exact next action: finish
-  the scope/design edits, update and read back the tracker, sync the changes to PR #48, run the
-  Markdown checks, and verify current PR CI. Then return the updated proposal for owner review;
-  do not implement T-034/T-037/T-038 before their scope is accepted.
+- PR #48 is updated at scope commit `fc18edd517f58546b1164978a6f9fbc0d0e7865c`. Its current CI
+  run 42144337724 passed all five checks, including the secret scan and Node 24/26 validation on
+  macOS/Windows. Markdown Prettier and `git diff --check` passed; this was docs/planning only, so no
+  runtime tests were run. The connected steering document and tracker were updated and read back.
+  The owner clarified V1: complete listing drafts from owner-provided product photos; separate
+  recommendations for each selected existing listing; and on-request research for comparable
+  prices, seasonal sales and marketing/video/theme ideas. Broader listing/pricing management is
+  future vision; no automatic creation, publishing or price change is implied. M9/M10 and T-037
+  (photo-based drafts) / T-038 (requested research) are added. Exact next action: owner review of
+  PR #48, especially which fields comprise a complete draft, research source/comparability
+  presentation, and the private-guidance save/update/activation flow. Do not implement T-034,
+  T-037 or T-038 before their scope/design gates are accepted.
 
 ## Required replacement at each checkpoint
 
