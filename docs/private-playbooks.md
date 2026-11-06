@@ -127,6 +127,7 @@ or credentials. Its contents and private evaluation outputs stay out of Git/proj
 Generic mode remains the default: file presence alone never enables private reads. This is a
 strategy baseline with no invented owner/product facts; actual buyer/product context can be
 added privately when supplied. See [the evaluation evidence](review-evaluation.md). Full owner
-owner usefulness and Mac edit acceptance completed in T-031. The functional proposal for a guided
-authoring workflow is under T-034 owner review; no authoring or save tool exists yet. See the
+owner usefulness and Mac edit acceptance completed in T-031. The T-034 guided setup proposal is
+being revised to add tailored, sourced research and a separate explicit in-chat activation choice;
+no authoring, save, or activation tool exists yet. See the
 [setup design](private-guidance-setup-design.md).

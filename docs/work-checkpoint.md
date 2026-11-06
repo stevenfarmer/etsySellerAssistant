@@ -39,19 +39,26 @@ resuming; historical evidence is valid only within its stated scope.
 - T-034 is In Review / Now. The functional proposal is in
   [private-guidance-setup-design.md](private-guidance-setup-design.md). It proposes a disclosed,
   optional AI-led interview, owner-checked draft, exact host confirmation, fixed-path local save,
-  safe explicit replacement, and continued private-mode opt-in. The owner decision about whether
-  that one-time opt-in remains a client setting or gains a separate in-chat action is unresolved.
+  safe explicit replacement, tailored research, and a separate in-chat private-mode opt-in. The
+  owner requested research modeled on topics in the private guidance; research details remain private.
   No code or file-writing tool has been implemented. T-025 remains deferred and is not a current
   release gate.
 - PR #46 merged the T-034 design proposal to `main` as
-  `acb045dbf71b1c72d2898c69c6abc3d4727b063e`. Documentation formatting and diff checks passed; no
-  runtime tests were run. PR CI run 42137972888 passed all five checks on head
-  `d9d79e502490be98cc67e4c7f09d4e6079ee46a4`, including macOS and Windows on Node 24 and 26 and the
-  secret scan. The merge-commit CI is running. T-034 remains In Review / Now: the functional design
-  is delivered, while owner review must decide whether private-mode setup remains a manual client
-  setting or needs a separate in-chat opt-in. The tracker evidence and PR link were read back.
-  Exact next action: record merge-commit CI, then get the owner's design decision before starting
-  implementation. T-025 remains deferred and is not a current release gate.
+  `acb045dbf71b1c72d2898c69c6abc3d4727b063e`; PR #47 synchronized the checkpoint as
+  `6b22cc707af2e141b2d05fee5ce495877da16c5f`. Their CI runs 42137972888 and 42139113603 each
+  passed all five checks, including macOS and Windows on Node 24 and 26 and the secret scan. The
+  owner approved a separate explicit in-chat opt-in after save and requested tailored research based
+  on topics in the private guidance. T-034 proposal updates are in progress: add an owner-reviewed
+  research plan, cite current sources, keep identifying details out of search queries, append dated
+  findings to the proposed private document, and separate saving from turning guidance on and
+  explicitly retrieving it. No implementation has started. Exact next action: finish the revised
+  proposal, synchronize the tracker, open a review PR and run CI; then review the revised flow with
+  the owner before implementation. T-025 remains deferred and is not a current release gate.
+- Security scan review: the CI secret scan and dependency audit are in place, and weekly Dependabot
+  updates are configured. No CodeQL workflow was found; GitHub's repo-level secret-scanning,
+  push-protection, and Dependabot-alert switches could not be verified through the connected API.
+  T-036 tracks adding code scanning and verifying these settings before v1. Do not describe the
+  existing controls as complete security coverage.
 
 ## Required replacement at each checkpoint
 

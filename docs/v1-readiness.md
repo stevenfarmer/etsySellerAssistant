@@ -38,8 +38,13 @@ and T-024 (guarded edits) are complete for their stated criteria. T-025 measurem
 backlog by the owner on 5 November 2026; its method does not fit unique, one-off handmade items
 yet and it is not a current release gate. T-031 Mac usefulness and guarded-edit acceptance passed
 on 5 November 2026. T-035's revised confirmation also passed Mac owner review and merged in PR #44.
-T-034 has a functional first-run private-guidance design proposal in owner review; implementation
-has not started.
+T-034's functional first-run private-guidance proposal is being revised to include tailored,
+source-backed research and a separate explicit in-chat activation step at the owner's request;
+implementation has not started.
+The CI workflow scans Git history for secrets and runs `npm audit` across its Node/OS matrix;
+Dependabot weekly dependency updates are configured. No CodeQL workflow was found, and the current
+connection could not verify GitHub alert or push-protection settings. T-036 tracks closing this
+coverage gap before the v1 release candidate.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
