@@ -56,19 +56,31 @@ resuming; historical evidence is valid only within its stated scope.
 - T-039 follow-up merged in PR #52 as `e849c1add5f2d976b7d1c4a762633540785d2a45`; all five CI
   checks passed in run 42256015866. Node 24 macOS passed after the original queued job was cancelled
   and retried. Loopback-enabled local validation passed 292/292 tests.
-- T-039 remains In Review for supported-client confirmation. The owner selected one in-chat
-  Save/Don't save choice after the host form failed to appear. The updated tool requires
-  `ownerConfirmed: true`, which records the assistant's assertion and cannot be independently
-  verified by the server. The fixed-path save remains create-only. No real guidance was saved.
-  Loopback-enabled `npm run validate` passed: formatting, lint, TypeScript, build and 292/292
-  tests. PR and CI for the in-chat flow are still pending. Next: open a PR from current main,
-  wait for all required checks, merge, restart the local alpha, then test the decline path without
-  calling the save tool. Use real guidance only after owner review and an explicit Save choice.
-- T-040 remains Open. The owner wants manual editing of the fixed-path file and agent-assisted
-  revisions. Agent replacement must be explicitly requested, shown in full, confirmed with one
-  Replace/Don't replace choice, and preserve a private recovery copy. The tracker records this
-  addition. Separate in-chat activation/deactivation remains in scope; activation must not read
-  the file.
+- T-039 implementation merged in PR #54 as `a3a0a53356d084fb6ab01ef29f6a144213439f46`. The
+  owner chose one in-chat Save/Don't save choice after the host form failed to appear. The fixed-path
+  create-only tool requires `ownerConfirmed: true`; the server cannot independently verify the
+  assistant's assertion. Loopback-enabled `npm run validate` passed (292/292 tests). All five PR
+  checks passed on head `b67427115f7e1ad088a078bc696546b9c0394a2c` (run 42264842078), and all five
+  post-merge main checks passed (run 42265182658). No real guidance was saved. T-039 remains In
+  Review pending a supported-client decline test. Next owner action: restart the local alpha, then
+  test Don't save without calling the save tool.
+- T-040 remains Open. Owners must be able to tune the saved guidance later by editing the file
+  themselves or asking an agent to revise it. Agent replacement must be explicitly requested,
+  shown in full, confirmed with one Replace/Don't replace choice, and preserve a private recovery
+  copy; decline, failure, or uncertainty leaves the current file unchanged. Separate in-chat
+  activation/deactivation remains in scope; activation must not read the file. Tracker H41 records
+  this scope.
+
+## Current repository state
+
+- Live main is `a3a0a53356d084fb6ab01ef29f6a144213439f46`. The documentation-only T-039 closeout
+  changes to this checkpoint and the requirements matrix are local and awaiting a focused PR; the
+  shared worktree also contains unrelated T-040 work, which must not be included. The current
+  checkout is stale and its Git metadata is not writable, so publish only the two documented file
+  contents through GitHub and inspect the resulting PR diff before merging.
+- After the closeout PR merges, wait for required CI and read back the tracker. Then ask the owner
+  to restart the local server and verify the T-039 decline path. Do not start T-040 implementation
+  until this bounded chunk is closed.
 
 ## Required replacement at each checkpoint
 
