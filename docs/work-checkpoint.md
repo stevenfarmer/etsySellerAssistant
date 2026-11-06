@@ -58,10 +58,13 @@ resuming; historical evidence is valid only within its stated scope.
   GitHub's repo-level secret-scanning, push-protection, and Dependabot-alert switches could not be
   verified through the connected API. Add code scanning and verify those settings before v1; do not
   describe the existing controls as complete security coverage.
-- PR #48 is updated at scope commit `fc18edd517f58546b1164978a6f9fbc0d0e7865c`. Its current CI
-  run 42144337724 passed all five checks, including the secret scan and Node 24/26 validation on
-  macOS/Windows. Markdown Prettier and `git diff --check` passed; this was docs/planning only, so no
-  runtime tests were run. The connected steering document and tracker were updated and read back.
+- PR #48's latest scope commit is `812d4ded86a2cedad770a049fbdf1e85c6e1a6ab`; CI run 42145207012
+  passed all five checks, including the secret scan and Node 24/26 validation on macOS/Windows.
+  The current PR also includes checkpoint sync commit `5a31e03b2cb880b19f317d42858f911391553a18`,
+  which passed run 42144737868. Markdown Prettier and `git diff --check` passed; this was
+  docs/planning only, so no runtime tests were run. The connected steering document and tracker
+  were updated and read back. A final checkpoint-only sync follows this scope commit; recheck the
+  exact PR head and CI before resuming or merging.
   The owner clarified V1: complete listing drafts from owner-provided product photos; separate
   recommendations for each selected existing listing; and on-request research for comparable
   prices, seasonal sales and marketing/video/theme ideas. Broader listing/pricing management is
