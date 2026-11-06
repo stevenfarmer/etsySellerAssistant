@@ -85,16 +85,23 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live `main` includes T-040 PR #58 and the documentation closeout PRs #59, #60 and #61. PR #61's
-  reviewed head was `3422df714ff452345508a99d44660ea5886a2008`; it merged as
-  `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`. All five PR checks passed in run 42307541020 and
-  all five post-merge main checks passed in run 42307846832.
-- The Google Drive checkout remains on the stale `codex/t034-guided-setup-design` branch with
-  unrelated uncommitted changes. It was not used for these docs-only changes.
+- Live `main` includes the T-040 implementation (PR #58) and documentation closeouts #59–#63.
+  PR #61 merged as `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; its five PR checks passed in run
+  42307541020 and five post-merge checks passed in run 42307846832. PR #62 merged as
+  `50823d56774add12bd2933dbdbba2650684899aa`; its five PR checks passed in run 42308355341 and
+  five post-merge checks passed in run 42308587072. PR #63 merged as
+  `c48671768c8d30e481541e87ff79f1a92897b1d7`; its five PR checks passed in run 42309021600 and
+  five post-merge checks passed in run 42309266872.
+- The Google Drive checkout remains on stale branch `codex/t034-guided-setup-design` with unrelated
+  uncommitted changes. It was not used for these documentation changes.
 - Tracker rows T-040–T-042 were read back. T-040 remains In Review: the owner tested refusal,
   consented read, focused revision, full replacement review, explicit Replace, successful save and
   private recovery-copy confirmation. Activation was unchanged; only the separate activation/
-  deactivation interaction remains untested. T-041 and T-042 are Backlog / P2 design tasks. T-041 covers keeping advice aligned with owner-confirmed changes and proposing, not silently saving, durable context updates. T-042 covers a seller-neutral inventory of unused API capabilities and candidate features; it authorizes no code or new access.
+  deactivation interaction remains untested.
+- T-041 and T-042 are Backlog / P2. T-041 calls for advice to reflect owner-confirmed changes in the
+  current conversation and, when useful across sessions, to propose a dated private-context update
+  for approval. T-042 covers seller-neutral discovery of unused API capabilities and candidate
+  features; it authorizes no code or new access.
 - Next owner action for T-040: in Codex Desktop, ask to activate private guidance and review the
   separate on/off choice. Activation must not read the file; do not report T-040 Done until the
   owner confirms that interaction.
