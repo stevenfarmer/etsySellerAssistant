@@ -70,8 +70,8 @@ resuming; historical evidence is valid only within its stated scope.
   prices, seasonal sales and marketing/video/theme ideas. Broader listing/pricing management is
   future vision; no automatic creation, publishing or price change is implied. M9/M10 and T-037
   (photo-based drafts) / T-038 (requested research) are added. Exact next action: owner review of
-  PR #48, especially which fields comprise a complete draft, research source/comparability
-  presentation, and the private-guidance save/update/activation flow. Do not implement T-034,
+  PR #48, especially the interactive listing-draft experience and field coverage, research
+  source/comparability presentation, and the private-guidance save/update/activation flow. Do not implement T-034,
   T-037 or T-038 before their scope/design gates are accepted.
 
 ## Required replacement at each checkpoint

@@ -37,11 +37,13 @@ Ask these as optional topics, one at a time, with skip and “unknown” answers
    owner confirmation, and what claims should never be assumed.
 3. Intended buyers or uses, expressed as general audience descriptions rather than customer records.
 4. Preferred writing voice, terms to use or avoid, and how much editing the owner wants.
-5. How the owner wants existing listings reviewed, including whether multiple listings should be
+5. How the owner wants new listing drafts to feel: a conversational, form-like flow; useful field
+   suggestions; how to handle skips, corrections and feedback; and how much detail to show at once.
+6. How the owner wants existing listings reviewed, including whether multiple listings should be
    handled one at a time with separate recommendations.
-6. Current marketing activities, seasonal opportunities, and interest in video, timely themes,
+7. Current marketing activities, seasonal opportunities, and interest in video, timely themes,
    trend research or comparable-product pricing.
-7. Business priorities, practical constraints, and any owner-defined boundaries for recommendations.
+8. Business priorities, practical constraints, and any owner-defined boundaries for recommendations.
 
 The assistant should not request passwords, tokens, buyer identities, order details, or other
 customer records. It may ask for broad, optional context, but must label unsupported claims and
@@ -90,8 +92,8 @@ The draft should use generic headings that make later review easy:
 
 - Business and product overview — only owner-confirmed facts.
 - Product facts and claim boundaries — confirmed details, plus what needs checking.
-- New-listing workflow — how to combine owner-provided photos with confirmed details and ask about
-  facts that photos cannot establish.
+- New-listing workflow — how to combine owner-provided photos with confirmed details, ask about
+  facts that photos cannot establish, and guide the seller through suggestions, feedback and revision.
 - Existing-listing reviews — how to make separate recommendations for each selected listing.
 - Intended audiences and uses — owner preferences, not individual customer data.
 - Writing preferences — tone, terminology, and editing preferences.

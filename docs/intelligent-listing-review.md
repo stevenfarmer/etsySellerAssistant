@@ -68,15 +68,21 @@ recommendations and proposed copy distinct from every other listing:
 
 ## New listing drafts from photos (M9, T-037)
 
-For a new item, the owner may provide a few photos and a product brief. The connected AI client
-interprets the photos and drafts a complete listing for the owner to review; the owner confirms
-material facts that cannot reliably be established visually. The draft should distinguish direct
-visual observations, owner-confirmed details and unanswered questions. It must not guess materials,
-dimensions, construction, origin, condition, benefits or claims. Ask focused follow-up questions
-when an unknown would materially change the draft. The project must define the exact listing fields
-included in a complete draft before implementation; the current guarded write path remains limited
-to approved title, description and tag edits on existing listings. Drafting does not create,
-publish or change an Etsy listing.
+For a new item, the owner may provide a few photos and answer focused questions in a conversational,
+form-like flow. The assistant should work through applicable listing fields in manageable groups,
+offer clearly labeled suggestions, let the seller correct, skip or add feedback, and revise the
+complete draft before presenting it for final review. The field set must be defined before
+implementation. At minimum, cover title, description and tags; consider category and category
+attributes, materials and maker/era facts, price and quantity, variations/personalization, and
+shipping or processing details where relevant. Distinguish content the assistant can draft from
+seller choices and shop settings such as shipping profiles.
+
+The connected AI client interprets the photos and distinguishes visual observations, owner-confirmed
+facts, suggestions and unanswered questions. Never guess materials, dimensions, construction,
+origin, condition, benefits or claims. Ask targeted follow-ups where an unknown materially affects
+the draft; allow the seller to leave it unanswered and mark it for completion. Photos are inputs to
+the conversation, not automatically uploaded listing images. Drafting does not create, publish or
+change an Etsy listing; guarded edits remain a separate approved workflow.
 
 ## Requested pricing and marketing research (M10, T-038)
 
