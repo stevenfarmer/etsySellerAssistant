@@ -37,8 +37,9 @@ release recommendation. T-023 (intelligent review), T-011 (guarded-write design/
 and T-024 (guarded edits) are complete for their stated criteria. T-025 measurement design was moved to the
 backlog by the owner on 5 November 2026; its method does not fit unique, one-off handmade items
 yet and it is not a current release gate. T-031 Mac usefulness and guarded-edit acceptance passed
-on 5 November 2026. T-035's revised confirmation also passed Mac owner review and merged in PR #44;
-T-034 will then design the first-run private-guidance setup.
+on 5 November 2026. T-035's revised confirmation also passed Mac owner review and merged in PR #44.
+T-034 has a functional first-run private-guidance design proposal in owner review; implementation
+has not started.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
