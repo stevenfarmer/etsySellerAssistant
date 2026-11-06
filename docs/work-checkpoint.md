@@ -44,12 +44,13 @@ resuming; historical evidence is valid only within its stated scope.
   No code or file-writing tool has been implemented. T-025 remains deferred and is not a current
   release gate.
 - Local `main` is synchronized through PR #45 at `559aee8e205bae802dddfcdfd5e367ca0107961e`.
-  Its CI passed all five checks on PR #45; the T-035 tracker row was read back as Done. No open PRs
-  were found when T-034 began. Current branch `codex/t034-guided-setup-design` is based on that
-  main; the T-034 design and synchronized records are prepared. Formatting and diff checks passed;
-  the tracker status/evidence was read back. Exact next action: commit, publish a review PR, and
-  verify its required CI. Do not implement
-  until the owner reviews the design and answers the opt-in question.
+  Its CI passed all five checks on PR #45; the T-035 tracker row was read back as Done. T-034 is
+  proposed in PR #46 from `codex/t034-guided-setup-design`, head
+  `e3e7a486a432620b3fd8b28e703c9772a7ea0555`. Documentation formatting and diff checks passed;
+  no runtime tests were run. CI run 42137577093 passed all five checks, including macOS and Windows
+  on Node 24 and 26 and the secret scan. The T-034 tracker row and PR link were read back. Exact
+  next action: owner reviews PR #46 and decides whether private-mode setup remains a manual client
+  setting or needs a separate in-chat opt-in. Do not implement until the owner accepts the design.
 
 ## Required replacement at each checkpoint
 
