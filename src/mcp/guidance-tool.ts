@@ -19,6 +19,10 @@ const messages: Record<PlaybookErrorCode, string> = {
     'Private guidance changed while being read. Save a stable file, then explicitly request guidance again.',
   already_exists:
     'Private guidance could not be loaded safely. Check the local file and storage guide.',
+  missing_file:
+    'Private guidance could not be loaded safely. Check the local file and storage guide.',
+  stale_revision:
+    'Private guidance could not be loaded safely. Check the local file and storage guide.',
   io_failed:
     'Private guidance could not be read safely. Check the local file and storage guide; no generic fallback was returned.',
 };

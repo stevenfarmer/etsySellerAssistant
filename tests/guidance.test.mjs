@@ -15,6 +15,7 @@ import {
 } from '../dist/src/guidance/review-guidance.js';
 import { GENERIC_PLAYBOOK } from '../dist/src/guidance/generic-playbook.js';
 import { createLocalGuidanceService } from '../dist/src/guidance/local-guidance-service.js';
+import { createPrivateGuidanceSettingsStore } from '../dist/src/local/private-guidance-settings.js';
 import { registerGuidanceTool } from '../dist/src/mcp/guidance-tool.js';
 import {
   PlaybookError,
@@ -75,6 +76,29 @@ test('generic is the default and does not access private configuration or its re
     selection: 'generic_mode',
     guidance: GENERIC_PLAYBOOK,
     notice: GUIDANCE_NOTICE,
+  });
+});
+
+test('saved in-chat activation gates private guidance until an explicit retrieval request', async () => {
+  await fixture(async ({ root, directory, repositoryDirectory, filename }) => {
+    const settings = createPrivateGuidanceSettingsStore({
+      repositoryDirectory,
+      directory: path.join(root, 'settings'),
+    });
+    await fs.writeFile(filename, 'Fabricated activated guidance.', { mode: 0o600 });
+    const service = createLocalGuidanceService({
+      repositoryDirectory,
+      settingsStore: settings,
+      environment: { ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: directory },
+    });
+
+    assert.equal((await service.getGuidance()).source, 'generic');
+    await settings.setEnabled(true);
+    assert.equal((await service.getGuidance()).guidance, 'Fabricated activated guidance.');
+    await settings.setEnabled(false);
+    const disabled = await service.getGuidance();
+    assert.equal(disabled.source, 'generic');
+    assert.equal(disabled.guidance, GENERIC_PLAYBOOK);
   });
 });
 
@@ -258,11 +282,15 @@ test('real alpha STDIO advertises and returns generic guidance with unchanged st
       'apply_listing_edit',
       'get_listing',
       'get_private_guidance_setup',
+      'get_private_guidance_update',
       'get_review_guidance',
       'get_setup_status',
       'list_active_listings',
       'prepare_listing_edit',
+      'read_private_guidance_for_update',
+      'replace_private_guidance',
       'save_private_guidance',
+      'set_private_guidance_active',
       'validate_listing_draft',
     ]);
     const meta = inventory.tools.find((t) => t.name === 'get_review_guidance');

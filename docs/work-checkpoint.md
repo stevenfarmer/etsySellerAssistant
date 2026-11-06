@@ -65,26 +65,28 @@ resuming; historical evidence is valid only within its stated scope.
   PR #55 merged as `e662da2f555d7f342fd921460fa75c1a01cbeb05`; its five CI checks passed in run 42266220041. PR #56 corrected the checkpoint and merged as
   `10ce7ab5b4450e96fc6bd305b9c7ee59d76960b8`; all five checks passed in run 42267488812. Both
   documentation PRs changed no runtime code.
-- T-040 remains Open. Owners must be able to tune saved guidance later by editing the file or asking
-  the agent to revise it. Natural-language requests such as “configure my Etsy seller assistant”
-  should start the interview; “update/refine my seller-assistant guidance” should start the reviewed
-  update flow without a special prompt. The connected agent recognizes the request and calls the
-  MCP tool—the server cannot see ordinary chat text—so verify on the supported client and keep
-  claims about other clients evidence-based. Agent replacement must be explicitly requested, show
-  the full proposed text, require one Replace/Don't replace reply, and preserve a private recovery
-  copy; decline, failure, or uncertainty leaves the current file unchanged. Separate in-chat
-  activation/deactivation remains in scope; activation must not read the file. Tracker H41 records
-  this scope.
+- T-040 implementation is underway. The alpha now exposes generic natural-language setup/update
+  prompt tools; updating requires prior chat consent to read, full replacement review, one explicit
+  Replace/Don't replace reply, a matching revision, a private backup and atomic replacement. A
+  separate local on/off choice does not read the guidance file; later retrieval remains explicit.
+  Manual editing uses the fixed/configured private file path. Loopback-enabled `npm run validate`
+  passed formatting, lint, TypeScript, build and 299/299 offline tests. The Codex Desktop trigger
+  and conversation flow still need owner acceptance. The connected agent selects the tools from
+  ordinary chat; the MCP server cannot inspect that chat. Tracker H41 records the scope.
 
 ## Current repository state
 
-- PR #55/#56 synchronized the T-039 closeout and checkpoint; their PR CI passed all five checks
-  (runs 42266220041 and 42267488812). No separate post-merge workflow run or combined status was
-  returned when checked. The T-039/T-040 tracker rows were read back; T-039 is Done and T-040 is
-  Open. The shared worktree still contains unrelated T-040 changes; do not include them. The current
-  checkout is stale and its Git metadata is not writable.
-- Next chunk: T-040, beginning with natural-language setup/update triggers in the supported agent,
-  then safe reviewed replacement, manual edit guidance, and separate in-chat activation/deactivation.
+- Live `main` is `43308e9fe81c84d850d19f32965f2e83ae5fb346`. No project PR is open; only dependency
+  PR #49 is open. The Google Drive worktree's Git metadata is stale and read-only, on the old
+  `codex/t034-guided-setup-design` branch. The T-040 changes are uncommitted there; publish only
+  the reviewed T-040 files to a fresh branch from live `main`.
+- T-040 is In Progress in the tracker. Connected row H41 was read back on 6 November 2026 and
+  matches the owner-approved scope. Update evidence/status after PR and CI; retain In Review until
+  the supported-client test is complete.
+- Next action: publish the exact T-040 implementation/docs/tests on a new feature branch, inspect
+  the resulting GitHub comparison, open a focused PR, and finish CI/merge/tracker closeout. Then
+  ask the owner to restart the local MCP server and verify ordinary-language setup/update triggers,
+  read consent, replacement, recovery-copy confirmation, and activation/deactivation in Codex.
 
 ## Required replacement at each checkpoint
 

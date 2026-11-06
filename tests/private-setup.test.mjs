@@ -5,9 +5,13 @@ import { tmpdir } from 'node:os';
 import process from 'node:process';
 import test from 'node:test';
 import { PRIVATE_SETUP_PROMPT } from '../dist/src/guidance/private-setup-prompt.js';
-import { registerPrivateSetupTools } from '../dist/src/mcp/private-setup-tools.js';
+import {
+  PRIVATE_GUIDANCE_UPDATE_PROMPT,
+  registerPrivateSetupTools,
+} from '../dist/src/mcp/private-setup-tools.js';
 import { createPrivatePlaybookWriter } from '../dist/src/local/private-playbook-writer.js';
 import { PRIVATE_PLAYBOOK_FILENAME, PlaybookError } from '../dist/src/local/private-playbook.js';
+import { createPrivateGuidanceSettingsStore } from '../dist/src/local/private-guidance-settings.js';
 
 async function fixture(run) {
   const root = await fs.mkdtemp(path.join(tmpdir(), 'etsy-private-setup-'));
@@ -21,7 +25,18 @@ async function fixture(run) {
   }
 }
 
-function registeredTools(writer) {
+function registeredTools(
+  writer,
+  settings = {
+    async getEnabled() {
+      return undefined;
+    },
+    async isEnabled() {
+      return false;
+    },
+    async setEnabled() {},
+  },
+) {
   const tools = new Map();
   registerPrivateSetupTools(
     {
@@ -30,6 +45,7 @@ function registeredTools(writer) {
       },
     },
     writer,
+    settings,
   );
   return tools;
 }
@@ -41,9 +57,46 @@ test('setup prompt explains disclosure, tailored interview, research boundaries 
   assert.match(PRIVATE_SETUP_PROMPT, /Save this exact document\?/);
   assert.match(PRIVATE_SETUP_PROMPT, /ownerConfirmed:true/);
   assert.match(PRIVATE_SETUP_PROMPT, /separately ask in chat/);
+  assert.match(PRIVATE_SETUP_PROMPT, /configure, set up, or personalize/);
+  assert.match(PRIVATE_SETUP_PROMPT, /stop and wait for the owner's answer/);
+  assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /update, edit, refine, or improve/);
+  assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /Wait for a clear yes/);
+  assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /complete replacement in chat/);
   const tools = registeredTools({ async create() {} });
   assert.equal(tools.has('get_private_guidance_setup'), true);
+  assert.equal(tools.has('get_private_guidance_update'), true);
+  assert.equal(tools.has('read_private_guidance_for_update'), true);
   assert.equal(tools.has('save_private_guidance'), true);
+  assert.equal(tools.has('replace_private_guidance'), true);
+  assert.equal(tools.has('set_private_guidance_active'), true);
+});
+
+test('writer reads only for an update request and replaces only the reviewed revision with a recovery copy', async () => {
+  await fixture(async ({ repositoryDirectory, directory }) => {
+    const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
+    const before = '# Fabricated old guidance\n';
+    const after = '# Fabricated revised guidance\n';
+    await writer.create(before);
+    const current = await writer.readForUpdate();
+    assert.equal(current.content, before);
+    assert.match(current.revision, /^[a-f0-9]{64}$/);
+    await assert.rejects(writer.replace(after, '0'.repeat(64)), { code: 'stale_revision' });
+    assert.equal(
+      await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
+      before,
+    );
+
+    const recoveryCopy = await writer.replace(after, current.revision);
+    assert.match(recoveryCopy, /^playbook\.private\.md\.backup-/);
+    assert.equal(await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'), after);
+    assert.equal(await fs.readFile(path.join(directory, recoveryCopy), 'utf8'), before);
+    if (process.platform !== 'win32') {
+      assert.equal(
+        (await fs.stat(path.join(directory, recoveryCopy)).then((s) => s.mode)) & 0o777,
+        0o600,
+      );
+    }
+  });
 });
 
 test('fixed writer creates private file once and preserves it on a second attempt', async () => {
@@ -120,4 +173,94 @@ test('save tool sanitizes private-storage failures after owner confirmation', as
   assert.match(result.content[0].text, /not safe to use/);
   assert.equal(JSON.stringify(result).includes('Fabricated.'), false);
   assert.equal(createCalls, 1);
+});
+
+test('update tools require read consent, bind replacement to the revision, and preserve the old text', async () => {
+  await fixture(async ({ root, repositoryDirectory, directory }) => {
+    const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
+    const settings = createPrivateGuidanceSettingsStore({
+      repositoryDirectory,
+      directory: path.join(root, 'settings'),
+    });
+    const tools = registeredTools(writer, settings);
+    const oldText = '# Fabricated current guidance\n';
+    const newText = '# Fabricated revised guidance\n';
+    await writer.create(oldText);
+
+    const read = tools.get('read_private_guidance_for_update').handler;
+    const declined = await read({});
+    assert.equal(declined.isError, true);
+    assert.equal(JSON.stringify(declined).includes(oldText), false);
+
+    const retrieved = await read({ ownerConfirmed: true });
+    assert.equal(retrieved.isError, undefined);
+    const revision = retrieved.structuredContent.revision;
+    assert.equal(retrieved.structuredContent.content, oldText);
+
+    const replace = tools.get('replace_private_guidance').handler;
+    const unconfirmed = await replace({ content: newText, expectedRevision: revision });
+    assert.equal(unconfirmed.isError, true);
+    assert.equal(
+      await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
+      oldText,
+    );
+
+    const stale = await replace({
+      content: newText,
+      expectedRevision: '0'.repeat(64),
+      ownerConfirmed: true,
+    });
+    assert.equal(stale.isError, true);
+    assert.equal(
+      await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
+      oldText,
+    );
+
+    const replaced = await replace({
+      content: newText,
+      expectedRevision: revision,
+      ownerConfirmed: true,
+    });
+    assert.equal(replaced.isError, undefined);
+    assert.match(replaced.content[0].text, /private recovery copy/);
+    assert.equal(
+      await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
+      newText,
+    );
+    assert.equal(await settings.isEnabled(), false);
+  });
+});
+
+test('activation is a separate local setting and never reads or changes guidance text', async () => {
+  await fixture(async ({ root, repositoryDirectory }) => {
+    const settings = createPrivateGuidanceSettingsStore({
+      repositoryDirectory,
+      directory: path.join(root, 'settings'),
+    });
+    const writer = {
+      async create() {
+        throw new Error('activation must not call create');
+      },
+      async readForUpdate() {
+        throw new Error('activation must not read guidance');
+      },
+      async replace() {
+        throw new Error('activation must not replace guidance');
+      },
+    };
+    const activate = registeredTools(writer, settings).get('set_private_guidance_active').handler;
+
+    const unconfirmed = await activate({ enabled: true });
+    assert.equal(unconfirmed.isError, true);
+    assert.equal(await settings.isEnabled(), false);
+
+    const on = await activate({ enabled: true, ownerConfirmed: true });
+    assert.equal(on.isError, undefined);
+    assert.match(on.content[0].text, /did not read its contents/);
+    assert.equal(await settings.isEnabled(), true);
+
+    const off = await activate({ enabled: false, ownerConfirmed: true });
+    assert.equal(off.isError, undefined);
+    assert.equal(await settings.isEnabled(), false);
+  });
 });

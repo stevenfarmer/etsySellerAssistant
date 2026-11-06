@@ -70,11 +70,15 @@ test('the explicit alpha entry point exposes read and proposal tools without sta
     'apply_listing_edit',
     'get_listing',
     'get_private_guidance_setup',
+    'get_private_guidance_update',
     'get_review_guidance',
     'get_setup_status',
     'list_active_listings',
     'prepare_listing_edit',
+    'read_private_guidance_for_update',
+    'replace_private_guidance',
     'save_private_guidance',
+    'set_private_guidance_active',
     'validate_listing_draft',
   ]);
 });
