@@ -41,20 +41,29 @@ resuming; historical evidence is valid only within its stated scope.
   the revised T-034 setup flow. T-034 is Done for design; T-025 remains deferred. T-036 security
   scanning/settings, T-037 photo-based listing drafts and T-038 requested pricing/marketing research
   remain open.
-- T-039 implementation is in PR #50, branch `codex/t039-guided-private-setup`; implementation
-  commit `5dee81f25e4631afd8e2d0c606ef8258ca59e4e9` is based on merged main
-  `23e1a0e0318783ab56240c9566421fa17cad9bfe`. A docs-only synchronization commit follows; recheck
-  the live PR head before merge.
+- T-039 implementation merged in PR #50 as `48f8a273a89b1416812da633b2ed7dcfa3271347`; reviewed
+  branch head `76c55c660012daf6a7a6e680c5575e45c52f2a95` is based on main
+  `23e1a0e0318783ab56240c9566421fa17cad9bfe`.
   It adds a generic interview/research prompt and a fixed-path, host-confirmed create-only save.
   Loopback-enabled `npm run validate` passed (292/292 tests); formatting, lint, TypeScript, build
-  and `git diff --check` passed. CI is pending for PR #50. No private guidance, Etsy data or
-  credentials were read; no Etsy calls or writes occurred. The save never overwrites an existing
-  file and does not activate it.
-- T-039 remains In Review pending CI and the supported-client confirmation check. T-040 tracks the
-  remaining approved setup flow: reviewed replacement/recovery and separate in-chat
-  activation/deactivation. Until T-040 is complete, private activation still uses the existing
-  local configuration. Exact next action: verify PR #50 CI on the final synced head; merge when
-  checks pass, then arrange the supported-client check before marking T-039 accepted.
+  and `git diff --check` passed. The first CI run failed formatting because the requirements file
+  was truncated during upload; the complete file was restored. Final CI run 42251072657 passed all
+  five checks on reviewed head `76c55c660012daf6a7a6e680c5575e45c52f2a95`. No private guidance, Etsy
+  data or credentials were read; no Etsy calls or writes occurred. Save is create-only and does not
+  activate guidance.
+- Requirements/status closeout merged in PR #51 as `0735b72137df89d857b181efd35d66c05f4f4b2c`;
+  all five checks passed in CI run 42253112633.
+- T-039 remains In Review for direct supported-client confirmation. T-040 tracks reviewed
+  replacement/recovery and separate in-chat activation/deactivation. Until T-040 is complete,
+  activation still uses the existing local configuration. After the owner restarted the MCP
+  connection, both setup tools appeared and the generic prompt returned. Two `save_private_guidance`
+  calls with fabricated acceptance text returned the generic safe-save failure; the owner confirmed
+  no confirmation form appeared. No successful save was reported. The current code conflates
+  host-confirmation errors with storage errors; a follow-up change separates these outcomes. Do not
+  use real guidance until the host form appears and a declined test confirms no write. Next: merge
+  the failure-diagnostic fix after CI, reload the updated local alpha, and rerun the synthetic decline
+  test. If the host still cannot open the form, keep T-039 In Review and diagnose client elicitation
+  support or local storage setup without reading private files.
 
 ## Required replacement at each checkpoint
 

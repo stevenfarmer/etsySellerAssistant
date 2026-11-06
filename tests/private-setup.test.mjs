@@ -120,8 +120,10 @@ test('save tool waits for exact host confirmation and writes only after acceptan
 });
 
 test('save tool does not write when confirmation is unavailable and sanitizes failures', async () => {
+  let createCalls = 0;
   const tools = registeredTools({
     async create() {
+      createCalls += 1;
       throw new PlaybookError('unsafe_path');
     },
   });
@@ -137,7 +139,9 @@ test('save tool does not write when confirmation is unavailable and sanitizes fa
     },
   );
   assert.equal(unavailable.isError, true);
+  assert.match(unavailable.content[0].text, /confirmation could not be opened/i);
   assert.equal(JSON.stringify(unavailable).includes('provider detail'), false);
+  assert.equal(createCalls, 0);
   const unsafe = await save(
     { content: 'Fabricated.' },
     {
@@ -151,4 +155,5 @@ test('save tool does not write when confirmation is unavailable and sanitizes fa
   assert.equal(unsafe.isError, true);
   assert.match(unsafe.content[0].text, /not safe to use/);
   assert.equal(JSON.stringify(unsafe).includes('Fabricated.'), false);
+  assert.equal(createCalls, 1);
 });
