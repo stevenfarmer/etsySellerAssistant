@@ -2,8 +2,9 @@
 
 Status: approved by the owner on 6 November 2026. T-039 implements first-time setup and safe
 creation; T-040 implements natural-language update entry, reviewed replacement, manual edit
-instructions and separate activation/deactivation. Supported-client acceptance remains. This
-design does not authorize Etsy access, listing edits or publication.
+instructions and separate activation/deactivation in PR #58. Local validation and all five PR/main
+CI checks passed. Supported-client acceptance remains. This design does not authorize Etsy access,
+listing edits or publication.
 
 ## Goal
 
