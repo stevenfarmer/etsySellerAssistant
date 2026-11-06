@@ -14,6 +14,8 @@ export type PlaybookErrorCode =
   | 'invalid_content'
   | 'changed_file'
   | 'already_exists'
+  | 'missing_file'
+  | 'stale_revision'
   | 'io_failed';
 
 export class PlaybookError extends Error {

@@ -41,8 +41,9 @@ on 5 November 2026. T-035's revised confirmation also passed Mac owner review an
 T-034's functional first-run private-guidance proposal was approved and merged in PR #48 as
 `23e1a0e0318783ab56240c9566421fa17cad9bfe`; all five checks passed on reviewed head
 `52fde35efe36ff472b9511cd12a74f13f49437ea` (run 42146691927). T-039 implements the setup prompt
-and fixed-path create-only save. T-040 tracks safe reviewed replacement and the separate in-chat
-activation choice. T-037 and T-038 track photo-based drafts and requested price/marketing research;
+and fixed-path create-only save. T-040 implements natural-language update entry, safe reviewed
+replacement, manual editing guidance and the separate in-chat activation choice; Codex Desktop
+acceptance remains. T-037 and T-038 track photo-based drafts and requested price/marketing research;
 broader listing/pricing management remains longer-term vision.
 The CI workflow scans Git history for secrets and runs `npm audit` across its Node/OS matrix;
 Dependabot weekly dependency updates are configured. No CodeQL workflow was found, and the current

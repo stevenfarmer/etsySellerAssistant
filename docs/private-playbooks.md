@@ -6,9 +6,10 @@ source labels. Chunk 2B creates an initial private owner playbook outside Git us
 creation and private permissions. T-039 adds the generic setup interview/research prompt and
 `save_private_guidance`, which is called only after the assistant shows the full draft in chat and
 the owner chooses Save. The tool requires `ownerConfirmed: true` and creates the fixed file only
-when it does not already exist. The server cannot independently verify the chat reply. Saving does
-not activate private mode. T-040 tracks reviewed
-replacement and the separate in-chat activation/deactivation action. The default server remains
+when it does not already exist. The server cannot independently verify the chat reply. T-040 adds
+natural-language setup/update entry points, reviewed replacement with a private recovery copy,
+manual editing instructions, and a separate in-chat activation/deactivation choice. Activation
+does not read the file; later delivery still requires an explicit `get_review_guidance` call. The default server remains
 status-only. Tests use fabricated temporary files and never read any actual owner playbook.
 Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
 separately from automated STDIO verification (T-027 Done).
@@ -23,23 +24,24 @@ With no additional settings, calling it returns the generic template compiled in
 It does not inspect any private directory, even if a private playbook exists. Equality between
 the compiled generic text and public Markdown template is tested to prevent drift.
 
-Private use is opt-in through trusted MCP client environment settings:
+Private use is off by default. The alpha records an explicit in-chat activation choice in a
+separate local settings file. A saved choice takes precedence over the legacy environment mode;
+before any in-chat choice is recorded, the environment setting remains available for existing
+installations:
 
 | Setting                                    | Meaning                                                                                                                                    |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ETSY_SELLER_ASSISTANT_GUIDANCE_MODE`      | `generic` (default) or `private`. Other values, including blank, fail safely on explicit invocation.                                       |
 | `ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY` | Optional absolute private directory override in private mode. Otherwise use the Mac default below. Generic mode never resolves this value. |
 
-Only set private mode when you intend to share that file's contents with the selected AI
-application/provider. Keep credentials out of the file. T-039's save tool accepts no path and requires `ownerConfirmed: true`; the assistant must first
-show the complete document in chat and wait for the owner's explicit Save choice. The server cannot
-verify the conversation, so this step depends on the AI client following the tool instructions. It
-uses the fixed guidance filename, private permissions and create-only behavior, and never replaces
-existing content. The existing shop
-configuration schema, Keychain, Etsy authorization and OAuth scopes are unchanged. Environment
-settings take effect in a newly started MCP process; file-content edits are reloaded on each
-explicit call. T-040 will replace the manual activation setting with the approved separate
-in-chat choice; until then, use the existing explicit local setting.
+The activation file is `private-guidance-state.json` in the local application-support directory;
+it stores only the on/off choice. Activation itself never reads the guidance text. Turning guidance
+on makes it available only when the assistant later calls `get_review_guidance` explicitly. Turning
+it off prevents future calls from returning the private file. Keep credentials out of the file.
+The server cannot verify a chat reply, so create, replace and activation tools rely on the connected
+agent to wait for the owner's explicit choice. Environment settings take effect after the MCP
+process starts; text edits are loaded on each explicit retrieval. Etsy authorization and scopes are
+unchanged.
 
 ## Tool result and errors
 
@@ -68,8 +70,15 @@ The existing listing smoke accepts the optional read-only guidance tool but neve
 ## Storage contract
 
 - Private filename: `playbook.private.md`. Keep a separate private copy; never edit the tracked
-  template into a private version. Updates have no write path and cannot overwrite customization.
-- Default Mac directory: `~/Library/Application Support/etsySellerAssistant/guidance`.
+  template into a private version. The agent can create it or replace it only through the reviewed
+  tools; manual editing is also supported.
+- Default Mac file: `~/Library/Application Support/etsySellerAssistant/guidance/playbook.private.md`.
+  To edit it in Finder, choose **Go → Go to Folder…**, paste
+  `~/Library/Application Support/etsySellerAssistant/guidance`, then open
+  `playbook.private.md` in a text editor. If the MCP connection has an explicit
+  `ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY` override, use that configured folder instead.
+  The separate activation setting is stored at
+  `~/Library/Application Support/etsySellerAssistant/private-guidance-state.json`.
   `resolvePrivatePlaybookDirectory()` resolves the location without accessing the filesystem.
   An explicit absolute `directory` option selects that directory directly. Paths are trusted
   application configuration, not a model-supplied file argument or a changed shop/token schema.
@@ -78,9 +87,9 @@ The existing listing smoke accepts the optional read-only guidance tool but neve
   performs filesystem I/O. `repositoryDirectory` must name the installation checkout, not an
   arbitrary model-selected exclusion root. Each read reloads the file; there is no content cache.
 - On macOS/POSIX, the final directory and file must belong to the current user and grant no
-  group/other permissions (normally directory `0700`, file `0600`). The loader does not create
-  directories, adjust permissions or try to repair a file. Future setup must use no-clobber
-  creation and preserve user changes; there is no setup writer in this chunk.
+  group/other permissions (normally directory `0700`, file `0600`). The reader does not create
+  directories or repair files. Setup creates with no-clobber behavior; replacement keeps the old
+  text in a private backup before atomically installing the reviewed version.
 - Reject placement within the configured checkout, including resolved aliases, or beneath an
   ancestor `.git` marker (ordinary checkout/worktree). Reject symlink final directories/files,
   hard-linked files, non-regular targets and invalid absolute paths. Ancestor path aliases such
@@ -138,7 +147,8 @@ or credentials. Its contents and private evaluation outputs stay out of Git/proj
 Generic mode remains the default: file presence alone never enables private reads. This is a
 strategy baseline with no invented owner/product facts; actual buyer/product context can be
 added privately when supplied. See [the evaluation evidence](review-evaluation.md). Full owner
-owner usefulness and Mac edit acceptance completed in T-031. The T-034 guided setup proposal is
-being revised to add tailored, sourced research and a separate explicit in-chat activation choice;
-no authoring, save, or activation tool exists yet. See the
-[setup design](private-guidance-setup-design.md).
+owner usefulness and Mac edit acceptance completed in T-031. The T-034 guided setup design and
+T-039 setup/save implementation are complete. T-040 adds agent-guided updates, separate in-chat
+activation, and manual edit instructions. Supported-client acceptance is still required; automated
+checks do not prove that a connected agent will select tools from ordinary natural-language
+requests. See the [setup design](private-guidance-setup-design.md).

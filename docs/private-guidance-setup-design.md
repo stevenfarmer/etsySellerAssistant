@@ -1,8 +1,9 @@
 # Guided private-guidance setup: functional design proposal
 
-Status: approved by the owner on 6 November 2026. The first implementation slice is tracked as
-T-039; reviewed replacement and explicit activation remain follow-up work under T-040. This design
-does not authorize Etsy access, listing edits or publication.
+Status: approved by the owner on 6 November 2026. T-039 implements first-time setup and safe
+creation; T-040 implements natural-language update entry, reviewed replacement, manual edit
+instructions and separate activation/deactivation. Supported-client acceptance remains. This
+design does not authorize Etsy access, listing edits or publication.
 
 ## Goal
 
@@ -189,9 +190,11 @@ saving or alter the MCP client's configuration.
 
 The owner approved this flow, including the separate explicit in-chat opt-in after saving. After
 the Codex host did not open the MCP form, the owner chose one explicit in-chat Save/Don’t save
-choice. T-039 implements the generic interview/research prompt and fixed-path, create-only save;
-the assistant asserts `ownerConfirmed: true` only after an explicit Save reply. The server cannot
-independently verify the chat transcript. The existing file is never overwritten. T-040 covers
-reviewed replacement and separate in-chat activation/deactivation; until that work is complete,
-activation remains the existing explicit local configuration choice and setup-created files stay
-off by default.
+choice. T-039 implements the generic interview/research prompt and fixed-path, create-only save.
+T-040 adds a natural-language update prompt, explicit permission before the existing file is read,
+full-text replacement review, one Replace/Don't replace reply, revision checking, and a private
+recovery copy before replacement. It also records a separate persistent activation choice without
+reading the guidance text. Tool descriptions guide the connected agent; the server cannot inspect
+ordinary chat text or verify the agent waited for the owner's reply. A saved activation choice
+takes precedence over the legacy mode setting. Manual editing remains available at the documented
+fixed/configured file location. Supported-client behavior still requires owner acceptance.
