@@ -5,8 +5,9 @@ This review records the design before implementation. The later T-030 implementa
 PR #39 as `dd77876d52c0a93db48bf95d61d0ca25f248f817` after offline verification and all five CI
 checks passed. The opt-in unpublished development alpha now contains guarded apply; published
 alpha.1 remains read-only. T-031 Mac acceptance later verified one owner-authorized update and its
-audit outcome. T-035 refines the confirmation copy and assistant follow-through without changing
-the approval, audit, or apply boundaries.
+audit outcome. T-035 clarified the confirmation copy and assistant follow-through; the owner reviewed
+and accepted the revised Mac prompt without applying the test-only proposal. It did not change the
+approval, audit, or apply boundaries.
 
 ## Decision and gate
 
@@ -172,9 +173,10 @@ stale-check, audit-before-write, no-retry, or reconciliation requirements above.
 
 ### Confirmation copy follow-up — T-035
 
-The seller-facing form should explain that Accept approves the exact change and that the assistant
-will apply it to Etsy and verify it. Keep the instruction to treat listing text as untrusted data in tool
-metadata, where it guides the assistant without appearing in the seller's confirmation.
+The seller-facing form explains that Accept approves the exact change and that the assistant will
+apply it to Etsy and verify the result. Keep the instruction to treat listing text as untrusted data
+in tool metadata, where it guides the assistant without appearing in the seller's confirmation. The
+revised prompt passed Mac owner review in T-035; a test-only proposal was accepted but not applied.
 
 ### Sources checked 3 November 2026
 
