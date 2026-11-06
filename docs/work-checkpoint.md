@@ -56,31 +56,35 @@ resuming; historical evidence is valid only within its stated scope.
 - T-039 follow-up merged in PR #52 as `e849c1add5f2d976b7d1c4a762633540785d2a45`; all five CI
   checks passed in run 42256015866. Node 24 macOS passed after the original queued job was cancelled
   and retried. Loopback-enabled local validation passed 292/292 tests.
-- T-039 implementation merged in PR #54 as `a3a0a53356d084fb6ab01ef29f6a144213439f46`. The
-  owner chose one in-chat Save/Don't save choice after the host form failed to appear. The fixed-path
-  create-only tool requires `ownerConfirmed: true`; the server cannot independently verify the
-  assistant's assertion. Loopback-enabled `npm run validate` passed (292/292 tests). All five PR
-  checks passed on head `b67427115f7e1ad088a078bc696546b9c0394a2c` (run 42264842078), and all five
-  post-merge main checks passed (run 42265182658). No real guidance was saved. T-039 remains In
-  Review pending a supported-client decline test. Next owner action: restart the local alpha, then
-  test Don't save without calling the save tool.
-- T-040 remains Open. Owners must be able to tune the saved guidance later by editing the file
-  themselves or asking an agent to revise it. Agent replacement must be explicitly requested,
-  shown in full, confirmed with one Replace/Don't replace choice, and preserve a private recovery
+- T-039 is Done. The owner-provided Mac supported-client transcript on 6 November 2026 showed the
+  disclosed interview asking one question at a time, fact recap/research choices, complete draft,
+  and final in-chat text choice. The owner replied “Don't save”; the assistant confirmed no save or
+  activation, and no save-tool call followed the decline in the transcript. No real or existing
+  guidance, credentials, or live shop data were used; no live shop operation occurred. PR #54
+  implementation, local validation (292/292 tests), and all five PR/main checks are recorded above.
+  PR #55 merged as `e662da2f555d7f342fd921460fa75c1a01cbeb05`; its five CI checks passed in run 42266220041. PR #56 corrected the checkpoint and merged as
+  `10ce7ab5b4450e96fc6bd305b9c7ee59d76960b8`; all five checks passed in run 42267488812. Both
+  documentation PRs changed no runtime code.
+- T-040 remains Open. Owners must be able to tune saved guidance later by editing the file or asking
+  the agent to revise it. Natural-language requests such as “configure my Etsy seller assistant”
+  should start the interview; “update/refine my seller-assistant guidance” should start the reviewed
+  update flow without a special prompt. The connected agent recognizes the request and calls the
+  MCP tool—the server cannot see ordinary chat text—so verify on the supported client and keep
+  claims about other clients evidence-based. Agent replacement must be explicitly requested, show
+  the full proposed text, require one Replace/Don't replace reply, and preserve a private recovery
   copy; decline, failure, or uncertainty leaves the current file unchanged. Separate in-chat
   activation/deactivation remains in scope; activation must not read the file. Tracker H41 records
   this scope.
 
 ## Current repository state
 
-- PR #55 closed out the requirements/checkpoint in docs-only changes and merged as
-  `e662da2f555d7f342fd921460fa75c1a01cbeb05`. All five PR checks passed on head
-  `ecb6f0085fc30aca4028c349a8778a4cfe66059b` in run 42266220041. No separate post-merge workflow
-  run or combined status was returned when checked. The shared worktree still contains unrelated
-  T-040 work; do not include it. The current checkout is stale and its Git metadata is not writable.
-- The T-039 tracker row was read back after adding PR #55 and its CI evidence. Next owner action:
-  restart the local server and verify the Don't save path without calling the save tool. Keep T-039
-  In Review until that supported-client check is complete. Do not start T-040 implementation yet.
+- PR #55/#56 synchronized the T-039 closeout and checkpoint; their PR CI passed all five checks
+  (runs 42266220041 and 42267488812). No separate post-merge workflow run or combined status was
+  returned when checked. The T-039/T-040 tracker rows were read back; T-039 is Done and T-040 is
+  Open. The shared worktree still contains unrelated T-040 changes; do not include them. The current
+  checkout is stale and its Git metadata is not writable.
+- Next chunk: T-040, beginning with natural-language setup/update triggers in the supported agent,
+  then safe reviewed replacement, manual edit guidance, and separate in-chat activation/deactivation.
 
 ## Required replacement at each checkpoint
 
