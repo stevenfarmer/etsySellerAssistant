@@ -65,28 +65,30 @@ resuming; historical evidence is valid only within its stated scope.
   PR #55 merged as `e662da2f555d7f342fd921460fa75c1a01cbeb05`; its five CI checks passed in run 42266220041. PR #56 corrected the checkpoint and merged as
   `10ce7ab5b4450e96fc6bd305b9c7ee59d76960b8`; all five checks passed in run 42267488812. Both
   documentation PRs changed no runtime code.
-- T-040 implementation is underway. The alpha now exposes generic natural-language setup/update
+- T-040 implementation merged in PR #58 as `60d14a583422654dd828e66b6cba4f8673d965e0` from
+  reviewed head `974ede0bf619edaba3310f17f14abf9c41a4596e`. The alpha now exposes generic natural-language setup/update
   prompt tools; updating requires prior chat consent to read, full replacement review, one explicit
   Replace/Don't replace reply, a matching revision, a private backup and atomic replacement. A
   separate local on/off choice does not read the guidance file; later retrieval remains explicit.
   Manual editing uses the fixed/configured private file path. Loopback-enabled `npm run validate`
   passed formatting, lint, TypeScript, build and 299/299 offline tests. The Codex Desktop trigger
-  and conversation flow still need owner acceptance. The connected agent selects the tools from
-  ordinary chat; the MCP server cannot inspect that chat. Tracker H41 records the scope.
+  and conversation flow still need owner acceptance. All five PR CI checks passed in run
+  42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
+  selects the tools from ordinary chat; the MCP server cannot inspect that chat. Tracker H41
+  records the scope.
 
 ## Current repository state
 
-- Live `main` is `43308e9fe81c84d850d19f32965f2e83ae5fb346`. No project PR is open; only dependency
-  PR #49 is open. The Google Drive worktree's Git metadata is stale and read-only, on the old
-  `codex/t034-guided-setup-design` branch. The T-040 changes are uncommitted there; publish only
-  the reviewed T-040 files to a fresh branch from live `main`.
-- T-040 is In Progress in the tracker. Connected row H41 was read back on 6 November 2026 and
-  matches the owner-approved scope. Update evidence/status after PR and CI; retain In Review until
-  the supported-client test is complete.
-- Next action: publish the exact T-040 implementation/docs/tests on a new feature branch, inspect
-  the resulting GitHub comparison, open a focused PR, and finish CI/merge/tracker closeout. Then
-  ask the owner to restart the local MCP server and verify ordinary-language setup/update triggers,
-  read consent, replacement, recovery-copy confirmation, and activation/deactivation in Codex.
+- Live `main` includes T-040 PR #58 at `60d14a583422654dd828e66b6cba4f8673d965e0`. All five PR
+  checks passed in run 42288723599; all five post-merge main checks passed in run 42289062632.
+  The Google Drive worktree's Git metadata remains stale/read-only on the old
+  `codex/t034-guided-setup-design` branch. Closeout documentation is being synchronized on a fresh
+  branch from the merged main commit.
+- Tracker H41 was read back after adding PR #58/local/CI evidence. It remains In Review until the
+  owner verifies the connected Codex Desktop behavior. Next action: finish the docs-only closeout
+  PR, then ask the owner to restart the local MCP connection and check normal-language setup/update
+  selection, the read-consent question, a full replacement review/decline, and the separate on/off
+  choice. Do not ask the owner to save or replace real guidance as part of the check.
 
 ## Required replacement at each checkpoint
 
