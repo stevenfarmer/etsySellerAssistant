@@ -1,6 +1,6 @@
 # Resumable v1 work checkpoint
 
-Updated 5 November 2026. Follow the [gated plan](v1-phase-gates.md) and
+Updated 6 November 2026. Follow the [gated plan](v1-phase-gates.md) and
 [tracking process](project-tracking.md). Recheck live main/PRs/CI and connected records before
 resuming; historical evidence is valid only within its stated scope.
 
@@ -41,16 +41,20 @@ resuming; historical evidence is valid only within its stated scope.
   the revised T-034 setup flow. T-034 is Done for design; T-025 remains deferred. T-036 security
   scanning/settings, T-037 photo-based listing drafts and T-038 requested pricing/marketing research
   remain open.
-- T-039 is the current implementation slice: a generic interview/research prompt plus a fixed-path,
-  host-confirmed create-only save. Code and fabricated tests are in the local workspace; the full
-  loopback-enabled `npm run validate` passed (292/292 tests). This code has not yet been uploaded to
-  a PR or run through CI. No local private guidance, Etsy data or credentials were read; no Etsy
-  calls or writes occurred. The save never overwrites an existing file and does not activate it.
-- T-040 tracks the remaining approved setup flow: reviewed replacement/recovery and separate in-chat
+- T-039 implementation is in PR #50, branch `codex/t039-guided-private-setup`; implementation
+  commit `5dee81f25e4631afd8e2d0c606ef8258ca59e4e9` is based on merged main
+  `23e1a0e0318783ab56240c9566421fa17cad9bfe`. A docs-only synchronization commit follows; recheck
+  the live PR head before merge.
+  It adds a generic interview/research prompt and a fixed-path, host-confirmed create-only save.
+  Loopback-enabled `npm run validate` passed (292/292 tests); formatting, lint, TypeScript, build
+  and `git diff --check` passed. CI is pending for PR #50. No private guidance, Etsy data or
+  credentials were read; no Etsy calls or writes occurred. The save never overwrites an existing
+  file and does not activate it.
+- T-039 remains In Review pending CI and the supported-client confirmation check. T-040 tracks the
+  remaining approved setup flow: reviewed replacement/recovery and separate in-chat
   activation/deactivation. Until T-040 is complete, private activation still uses the existing
-  local configuration. Exact next action: create a feature branch from merged main, open the T-039
-  PR, synchronize tracker/steering evidence, then wait for CI and owner-run Mac confirmation before
-  marking T-039 accepted.
+  local configuration. Exact next action: verify PR #50 CI on the final synced head; merge when
+  checks pass, then arrange the supported-client check before marking T-039 accepted.
 
 ## Required replacement at each checkpoint
 

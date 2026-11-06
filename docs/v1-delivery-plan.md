@@ -1,6 +1,6 @@
 # Current delivery status to v1
 
-Updated 5 November 2026. The [phase-gated plan](v1-phase-gates.md) is the single sequence of
+Updated 6 November 2026. The [phase-gated plan](v1-phase-gates.md) is the single sequence of
 small deliverables and exit gates. The [work checkpoint](work-checkpoint.md) records where to
 resume. Use the [current matrix](requirements-and-acceptance.md) for requirements/acceptance
 and the connected tracker for execution state.
@@ -14,7 +14,7 @@ and the connected tracker for execution state.
 | 4. Guarded editing                  | T-024 and T-035 complete         | T-028 proposal/approval, T-032 confirmation, T-029 audit and T-030 apply/reconciliation are complete. T-031 owner acceptance and T-035 Mac confirmation review passed.                                                        |
 | 5. Measurement and Mac acceptance   | T-025 Backlog; T-031 Done        | Owner deferred T-025 on 5 November 2026 because repeat-item sales comparisons do not fit one-off handmade inventory. T-031's private-guidance review and authorized guarded-edit Mac acceptance are complete.                 |
 | 5C. Guided private-guidance setup   | T-034 Done (design)              | Owner approved and merged the interview/research/save/activation design in PR #48.                                                                                                                                            |
-| 5C1. Setup prompt and safe creation | T-039 In Progress / Now          | The local MCP alpha now includes a disclosed interview/research prompt and exact-confirmed, fixed-path create-only save. PR and CI are pending.                                                                               |
+| 5C1. Setup prompt and safe creation | T-039 In Review / Now          | PR #50 includes the disclosed interview/research prompt and exact-confirmed, fixed-path create-only save. Local validation passed; CI and supported-client confirmation are pending.                                            |
 | 5C2. Update and activation          | T-040 Open / Now                 | Add safe reviewed replacement/recovery and separate explicit in-chat activation/deactivation; activation must not retrieve private text.                                                                                      |
 | 5D. Automated code scanning         | T-036 Open / Now                 | Existing CI scans repository history for secrets and runs `npm audit`; weekly Dependabot updates are configured. CodeQL and GitHub alert/push-protection settings remain to be verified. Complete before v1.                  |
 | 5E. Guided photo-based drafts       | T-037 Open / P1                  | Define the complete field set and deliver a conversational, form-like workflow with suggestions, focused questions, seller corrections/feedback and an iterative reviewable draft. No automatic Etsy creation or publication. |
