@@ -73,14 +73,14 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live main is `a3a0a53356d084fb6ab01ef29f6a144213439f46`. The documentation-only T-039 closeout
-  changes to this checkpoint and the requirements matrix are local and awaiting a focused PR; the
-  shared worktree also contains unrelated T-040 work, which must not be included. The current
-  checkout is stale and its Git metadata is not writable, so publish only the two documented file
-  contents through GitHub and inspect the resulting PR diff before merging.
-- After the closeout PR merges, wait for required CI and read back the tracker. Then ask the owner
-  to restart the local server and verify the T-039 decline path. Do not start T-040 implementation
-  until this bounded chunk is closed.
+- PR #55 closed out the requirements/checkpoint in docs-only changes and merged as
+  `e662da2f555d7f342fd921460fa75c1a01cbeb05`. All five PR checks passed on head
+  `ecb6f0085fc30aca4028c349a8778a4cfe66059b` in run 42266220041. No separate post-merge workflow
+  run or combined status was returned when checked. The shared worktree still contains unrelated
+  T-040 work; do not include it. The current checkout is stale and its Git metadata is not writable.
+- The T-039 tracker row was read back after adding PR #55 and its CI evidence. Next owner action:
+  restart the local server and verify the Don't save path without calling the save tool. Keep T-039
+  In Review until that supported-client check is complete. Do not start T-040 implementation yet.
 
 ## Required replacement at each checkpoint
 
