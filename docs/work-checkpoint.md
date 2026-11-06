@@ -71,8 +71,12 @@ resuming; historical evidence is valid only within its stated scope.
   Replace/Don't replace reply, a matching revision, a private backup and atomic replacement. A
   separate local on/off choice does not read the guidance file; later retrieval remains explicit.
   Manual editing uses the fixed/configured private file path. Loopback-enabled `npm run validate`
-  passed formatting, lint, TypeScript, build and 299/299 offline tests. The Codex Desktop trigger
-  and conversation flow still need owner acceptance. All five PR CI checks passed in run
+  passed formatting, lint, TypeScript, build and 299/299 offline tests. Owner-provided Codex Desktop
+  transcripts on 6 November 2026 verified the natural-language update trigger, provider-sharing
+  disclosure, and explicit consent prompt. The declined path left the file unread and unchanged; after explicit yes, the assistant read the
+  guidance and asked a focused follow-up question. The owner then reviewed the complete replacement
+  and chose Replace; the tool confirmed the save and a private recovery copy. Activation was unchanged.
+  Separate activation/deactivation remains unverified. All five PR CI checks passed in run
   42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
   selects the tools from ordinary chat; the MCP server cannot inspect that chat. Tracker H41
   records the scope.
@@ -84,13 +88,11 @@ resuming; historical evidence is valid only within its stated scope.
   #59 synchronizes this task's closeout evidence and merged as `83abebd6d2acc29d2005f76fabb1df1cd950f7cf`;
   its five PR checks passed in run 42289885741 and five post-merge checks passed in run 42290158944. The Google
   Drive worktree's Git metadata remains stale/read-only on the old `codex/t034-guided-setup-design`
-  branch.
-- Tracker H41 was read back with status In Review and PR #58/local/CI evidence. The remaining task
-  is the owner verifying connected Codex Desktop behavior. Restart the local MCP connection, then
-  check normal-language setup/update selection and confirm an update request first asks whether to
-  share existing guidance before reading. The owner can stop there or choose Don't replace after
-  reviewing a test proposal; do not save or replace real guidance as part of this check. Separately
-  confirm the in-chat on/off choice if desired; activation itself does not retrieve the file.
+  branch. That checkout has unrelated uncommitted changes and was not used for this docs-only PR.
+- PR #61 is open from `codex/t040-consent-decline-acceptance` at head `d4dcca9bedc07d5519a6fe1fcb5f55adade122fa`; it contains documentation only. The prior head's CI run 42306816562 passed secret scanning and both macOS jobs; Windows checks were in progress when the replacement evidence update changed the head. CI is rerunning for the current head.
+- Tracker H41 was read back with status In Review and records the owner-provided Codex Desktop consent tests. Refusal, explicit-consent read, full replacement review, explicit Replace, successful save and private recovery-copy confirmation are verified. Keep T-040 In Review until the owner tests the separate activation/deactivation flow; the update tool confirmed activation remained unchanged. Next, verify activation/deactivation separately without reading the file.
+
+- The owner added T-041 (owner-approved updates to evolving private shop context) and T-042 (inventory unused Etsy API capabilities and define candidate features) to the backlog. Both are design/discovery only; no code or additional access is authorized by these tasks.
 
 ## Required replacement at each checkpoint
 
