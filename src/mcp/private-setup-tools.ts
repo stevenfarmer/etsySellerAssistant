@@ -50,8 +50,9 @@ export function registerPrivateSetupTools(server: McpServer, writer: PrivatePlay
       const parsed = saveInput.safeParse(rawInput);
       if (!parsed.success)
         return failure('Provide the complete nonempty private guidance document.');
+      let result: Awaited<ReturnType<typeof context.mcpReq.elicitInput>>;
       try {
-        const result = await context.mcpReq.elicitInput({
+        result = await context.mcpReq.elicitInput({
           mode: 'form',
           message: [
             'Save this exact private guidance document?',
@@ -64,9 +65,13 @@ export function registerPrivateSetupTools(server: McpServer, writer: PrivatePlay
           ].join('\n\n'),
           requestedSchema: { type: 'object', properties: {} },
         });
-        if (result.action !== 'accept') {
-          return failure('Save was declined or cancelled. No file was written.');
-        }
+      } catch {
+        return failure('The confirmation could not be opened. No file was written.');
+      }
+      if (result.action !== 'accept') {
+        return failure('Save was declined or cancelled. No file was written.');
+      }
+      try {
         await writer.create(parsed.data.content);
         return {
           content: [
