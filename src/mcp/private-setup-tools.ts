@@ -5,13 +5,18 @@ import type { PrivatePlaybookWriter } from '../local/private-playbook-writer.js'
 import { MAX_PLAYBOOK_BYTES, PlaybookError } from '../local/private-playbook.js';
 
 const emptyInput = z.object({}).strict();
-const saveInput = z.object({ content: z.string().min(1).max(MAX_PLAYBOOK_BYTES) }).strict();
+const saveInput = z
+  .object({
+    content: z.string().min(1).max(MAX_PLAYBOOK_BYTES),
+    ownerConfirmed: z.literal(true),
+  })
+  .strict();
 
 function failure(message: string) {
   return { isError: true, content: [{ type: 'text' as const, text: message }] };
 }
 
-/** Generic setup prompt and fixed-path, confirmed, create-only private guidance save. */
+/** Generic setup prompt and fixed-path, chat-confirmed, create-only private guidance save. */
 export function registerPrivateSetupTools(server: McpServer, writer: PrivatePlaybookWriter): void {
   server.registerTool(
     'get_private_guidance_setup',
@@ -37,7 +42,7 @@ export function registerPrivateSetupTools(server: McpServer, writer: PrivatePlay
     'save_private_guidance',
     {
       description:
-        'Save the complete owner-reviewed private guidance document to the installation’s fixed local guidance file. Immediately shows the exact document in one host confirmation. Accept creates a new file only; it never overwrites an existing file, changes Etsy or activates private guidance. After success, ask the owner separately in chat whether to turn private guidance on or keep it off.',
+        'Save the complete private guidance document to the installation’s fixed local file. First show the entire exact document in chat and ask the owner to choose Save or Don’t save; wait for an explicit Save reply before calling this tool with ownerConfirmed:true. This flag records the assistant’s confirmation but the server cannot verify the chat transcript. If declined, cancelled, unclear, or unapproved, do not call this tool. The save creates a new file only; it never overwrites existing guidance, changes Etsy, or activates private guidance. After success, ask separately whether to turn private guidance on or keep it off.',
       inputSchema: saveInput,
       annotations: {
         readOnlyHint: false,
@@ -46,31 +51,12 @@ export function registerPrivateSetupTools(server: McpServer, writer: PrivatePlay
         openWorldHint: false,
       },
     },
-    async (rawInput, context) => {
+    async (rawInput) => {
       const parsed = saveInput.safeParse(rawInput);
       if (!parsed.success)
-        return failure('Provide the complete nonempty private guidance document.');
-      let result: Awaited<ReturnType<typeof context.mcpReq.elicitInput>>;
-      try {
-        result = await context.mcpReq.elicitInput({
-          mode: 'form',
-          message: [
-            'Save this exact private guidance document?',
-            'Destination: this installation’s private guidance folder (playbook.private.md).',
-            'Accept creates the file only if it does not already exist. Etsy is unchanged and private guidance stays off.',
-            'The selected AI provider has already received the setup conversation and draft.',
-            '--- DOCUMENT START ---',
-            parsed.data.content,
-            '--- DOCUMENT END ---',
-          ].join('\n\n'),
-          requestedSchema: { type: 'object', properties: {} },
-        });
-      } catch {
-        return failure('The confirmation could not be opened. No file was written.');
-      }
-      if (result.action !== 'accept') {
-        return failure('Save was declined or cancelled. No file was written.');
-      }
+        return failure(
+          'Show the complete document and receive the owner’s explicit Save choice before calling this tool with ownerConfirmed:true.',
+        );
       try {
         await writer.create(parsed.data.content);
         return {

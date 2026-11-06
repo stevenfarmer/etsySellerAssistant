@@ -25,7 +25,7 @@ the text.
 | Check facts  | Review and correct a short recap before research.                                                                                                  | The recap separates owner-confirmed facts, preferences, and unanswered or uncertain points. The assistant does not fill gaps with guesses.                                                                              |
 | Research     | See a short research plan based on the interview; remove or edit topics before external research.                                                  | The assistant researches a few relevant topics using generalized, non-identifying queries and current, credible sources. It returns dated sources, useful findings, limits, and practical options.                      |
 | Review draft | Read and edit the complete proposed document, including the research notes. Confirm facts and decide whether it reflects the seller's preferences. | The assistant produces a concise private file, distinguishes evidence from recommendations, keeps unknowns explicit, and makes no local changes yet. The seller can revise, restart, or cancel.                         |
-| Save         | Choose Save in one host confirmation that shows the exact document and fixed destination.                                                          | A local MCP save action writes only the approved text to the configured private-guidance location. It accepts no model-supplied path and never changes Etsy, credentials, or client settings.                           |
+| Save         | Read the complete document in chat and choose Save or Don’t save in one clear question.                                                            | The assistant waits for an explicit Save reply, then calls the fixed-path create-only MCP tool with `ownerConfirmed: true`. The server cannot verify the chat transcript; the flag records the assistant’s assertion.   |
 | Turn on      | After saving, separately choose “Turn on private guidance” or “Keep it off” in chat.                                                               | Only a clear affirmative choice enables private guidance for this installation. This does not retrieve the file; later content is sent to the selected AI provider only when the owner explicitly requests it.          |
 | Finish       | Get a clear saved/on or saved/off result and know how to change the choice later.                                                                  | Saving and activation are separate actions. The server does not read the file on startup or status checks; the existing explicit `get_review_guidance` call contract remains. Turning it off is also available in chat. |
 
@@ -118,9 +118,11 @@ The proposed MCP interface has three parts:
 
 - A read-only, empty-input setup-prompt tool returns the generic interview instructions. It contains
   no seller-specific content and can be used before private mode is enabled.
-- A local save tool accepts the final document and a closed operation choice (`create` or
-  `replace`). It has no path, filename, Etsy, or settings argument. The host confirmation displays
-  the exact document and uses one Accept/Deny choice; host acceptance is required before any write.
+- A local create tool accepts the final document and requires `ownerConfirmed: true`. Before
+  calling it, the assistant must show the complete exact document in chat, ask one Save/Don’t save
+  question, and wait for the owner's explicit Save reply. The argument is an assistant assertion;
+  the server cannot inspect or independently verify the conversation. The tool has no path,
+  filename, Etsy, or settings argument and only creates a file if none exists.
 - A separate in-chat activation action records the owner's explicit “Turn on private guidance”
   choice for this installation. “Keep it off” leaves the saved file inactive. Activation does not
   fetch the file, and future delivery still requires an explicit `get_review_guidance` request. The
@@ -128,11 +130,11 @@ The proposed MCP interface has three parts:
   alter MCP client configuration or broaden Etsy access.
 
 For `create`, the server uses the existing fixed private filename and refuses to overwrite any
-existing file. For `replace`, the owner must first choose to use their existing guidance in the AI
-conversation, review the complete replacement, and accept a host confirmation. The server keeps a
-private recovery copy before an atomic replacement; if the existing file or recovery copy cannot
-be handled safely, it leaves the current file unchanged and reports failure. No file content goes
-to logs, audits, tests, or project tracking.
+existing file. For a future `replace` action, the owner must first choose to use their existing
+guidance in the AI conversation, review the complete replacement, and explicitly choose Replace in
+chat. The server keeps a private recovery copy before an atomic replacement; if the existing file
+or recovery copy cannot be handled safely, it leaves the current file unchanged and reports
+failure. No file content goes to logs, audits, tests, or project tracking.
 
 Use the existing configured private directory and size/content rules. Do not create an arbitrary
 path option. The default remains off. After saving, the assistant asks separately whether to turn
@@ -142,7 +144,9 @@ saving or alter the MCP client's configuration.
 
 ## Failure and privacy behavior
 
-- If confirmation is declined or unavailable, do not write anything.
+- If the owner declines, the response is unclear, or the assistant has not received an explicit
+  Save choice, do not call the save tool. If `ownerConfirmed: true` is missing, the server refuses
+  the call. The server cannot prove that the assistant waited for the owner's reply.
 - If the file already exists during `create`, preserve it and offer the explicit update path.
 - If the file is invalid, unsafe, too large, or cannot be backed up/replaced safely, preserve it and
   explain that no update was saved.
@@ -171,7 +175,7 @@ saving or alter the MCP client's configuration.
   store/product claims.
 - The draft includes a concise research section that distinguishes source evidence from
   recommendations and states uncertainty and freshness limits.
-- The owner reviews the complete exact document before the host asks for one final save decision.
+- The owner reviews the complete exact document in chat before one final Save/Don’t save choice.
 - Save uses only the fixed private location, preserves existing content unless an explicit reviewed
   replacement is accepted, and fails closed on unsafe or uncertain file operations.
 - After saving, the owner separately opts in or keeps guidance off in chat. Activation itself does
@@ -183,8 +187,11 @@ saving or alter the MCP client's configuration.
 
 ## Implementation gate
 
-The owner approved this flow, including the separate explicit in-chat opt-in after saving. T-039
-implements the generic interview/research prompt and a fixed-path, confirmation-gated create-only
-save. The existing file is never overwritten. T-040 covers reviewed replacement and the separate
-in-chat activation/deactivation mechanism; until that work is complete, activation remains the
-existing explicit local configuration choice and setup-created files stay off by default.
+The owner approved this flow, including the separate explicit in-chat opt-in after saving. After
+the Codex host did not open the MCP form, the owner chose one explicit in-chat Save/Don’t save
+choice. T-039 implements the generic interview/research prompt and fixed-path, create-only save;
+the assistant asserts `ownerConfirmed: true` only after an explicit Save reply. The server cannot
+independently verify the chat transcript. The existing file is never overwritten. T-040 covers
+reviewed replacement and separate in-chat activation/deactivation; until that work is complete,
+activation remains the existing explicit local configuration choice and setup-created files stay
+off by default.
