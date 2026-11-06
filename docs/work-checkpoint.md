@@ -53,17 +53,18 @@ resuming; historical evidence is valid only within its stated scope.
   activate guidance.
 - Requirements/status closeout merged in PR #51 as `0735b72137df89d857b181efd35d66c05f4f4b2c`;
   all five checks passed in CI run 42253112633.
+- T-039 follow-up merged in PR #52 as `e849c1add5f2d976b7d1c4a762633540785d2a45`; all five CI
+  checks passed in run 42256015866. Node 24 macOS passed after the original queued job was cancelled
+  and retried. Loopback-enabled local validation passed 292/292 tests.
 - T-039 remains In Review for direct supported-client confirmation. T-040 tracks reviewed
   replacement/recovery and separate in-chat activation/deactivation. Until T-040 is complete,
-  activation still uses the existing local configuration. After the owner restarted the MCP
-  connection, both setup tools appeared and the generic prompt returned. Two `save_private_guidance`
-  calls with fabricated acceptance text returned the generic safe-save failure; the owner confirmed
-  no confirmation form appeared. No successful save was reported. The current code conflates
-  host-confirmation errors with storage errors; a follow-up change separates these outcomes. Do not
-  use real guidance until the host form appears and a declined test confirms no write. Next: merge
-  the failure-diagnostic fix after CI, reload the updated local alpha, and rerun the synthetic decline
-  test. If the host still cannot open the form, keep T-039 In Review and diagnose client elicitation
-  support or local storage setup without reading private files.
+  activation still uses the existing local configuration. After restart, both setup tools appeared
+  and the generic prompt returned, but two fabricated save attempts failed without displaying a
+  confirmation form. The merged fix reports host-confirmation failure separately from private-file
+  storage failure. No successful save response was returned; whether a file was created is not
+  verified. Next: restart the local alpha to load PR #52, then retry the fabricated save. If the form
+  appears, decline and verify that no file was written; if it does not, confirm the explicit
+  host-confirmation-unavailable response. Do not use real guidance until the confirmation flow works.
 
 ## Required replacement at each checkpoint
 
