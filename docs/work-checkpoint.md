@@ -92,6 +92,8 @@ resuming; historical evidence is valid only within its stated scope.
 - PR #61 is open from `codex/t040-consent-decline-acceptance` at head `d4dcca9bedc07d5519a6fe1fcb5f55adade122fa`; it contains documentation only. The prior head's CI run 42306816562 passed secret scanning and both macOS jobs; Windows checks were in progress when the replacement evidence update changed the head. CI is rerunning for the current head.
 - Tracker H41 was read back with status In Review and records the owner-provided Codex Desktop consent tests. Refusal, explicit-consent read, full replacement review, explicit Replace, successful save and private recovery-copy confirmation are verified. Keep T-040 In Review until the owner tests the separate activation/deactivation flow; the update tool confirmed activation remained unchanged. Next, verify activation/deactivation separately without reading the file.
 
+- The owner added T-041 (owner-approved updates to evolving private shop context) and T-042 (inventory unused Etsy API capabilities and define candidate features) to the backlog. Both are design/discovery only; no code or additional access is authorized by these tasks.
+
 ## Required replacement at each checkpoint
 
 Keep this checkpoint short; replace stale entries rather than append chat transcripts. Record
