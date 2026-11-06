@@ -71,7 +71,12 @@ resuming; historical evidence is valid only within its stated scope.
   Replace/Don't replace reply, a matching revision, a private backup and atomic replacement. A
   separate local on/off choice does not read the guidance file; later retrieval remains explicit.
   Manual editing uses the fixed/configured private file path. Loopback-enabled `npm run validate`
-  passed formatting, lint, TypeScript, build and 299/299 offline tests. Owner-provided Codex Desktop transcripts on 6 November 2026 verified the natural-language update trigger, provider-sharing disclosure, explicit consent prompt, declined path (no read or change), and consented path through reading and asking one focused follow-up question. No replacement has yet been proposed or approved, and no saved-file change is evidenced. The separate activation/deactivation flow remains unverified. All five PR CI checks passed in run
+  passed formatting, lint, TypeScript, build and 299/299 offline tests. Owner-provided Codex Desktop
+  transcripts on 6 November 2026 verified the natural-language update trigger, provider-sharing
+  disclosure, and explicit consent prompt. The declined path left the file unread and unchanged; after
+  explicit yes, the assistant read the guidance and asked a focused follow-up question. No replacement
+  has been proposed or approved, and no saved-file change is evidenced. The separate activation/
+  deactivation flow remains unverified. All five PR CI checks passed in run
   42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
   selects the tools from ordinary chat; the MCP server cannot inspect that chat. Tracker H41
   records the scope.
@@ -84,7 +89,11 @@ resuming; historical evidence is valid only within its stated scope.
   its five PR checks passed in run 42289885741 and five post-merge checks passed in run 42290158944. The Google
   Drive worktree's Git metadata remains stale/read-only on the old `codex/t034-guided-setup-design`
   branch.
-- Tracker H41 was read back with status In Review and now records the owner-provided Codex Desktop consent tests. Keep T-040 In Review: the owner has verified both refusal and explicit-consent/read paths, but has not yet seen a replacement draft or tested its Replace/Don't replace gate or separate activation/deactivation. Next, finish the update interview, review the complete proposed replacement, choose Don't replace to leave the private file unchanged, then separately verify the activation choice without reading the file.
+- Tracker H41 was read back with status In Review and records the owner-provided Codex Desktop
+  consent tests. Keep T-040 In Review: both refusal and explicit-consent/read paths are verified, but
+  the replacement review/decline gate and separate activation/deactivation remain untested. Next,
+  finish the update interview, review the complete proposed replacement, choose Don't replace to
+  leave the private file unchanged, then verify activation separately without reading the file.
 
 ## Required replacement at each checkpoint
 
