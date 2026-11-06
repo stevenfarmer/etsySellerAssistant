@@ -49,18 +49,20 @@ resuming; historical evidence is valid only within its stated scope.
   passed all five checks, including macOS and Windows on Node 24 and 26 and the secret scan. The
   owner approved a separate explicit in-chat opt-in after save and requested tailored research based
   on topics in the private guidance. Revised proposal is in PR #48 from
-  `codex/t034-research-activation`, head `163b7c204aa9c151c991ddcc8b47e9608abff40a`. It adds an
+  `codex/t034-research-activation`, head `1cceaa78296010dfb738e842adcfc7261d0e49b7`. It adds an
   owner-approved research plan, dated citations, generalized non-identifying queries, findings in
   the private draft, and separate save / turn-on / explicit retrieval steps. No implementation has
-  started. T-034 remains In Review pending owner review of this revised flow. T-025 remains deferred.
+  started. PR CI run 42140972463 passed all five checks, including Node 24/26 on macOS/Windows and
+  the secret scan. T-034 remains In Review pending owner review of this revised flow. T-025 remains
+  deferred.
 - T-036 tracks the separate pre-v1 security follow-up. Current CI scans Git history for secrets and
   runs `npm audit`; weekly Dependabot updates are configured. No CodeQL workflow was found, and
   GitHub's repo-level secret-scanning, push-protection, and Dependabot-alert switches could not be
   verified through the connected API. Add code scanning and verify those settings before v1; do not
   describe the existing controls as complete security coverage.
 - The PR #48 tracker updates, including T-034's new design scope and T-036, were read back. Exact
-  next action: finish CI on PR #48 and merge if all checks pass; then review the revised design with
-  the owner before implementation.
+  next action: owner reviews the revised design in PR #48. If accepted, merge the design update;
+  implementation still requires that acceptance and separate verification work.
 
 ## Required replacement at each checkpoint
 
