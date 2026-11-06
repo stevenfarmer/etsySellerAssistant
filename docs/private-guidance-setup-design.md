@@ -6,9 +6,13 @@ not authorize implementation or change the current private-guidance storage cont
 ## Goal
 
 Let a seller describe how their store and products work, review a concise set of tailored
-instructions, and save those instructions locally without finding or editing a file by hand.
-The server stores the owner's approved document; the selected AI client conducts the conversation
-and drafts the text.
+instructions, and save those instructions locally without finding or editing a file by hand. The
+interview prepares the assistant to help draft complete listings from owner-provided product
+photos, review existing listings one by one, and provide pricing, seasonal-sales and marketing
+research when asked. It should record the owner's preferences for how those capabilities are used,
+not promise results or grant permission for listing changes. The server stores the owner's
+approved document; the selected AI client conducts the conversation, interprets photos and drafts
+the text.
 
 ## Proposed experience
 
@@ -28,28 +32,46 @@ and drafts the text.
 
 Ask these as optional topics, one at a time, with skip and “unknown” answers supported:
 
-1. Store focus and the kinds of products the owner wants help with.
-2. How products are made, what materials or features are confirmed, and what claims should never be assumed.
+1. Store focus, the kinds of products sold, and what help the owner wants when developing a new item.
+2. How products are made, what details can be confirmed from photos, what materials/features need
+   owner confirmation, and what claims should never be assumed.
 3. Intended buyers or uses, expressed as general audience descriptions rather than customer records.
 4. Preferred writing voice, terms to use or avoid, and how much editing the owner wants.
-5. Current marketing activities, what the owner has observed, and what they would like help improving.
-6. Business priorities, practical constraints, and any owner-defined boundaries for recommendations.
+5. How the owner wants existing listings reviewed, including whether multiple listings should be
+   handled one at a time with separate recommendations.
+6. Current marketing activities, seasonal opportunities, and interest in video, timely themes,
+   trend research or comparable-product pricing.
+7. Business priorities, practical constraints, and any owner-defined boundaries for recommendations.
 
 The assistant should not request passwords, tokens, buyer identities, order details, or other
 customer records. It may ask for broad, optional context, but must label unsupported claims and
 leave missing facts blank rather than generating them.
 
+The goal is a reusable guide for those workflows, not a list of mandatory questions to ask on every
+future request. The assistant should ask only for facts that materially affect a specific listing
+or recommendation, preserve the owner's review of each listing separately, and do pricing/trend
+research when requested. Photo observations do not establish hidden product details. A new-listing
+draft remains a proposal; the current server does not create or publish listings.
+
 ## Required research stage
 
-After the owner corrects the interview recap, the assistant must identify and research a small set
-of relevant, actionable topics before drafting the guidance. Use the interview and owner-approved
-research plan to choose topics; suitable examples include search visibility and listing
-presentation for one-off goods, promotion planning for limited-inventory releases, useful ways to
-evaluate results when each item is unique, and costing or pricing for handmade low-volume work.
-Do not force a topic that does not fit the owner's answers. If useful evidence is unavailable, say
-so and leave that topic as an open question rather than filling the gap with generic advice.
+After the owner corrects the interview recap, the assistant must propose a short research plan for
+the private guidance, show it to the owner, and research the selected topics before drafting. The
+plan should reflect the owner's goals and may cover listing presentation/search guidance,
+comparable-product pricing across Etsy, eBay and other legitimate online sellers, seasonal sales
+planning, or marketing ideas such as video and timely themes. Explain why each topic may help; let
+the owner remove, add or defer topics. Do not force a topic that does not fit the owner's answers.
+The private guidance should also tell the future assistant to perform deeper market or trend
+research only when the owner asks for it, unless the owner chooses another preference. If useful
+evidence is unavailable, say so and leave the topic open rather than filling the gap with generic
+advice.
 
 Use current primary sources where available and reputable specialist sources for broader strategy.
+For pricing research, compare genuinely similar public offers and describe material differences
+such as product type, materials, size, condition and included components when the source shows
+them; distinguish asking prices from completed sales. Never imply access to private sales,
+conversion or competitor-performance data. For trends and seasonal suggestions, state when the
+source was checked and whether the idea is a current observation or a general planning option.
 Record each source's title, link, publication/update date when available, and the date checked.
 Separate sourced facts, the assistant's interpretation, and optional recommendations; note
 conflicts, uncertainty, and limits. Do not invent benchmarks or promise results. Keep research
@@ -68,10 +90,16 @@ The draft should use generic headings that make later review easy:
 
 - Business and product overview — only owner-confirmed facts.
 - Product facts and claim boundaries — confirmed details, plus what needs checking.
+- New-listing workflow — how to combine owner-provided photos with confirmed details and ask about
+  facts that photos cannot establish.
+- Existing-listing reviews — how to make separate recommendations for each selected listing.
 - Intended audiences and uses — owner preferences, not individual customer data.
 - Writing preferences — tone, terminology, and editing preferences.
 - Current marketing context — channels and observations supplied by the owner; no invented
   benchmarks or performance conclusions.
+- Requested research — preferences for when to explore comparable prices, seasonal opportunities,
+  marketing ideas, video and timely themes; cite sources and explain limits when research is asked
+  for. Use dated research findings in this private setup draft only, not as permanently current facts.
 - Research-informed opportunities — a few concise findings, options, trade-offs, and open decisions,
   with dated sources, evidence limits, and a note to verify time-sensitive advice before relying on
   it. This is not a business-specific operations manual.

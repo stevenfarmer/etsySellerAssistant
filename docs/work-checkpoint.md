@@ -38,11 +38,9 @@ resuming; historical evidence is valid only within its stated scope.
   as `333e6af9275c5af602bdee2e3e7112684a828ac9`; CI run 42132738820 passed all five checks.
 - T-034 is In Review / Now. The functional proposal is in
   [private-guidance-setup-design.md](private-guidance-setup-design.md). It proposes a disclosed,
-  optional AI-led interview, owner-checked draft, exact host confirmation, fixed-path local save,
-  safe explicit replacement, tailored research, and a separate in-chat private-mode opt-in. The
-  owner requested research modeled on topics in the private guidance; research details remain private.
-  No code or file-writing tool has been implemented. T-025 remains deferred and is not a current
-  release gate.
+  optional AI-led interview, owner-checked draft, owner-approved research plan, exact host
+  confirmation, fixed-path local save, safe explicit replacement, and a separate in-chat
+  private-mode opt-in. No code or file-writing tool has been implemented. T-025 remains deferred.
 - PR #46 merged the T-034 design proposal to `main` as
   `acb045dbf71b1c72d2898c69c6abc3d4727b063e`; PR #47 synchronized the checkpoint as
   `6b22cc707af2e141b2d05fee5ce495877da16c5f`. Their CI runs 42137972888 and 42139113603 each
@@ -60,11 +58,17 @@ resuming; historical evidence is valid only within its stated scope.
   GitHub's repo-level secret-scanning, push-protection, and Dependabot-alert switches could not be
   verified through the connected API. Add code scanning and verify those settings before v1; do not
   describe the existing controls as complete security coverage.
-- The PR #48 tracker updates, including T-034's new design scope and T-036, were read back. The
-  owner clarified that research should provide concise decision support, not draft business-specific
-  operating procedures unless requested. Exact next action: review the revised proposal in PR #48
-  with the owner. If accepted, merge the design update; implementation still requires that
-  acceptance and separate verification work.
+- PR #48's current head is `3d910339d4fe72cf41241c78fdde212834017659`; the previously reported CI
+  run 42142428469 passed all five checks on its earlier head. The connected tracker was read back
+  at T-034/T-036. The owner has now clarified V1: complete listing drafts from owner-provided
+  product photos, separate recommendations for each selected existing listing, and on-request
+  research for comparable prices, seasonal sales and marketing/video/theme ideas. Broader
+  listing/pricing management is future vision; no automatic creation, publishing or price change is
+  implied. Documentation and tracker changes for T-037 photo-based drafts and T-038 requested
+  research are being prepared locally and have not yet been synchronized. Exact next action: finish
+  the scope/design edits, update and read back the tracker, sync the changes to PR #48, run the
+  Markdown checks, and verify current PR CI. Then return the updated proposal for owner review;
+  do not implement T-034/T-037/T-038 before their scope is accepted.
 
 ## Required replacement at each checkpoint
 

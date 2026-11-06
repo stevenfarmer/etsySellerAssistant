@@ -13,13 +13,21 @@ publish the current read-only build as v1. The package's existing unpublished `1
 does not establish completion; choose the next candidate version when preparing that artifact.
 Published `v0.1.0-alpha.1` and its tag remain unchanged.
 
-v1 combines listing facts, an owner-supplied buyer/product brief, dated official Etsy guidance,
-and optional owner-supplied aggregate performance evidence. The connected MCP client does the
-reasoning; Codex Desktop is the current v1 acceptance client. The local MCP server supplies bounded
-data and enforces deterministic safety/validation rules. Broader client acceptance remains tracked
-separately and this clarification does not expand v1's platform scope.
-No hosted AI service or OpenAI API account is added. Recommendations explain their evidence,
-buyer benefit, uncertainty and measurement plan, rather than promising rankings or sales.
+v1 supports two core listing workflows: draft a complete proposed listing from owner-provided
+product photos and confirmed facts, and review one or more existing listings with separate
+recommendations for each. When asked, it also provides current, sourced decision support for
+comparable-product pricing, seasonal sales planning and marketing ideas, including suitable video
+and timely-theme ideas. Pricing comparisons should cover relevant Etsy, eBay and other legitimate
+online sellers, explain why examples are comparable, and state the source date and uncertainty.
+These are recommendations for the owner to decide on; they do not guarantee sales or rankings.
+
+The connected MCP client does the reasoning and image interpretation; the owner provides the
+photos to that client. The local MCP server supplies bounded Etsy data and enforces deterministic
+safety/validation rules. Codex Desktop remains the current v1 acceptance client. Broader client
+acceptance remains tracked separately and this clarification does not expand v1's platform scope.
+No hosted AI service or OpenAI API account is added. “Manage nearly all aspects of listings and
+pricing” is longer-term product vision, not a v1 commitment to automatic changes or expanded write
+permissions.
 
 ## Owner follow-up — measurement scope, 5 November 2026
 
@@ -45,17 +53,21 @@ before write-access implementation. The guarded-edit design baseline is recorded
 scope upgrades, reset, reauthorization and release
 publication still need concrete authorization. Do not disturb the healthy connection.
 
-No price, inventory, images, variations, shipping, publishing, creation/deletion, orders or
-buyer-data tools are added by this decision. Broader analytics API access also needs a separate
-requirement/data-availability review. Recommendations may flag missing evidence; they must not
-pretend to inspect unavailable photos, policies, search volumes or competitor performance.
+No price, inventory, images, variations, shipping, listing creation/deletion, orders or buyer-data
+write tools are added by this decision. The client may interpret photos that the owner supplies in
+the conversation; it must ask the owner to confirm details that cannot be reliably seen. Market
+research is on request and must cite current comparable sources; it must not imply access to private
+sales data, search volumes or competitor performance metrics. Broader analytics API access needs a
+separate requirement/data-availability review.
 
 ## Delivery and acceptance
 
-The [current matrix](../requirements-and-acceptance.md) maps the expanded M4 and new M6/M7
-criteria to tasks. T-011 covers detailed guarded-write design/security review; T-023 covers
-intelligent review and fabricated evaluations; T-024 covers guarded-edit implementation after
-review. T-025's measurement design is in the backlog and is not a current v1 release gate; T-031
+The [current matrix](../requirements-and-acceptance.md) maps M4 and M6/M7 plus the new photo-draft
+and on-request research requirements to tasks. T-011 covers detailed guarded-write design/security
+review; T-023 covers the delivered intelligent-review workflow and fabricated evaluations; T-024
+covers guarded-edit implementation after review. T-037 tracks photo-based listing drafts and T-038
+tracks requested pricing/marketing research. T-025's measurement design is in the backlog and is
+not a current v1 release gate; T-031
 tracks scoped owner review of private-guidance usefulness and Mac workflow acceptance; that
 acceptance is complete. T-012 remains open for final product acceptance and separately authorized
 publication.

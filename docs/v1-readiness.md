@@ -31,16 +31,17 @@ This was a fresh checkout on the existing Mac, not a new clean-machine/live OAut
 
 ## Work still required for v1
 
-The owner confirmed editing and intelligent sales-oriented recommendations are expected in v1.
+The owner confirmed v1 includes photo-based complete listing drafts, distinct reviews for selected existing listings, and on-request comparable-pricing and seasonal/marketing research, alongside guarded edits.
 [ADR 0005](decisions/0005-v1-intelligence-and-guarded-edits.md) supersedes the read-only-only
 release recommendation. T-023 (intelligent review), T-011 (guarded-write design/security review),
 and T-024 (guarded edits) are complete for their stated criteria. T-025 measurement design was moved to the
 backlog by the owner on 5 November 2026; its method does not fit unique, one-off handmade items
 yet and it is not a current release gate. T-031 Mac usefulness and guarded-edit acceptance passed
 on 5 November 2026. T-035's revised confirmation also passed Mac owner review and merged in PR #44.
-T-034's functional first-run private-guidance proposal is being revised to include tailored,
-source-backed research and a separate explicit in-chat activation step at the owner's request;
-implementation has not started.
+T-034's functional first-run private-guidance proposal in PR #48 is being revised to support those
+workflows, include tailored source-backed research, and keep the separate explicit in-chat activation
+step. No implementation has started. T-037 and T-038 now track photo-based drafts and requested
+price/marketing research; broader listing/pricing management remains longer-term vision.
 The CI workflow scans Git history for secrets and runs `npm audit` across its Node/OS matrix;
 Dependabot weekly dependency updates are configured. No CodeQL workflow was found, and the current
 connection could not verify GitHub alert or push-protection settings. T-036 tracks closing this

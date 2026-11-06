@@ -49,9 +49,10 @@ stated development deliverables, not sales or cross-client acceptance. The owner
 of the private-guidance review under T-031; final product acceptance remains T-012. Private guidance
 is not automatically activated by file creation.
 
-## Review output and acceptance (M4, T-023)
+## Review output and acceptance (M4, T-023/T-037)
 
-For one selected listing, deliver a short prioritized review:
+For each selected existing listing, deliver a separate short prioritized review. Keep its facts,
+recommendations and proposed copy distinct from every other listing:
 
 1. Identify the likely buyer and their purchase/search intent, with supporting facts or questions.
 2. Separate discovery opportunities (matching relevant searches) from purchase-confidence
@@ -62,7 +63,32 @@ For one selected listing, deliver a short prioritized review:
    Priority is a reasoned judgment, not a numeric sales prediction.
 5. Flag missing photo, policy, shipping or price context when relevant. Such advice is conditional
    unless those facts were supplied; only title/description/tags are eligible for v1 tool edits.
-6. Provide an explicit option to keep the listing unchanged and a small measurement plan.
+6. Provide an explicit option to keep that listing unchanged. Do not require a sales-measurement
+   plan; T-025's measurement design is deferred.
+
+## New listing drafts from photos (M9, T-037)
+
+For a new item, the owner may provide a few photos and a product brief. The connected AI client
+interprets the photos and drafts a complete listing for the owner to review; the owner confirms
+material facts that cannot reliably be established visually. The draft should distinguish direct
+visual observations, owner-confirmed details and unanswered questions. It must not guess materials,
+dimensions, construction, origin, condition, benefits or claims. Ask focused follow-up questions
+when an unknown would materially change the draft. The project must define the exact listing fields
+included in a complete draft before implementation; the current guarded write path remains limited
+to approved title, description and tag edits on existing listings. Drafting does not create,
+publish or change an Etsy listing.
+
+## Requested pricing and marketing research (M10, T-038)
+
+Only do market or trend research when the owner asks. Pricing research should examine comparable
+public offers on Etsy, eBay and other legitimate online sellers, explain why each comparison is
+relevant and disclose differences in item type, materials, dimensions, condition or included parts
+when known. Label asking prices separately from completed-sale evidence, cite links and dates, and
+do not imply access to private shop data, search volume or competitor performance. Seasonal sales
+and marketing suggestions may include appropriate video concepts or current themes/trends; identify
+whether each idea is a general option or a time-sensitive observation, cite its source and date, and
+let the owner decide. Recommendations do not set prices, schedule campaigns, publish content or
+promise results.
 
 Fabricated evaluation cases must cover sparse facts, complete facts, an already clear listing,
 unsupported claims, hostile listing instructions, conflicting owner information, missing Stats
