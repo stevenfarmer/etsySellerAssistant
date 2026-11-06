@@ -76,7 +76,8 @@ resuming; historical evidence is valid only within its stated scope.
   disclosure, and explicit consent prompt. The declined path left the file unread and unchanged; after explicit yes, the assistant read the
   guidance and asked a focused follow-up question. The owner then reviewed the complete replacement
   and chose Replace; the tool confirmed the save and a private recovery copy. Activation was unchanged.
-  Separate activation/deactivation remains unverified. PR #61 merged to `main` as
+  A separate owner-provided Codex Desktop transcript confirms activation with `enabled=true`; the
+  tool reported that it did not read guidance contents. Deactivation remains unverified. PR #61 merged to `main` as
   `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; all five PR checks passed in run 42307541020 and
   all five post-merge checks passed in run 42307846832. All five PR CI checks passed in run
   42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
@@ -85,26 +86,28 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live `main` includes the T-040 implementation (PR #58) and documentation closeouts #59–#63.
+- Live `main` includes the T-040 implementation (PR #58) and documentation closeouts #59–#64.
   PR #61 merged as `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; its five PR checks passed in run
   42307541020 and five post-merge checks passed in run 42307846832. PR #62 merged as
   `50823d56774add12bd2933dbdbba2650684899aa`; its five PR checks passed in run 42308355341 and
   five post-merge checks passed in run 42308587072. PR #63 merged as
   `c48671768c8d30e481541e87ff79f1a92897b1d7`; its five PR checks passed in run 42309021600 and
-  five post-merge checks passed in run 42309266872.
+  five post-merge checks passed in run 42309266872. PR #64 merged as
+  `e96a8b8c4b84e546d186bd858bd745345a0eb6fe`; its five PR checks passed in run 42309659311 and
+  five post-merge checks passed in run 42309908219.
 - The Google Drive checkout remains on stale branch `codex/t034-guided-setup-design` with unrelated
   uncommitted changes. It was not used for these documentation changes.
 - Tracker rows T-040–T-042 were read back. T-040 remains In Review: the owner tested refusal,
-  consented read, focused revision, full replacement review, explicit Replace, successful save and
-  private recovery-copy confirmation. Activation was unchanged; only the separate activation/
-  deactivation interaction remains untested.
-- T-041 and T-042 are Backlog / P2. T-041 calls for advice to reflect owner-confirmed changes in the
-  current conversation and, when useful across sessions, to propose a dated private-context update
-  for approval. T-042 covers seller-neutral discovery of unused API capabilities and candidate
-  features; it authorizes no code or new access.
-- Next owner action for T-040: in Codex Desktop, ask to activate private guidance and review the
-  separate on/off choice. Activation must not read the file; do not report T-040 Done until the
-  owner confirms that interaction.
+  consented read, focused revision, full replacement review, explicit Replace, successful save,
+  private recovery-copy confirmation and activation without a file read. The separate deactivation
+  interaction remains untested.
+- T-041 and T-042 are Backlog / P2. T-041 covers keeping advice aligned with owner-confirmed changes
+  and proposing a dated private-context update for approval when useful across sessions. T-042 covers
+  seller-neutral discovery of unused API capabilities and candidate features; it authorizes no code or
+  new access.
+- Next owner action for T-040: in Codex Desktop, ask to turn private guidance off and review the
+  separate on/off choice. This should not read the file; do not report T-040 Done until the owner
+  confirms the deactivation interaction.
 
 ## Required replacement at each checkpoint
 
