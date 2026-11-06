@@ -56,6 +56,12 @@ conflicts, uncertainty, and limits. Do not invent benchmarks or promise results.
 queries generic: do not send the shop name, location, listing details, customer information,
 private-document text, or other identifying facts to search services.
 
+Keep the research useful and high-level by default: explain why a finding may matter, outline a
+small number of options and trade-offs, and flag any decision the owner may want to make. Do not
+turn research into business-specific operating instructions, settings, commitments, or finished
+copy unless the owner asks for that. If deeper work would require choosing operational details,
+ask whether the owner wants to explore it before drafting those details.
+
 ## Private document structure
 
 The draft should use generic headings that make later review easy:
@@ -66,8 +72,9 @@ The draft should use generic headings that make later review easy:
 - Writing preferences — tone, terminology, and editing preferences.
 - Current marketing context — channels and observations supplied by the owner; no invented
   benchmarks or performance conclusions.
-- Research-informed opportunities — a few tailored findings and practical options, with dated
-  sources, evidence limits, and a note to verify time-sensitive advice before relying on it.
+- Research-informed opportunities — a few concise findings, options, trade-offs, and open decisions,
+  with dated sources, evidence limits, and a note to verify time-sensitive advice before relying on
+  it. This is not a business-specific operations manual.
 - Priorities, constraints, and open questions.
 - Review note — owner should revisit the file when products or priorities change.
 
@@ -126,6 +133,9 @@ saving or alter the MCP client's configuration.
 - Questions are optional, focused, and adaptive; the owner can skip, mark unknown, revise, or stop.
 - After the recap is corrected, the assistant researches a few relevant topics and cites dated,
   credible sources; queries contain no identifying seller details.
+- Research is concise decision support, not prescriptive business-specific setup or finished
+  operational copy. The assistant explores detailed operational choices only at the owner's
+  request.
 - The draft distinguishes confirmed facts, preferences, and open questions and contains no invented
   store/product claims.
 - The draft includes a concise research section that distinguishes source evidence from
