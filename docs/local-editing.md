@@ -7,9 +7,10 @@ server stays status-only, and the published alpha remains read-only.
 ## What the two steps do
 
 1. `prepare_listing_edit` reads the selected listing, builds a short-lived proposal and opens the
-   client's confirmation form with its exact current and proposed values. The client Accept/Deny
-   choice is the approval. Accept records permission for a later step; it does not edit Etsy.
-2. `apply_listing_edit` accepts only that proposal ID. It can use the approval once. The tool
+   client's confirmation form with its exact current and proposed values. Accept approves those
+   exact changes. The assistant should then immediately call `apply_listing_edit`; the confirmation
+   itself does not send the Etsy update.
+2. `apply_listing_edit` accepts only that proposal ID and consumes the approval once. The tool
    checks the owner, shop, listing, timestamp and current values again; validates the resulting
    draft; saves and flushes a local audit intent; sends one update containing only the approved
    changed fields; then reads the listing to verify or reconcile the result.

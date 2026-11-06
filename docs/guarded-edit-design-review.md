@@ -4,8 +4,9 @@ Updated 5 November 2026. Phase 3A / T-011 technical design baseline, completed a
 This review records the design before implementation. The later T-030 implementation merged in
 PR #39 as `dd77876d52c0a93db48bf95d61d0ca25f248f817` after offline verification and all five CI
 checks passed. The opt-in unpublished development alpha now contains guarded apply; published
-alpha.1 remains read-only. No live grant or listing change was performed, and owner acceptance
-remains T-031.
+alpha.1 remains read-only. T-031 Mac acceptance later verified one owner-authorized update and its
+audit outcome. T-035 refines the confirmation copy and assistant follow-through without changing
+the approval, audit, or apply boundaries.
 
 ## Decision and gate
 
@@ -168,6 +169,12 @@ offline implementation or CI.
 The addendum changes the timing of the already-required human confirmation to match the verified
 T-032 interaction; it does not change the immutable proposal, one-use, field allowlist, identity,
 stale-check, audit-before-write, no-retry, or reconciliation requirements above.
+
+### Confirmation copy follow-up — T-035
+
+The seller-facing form should explain that Accept approves the exact change and that the assistant
+will apply it to Etsy and verify it. Keep the instruction to treat listing text as untrusted data in tool
+metadata, where it guides the assistant without appearing in the seller's confirmation.
 
 ### Sources checked 3 November 2026
 

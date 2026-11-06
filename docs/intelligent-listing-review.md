@@ -1,6 +1,6 @@
 # Intelligent listing review: v1 requirements
 
-Updated 1 November 2026. Approved goal: recommendations that help the right buyers find and
+Updated 5 November 2026. Approved goal: recommendations that help the right buyers find and
 understand the item, followed by safely applying the edits the owner approves. Chunk 2A implements the generic workflow/brief and deterministic copy validator; broader
 evaluation/rubric and initial private playbook are delivered in chunk 2B; no sales improvement
 or final owner usefulness acceptance is established. See
@@ -45,8 +45,9 @@ plus an initial private local playbook outside Git. Eight reviews passed declare
 and the self-review threshold; the same assistant generated and scored them. This is not an
 independent/automated model benchmark. The public regression suite verifies evaluation rejection
 logic and its semantic limits; full validation passed 242 offline tests. T-023 Done denotes the
-stated development deliverables, not owner usefulness/sales/private-client/edit acceptance, which
-remains later work. Private guidance is not automatically activated by file creation.
+stated development deliverables, not sales or cross-client acceptance. The owner accepted usefulness
+of the private-guidance review under T-031; final product acceptance remains T-012. Private guidance
+is not automatically activated by file creation.
 
 ## Review output and acceptance (M4, T-023)
 
@@ -75,8 +76,8 @@ Owner usefulness acceptance remains distinct from those checks and from observed
 
 The 3 November 2026 technical baseline is in [the guarded-edit design review](guarded-edit-design-review.md).
 Phase 4A–4C implementation, offline verification and review are complete; the unpublished
-development alpha has the guarded apply path. Live edit acceptance and owner usefulness remain
-separate under T-031. The published alpha.1 remains read-only.
+development alpha has the guarded apply path. T-031 Mac acceptance is complete; T-035 refines the
+confirmation wording and assistant follow-through. The published alpha.1 remains read-only.
 
 Before implementing write access, review the exact tool contracts and threat/failure model:
 
@@ -102,7 +103,7 @@ so a repeat-item sales comparison is not a useful default. No metric or comparis
 selected. Revisit the goal and agree how success should be assessed before designing a workflow.
 Do not treat sales of different one-off items as interchangeable or claim that an edit caused a
 sale. T-025 is not a current v1 release gate. Owner review of the guidance and guarded-edit
-workflow remains a separate T-031 acceptance activity.
+workflow was accepted in T-031; T-025 measurement remains deferred.
 
 ## Official guidance checked 1 November 2026
 

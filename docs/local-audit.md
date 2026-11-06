@@ -60,4 +60,4 @@ symlinks, hard links, concurrent writers, monthly rotation, torn records, lock r
 storage failures before and after a simulated operation. The T-030 integration tests use mocked
 Etsy transport and temporary audit folders; they do not call Etsy or create a live listing edit.
 T-030 connected this store to the guarded apply workflow in PR #39. The separate owner acceptance
-gate remains T-031.
+Mac acceptance was completed in T-031; the confirmation-copy follow-up is tracked as T-035.

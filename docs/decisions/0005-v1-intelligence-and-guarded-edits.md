@@ -56,8 +56,9 @@ The [current matrix](../requirements-and-acceptance.md) maps the expanded M4 and
 criteria to tasks. T-011 covers detailed guarded-write design/security review; T-023 covers
 intelligent review and fabricated evaluations; T-024 covers guarded-edit implementation after
 review. T-025's measurement design is in the backlog and is not a current v1 release gate; T-031
-tracks scoped owner review of private-guidance usefulness and Mac workflow acceptance. T-012
-remains open for the completed product's final acceptance and separately authorized publication.
+tracks scoped owner review of private-guidance usefulness and Mac workflow acceptance; that
+acceptance is complete. T-012 remains open for final product acceptance and separately authorized
+publication.
 
 The [review requirements](../intelligent-listing-review.md) define recommendation quality.
 Passing format/unit tests alone cannot establish AI usefulness or sales improvement. Retain
