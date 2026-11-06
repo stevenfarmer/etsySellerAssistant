@@ -6,6 +6,8 @@ import { registerGuidanceTool } from './mcp/guidance-tool.js';
 import type { ReviewGuidanceService } from './guidance/review-guidance.js';
 import { registerDraftValidationTool } from './mcp/draft-tool.js';
 import { registerEditProposalTools } from './mcp/edit-proposal-tools.js';
+import { registerPrivateSetupTools } from './mcp/private-setup-tools.js';
+import type { PrivatePlaybookWriter } from './local/private-playbook-writer.js';
 import type { ListingEditProposal } from './edits/proposal-service.js';
 import type { ListingApplyResult } from './edits/apply-service.js';
 
@@ -17,6 +19,7 @@ export function createServer(
     readonly guidanceService?: ReviewGuidanceService;
     readonly draftValidation?: boolean;
     readonly editProposals?: boolean;
+    readonly privatePlaybookWriter?: PrivatePlaybookWriter;
     readonly applyService?: {
       apply(proposal: ListingEditProposal): Promise<ListingApplyResult>;
     };
@@ -60,6 +63,8 @@ export function createServer(
       });
   }
   if (options.guidanceService) registerGuidanceTool(server, options.guidanceService);
+  if (options.privatePlaybookWriter)
+    registerPrivateSetupTools(server, options.privatePlaybookWriter);
   if (options.draftValidation) registerDraftValidationTool(server);
 
   return server;

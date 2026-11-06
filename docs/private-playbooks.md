@@ -2,9 +2,13 @@
 
 Chunk 1A implements a generic [starter template](../templates/playbook.example.md), path resolver
 and safe private reader. Chunk 1B adds `get_review_guidance` to the opt-in alpha, with explicit
-source labels. The default server remains status-only. Chunk 2B creates an initial private owner playbook outside Git using no-clobber creation,
-private permissions and explicit local verification. CI/private-mode regression tests still
-use fabricated temporary files and never read that actual playbook. Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
+source labels. Chunk 2B creates an initial private owner playbook outside Git using no-clobber
+creation and private permissions. T-039 adds the generic setup interview/research prompt and
+`save_private_guidance`, which shows the full draft in one host confirmation and creates the fixed
+file only when it does not already exist. It does not activate private mode. T-040 tracks reviewed
+replacement and the separate in-chat activation/deactivation action. The default server remains
+status-only. Tests use fabricated temporary files and never read any actual owner playbook.
+Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
 separately from automated STDIO verification (T-027 Done).
 
 ## How guidance is selected
@@ -25,10 +29,13 @@ Private use is opt-in through trusted MCP client environment settings:
 | `ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY` | Optional absolute private directory override in private mode. Otherwise use the Mac default below. Generic mode never resolves this value. |
 
 Only set private mode when you intend to share that file's contents with the selected AI
-application/provider. Keep credentials out of the file. The existing shop configuration schema,
-Keychain, Etsy authorization and OAuth scopes are unchanged. Settings take effect in a newly
-started MCP process; file-content edits are reloaded on each explicit call. No setup writer or
-CLI command is added, and no private file is created or overwritten automatically.
+application/provider. Keep credentials out of the file. T-039's save tool accepts no path and
+requires the host's explicit Accept action; it uses the fixed guidance filename, private
+permissions and create-only behavior. It never replaces existing content. The existing shop
+configuration schema, Keychain, Etsy authorization and OAuth scopes are unchanged. Environment
+settings take effect in a newly started MCP process; file-content edits are reloaded on each
+explicit call. T-040 will replace the manual activation setting with the approved separate
+in-chat choice; until then, use the existing explicit local setting.
 
 ## Tool result and errors
 
