@@ -257,10 +257,12 @@ test('real alpha STDIO advertises and returns generic guidance with unchanged st
     assert.deepEqual(inventory.tools.map((t) => t.name).sort(), [
       'apply_listing_edit',
       'get_listing',
+      'get_private_guidance_setup',
       'get_review_guidance',
       'get_setup_status',
       'list_active_listings',
       'prepare_listing_edit',
+      'save_private_guidance',
       'validate_listing_draft',
     ]);
     const meta = inventory.tools.find((t) => t.name === 'get_review_guidance');

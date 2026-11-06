@@ -1,7 +1,8 @@
 # Guided private-guidance setup: functional design proposal
 
-Status: proposed for owner review under T-034. This document describes a user experience; it does
-not authorize implementation or change the current private-guidance storage contract.
+Status: approved by the owner on 6 November 2026. The first implementation slice is tracked as
+T-039; reviewed replacement and explicit activation remain follow-up work under T-040. This design
+does not authorize Etsy access, listing edits or publication.
 
 ## Goal
 
@@ -182,8 +183,8 @@ saving or alter the MCP client's configuration.
 
 ## Implementation gate
 
-The owner has requested a separate explicit in-chat opt-in after saving; it must not be bundled with
-the save confirmation or trigger automatic retrieval. The exact local activation mechanism is an
-implementation-design question. No code or tool changes should start until the owner reviews this
-revised flow, especially the research stage and the distinction between saving, turning guidance
-on, and explicitly retrieving it.
+The owner approved this flow, including the separate explicit in-chat opt-in after saving. T-039
+implements the generic interview/research prompt and a fixed-path, confirmation-gated create-only
+save. The existing file is never overwritten. T-040 covers reviewed replacement and the separate
+in-chat activation/deactivation mechanism; until that work is complete, activation remains the
+existing explicit local configuration choice and setup-created files stay off by default.

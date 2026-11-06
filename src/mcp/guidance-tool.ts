@@ -17,6 +17,8 @@ const messages: Record<PlaybookErrorCode, string> = {
     'Private guidance must be nonblank valid UTF-8 without unsupported control characters. Review the file locally.',
   changed_file:
     'Private guidance changed while being read. Save a stable file, then explicitly request guidance again.',
+  already_exists:
+    'Private guidance could not be loaded safely. Check the local file and storage guide.',
   io_failed:
     'Private guidance could not be read safely. Check the local file and storage guide; no generic fallback was returned.',
 };

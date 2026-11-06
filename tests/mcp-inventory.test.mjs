@@ -69,10 +69,12 @@ test('the explicit alpha entry point exposes read and proposal tools without sta
   assert.deepEqual(await readInventory('./dist/src/alpha.js'), [
     'apply_listing_edit',
     'get_listing',
+    'get_private_guidance_setup',
     'get_review_guidance',
     'get_setup_status',
     'list_active_listings',
     'prepare_listing_edit',
+    'save_private_guidance',
     'validate_listing_draft',
   ]);
 });

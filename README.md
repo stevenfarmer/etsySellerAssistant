@@ -69,7 +69,7 @@ custom guidance. Owner usefulness and one guarded edit were accepted in T-031; T
 
 ## Version roadmap
 
-- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. T-031 owner usefulness and edit acceptance and T-035 confirmation UX are complete; T-034 guided private-guidance setup design is next, followed by final T-012 acceptance.
+- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. T-031 owner usefulness and edit acceptance and T-035 confirmation UX are complete. The approved guided private-guidance setup is being implemented in T-039/T-040; photo-based listing drafts and requested research remain T-037/T-038, followed by final T-012 acceptance.
 - **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.

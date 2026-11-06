@@ -13,6 +13,7 @@ export type PlaybookErrorCode =
   | 'too_large'
   | 'invalid_content'
   | 'changed_file'
+  | 'already_exists'
   | 'io_failed';
 
 export class PlaybookError extends Error {

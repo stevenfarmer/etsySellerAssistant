@@ -38,10 +38,12 @@ and T-024 (guarded edits) are complete for their stated criteria. T-025 measurem
 backlog by the owner on 5 November 2026; its method does not fit unique, one-off handmade items
 yet and it is not a current release gate. T-031 Mac usefulness and guarded-edit acceptance passed
 on 5 November 2026. T-035's revised confirmation also passed Mac owner review and merged in PR #44.
-T-034's functional first-run private-guidance proposal in PR #48 is being revised to support those
-workflows, include tailored source-backed research, and keep the separate explicit in-chat activation
-step. No implementation has started. T-037 and T-038 now track photo-based drafts and requested
-price/marketing research; broader listing/pricing management remains longer-term vision.
+T-034's functional first-run private-guidance proposal was approved and merged in PR #48 as
+`23e1a0e0318783ab56240c9566421fa17cad9bfe`; all five checks passed on reviewed head
+`52fde35efe36ff472b9511cd12a74f13f49437ea` (run 42146691927). T-039 implements the setup prompt
+and fixed-path create-only save. T-040 tracks safe reviewed replacement and the separate in-chat
+activation choice. T-037 and T-038 track photo-based drafts and requested price/marketing research;
+broader listing/pricing management remains longer-term vision.
 The CI workflow scans Git history for secrets and runs `npm audit` across its Node/OS matrix;
 Dependabot weekly dependency updates are configured. No CodeQL workflow was found, and the current
 connection could not verify GitHub alert or push-protection settings. T-036 tracks closing this
