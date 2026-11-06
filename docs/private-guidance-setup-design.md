@@ -6,36 +6,85 @@ not authorize implementation or change the current private-guidance storage cont
 ## Goal
 
 Let a seller describe how their store and products work, review a concise set of tailored
-instructions, and save those instructions locally without finding or editing a file by hand.
-The server stores the owner's approved document; the selected AI client conducts the conversation
-and drafts the text.
+instructions, and save those instructions locally without finding or editing a file by hand. The
+interview prepares the assistant to help draft complete listings from owner-provided product
+photos, review existing listings one by one, and provide pricing, seasonal-sales and marketing
+research when asked. It should record the owner's preferences for how those capabilities are used,
+not promise results or grant permission for listing changes. The server stores the owner's
+approved document; the selected AI client conducts the conversation, interprets photos and drafts
+the text.
 
 ## Proposed experience
 
-| Step         | Seller experience                                                                                                                         | Product behavior                                                                                                                                                                              |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Start        | Ask the connected assistant to help set up private seller guidance.                                                                       | The assistant retrieves a generic setup prompt from the local server. Nothing is loaded automatically at startup.                                                                             |
-| Disclosure   | Before asking questions, learn that answers and any existing guidance shown to the assistant are sent to the selected AI client/provider. | The assistant explains that the setup conversation makes no Etsy requests, asks for no credentials or customer records, and can be stopped or skipped at any time.                            |
-| Interview    | Answer one short question at a time; skip anything or say “not sure.”                                                                     | The assistant adapts follow-up questions to the answers and asks only for information that could materially change its recommendations.                                                       |
-| Check facts  | Review a short recap before drafting.                                                                                                     | The recap separates owner-confirmed facts, preferences, and unanswered or uncertain points. The assistant does not fill gaps with guesses.                                                    |
-| Review draft | Read and edit the complete proposed document. Confirm facts and decide whether it reflects the seller's preferences.                      | The assistant produces a concise private file, keeps unknowns explicit, and makes no local changes yet. The seller can revise, restart, or cancel.                                            |
-| Save         | Choose Save in one host confirmation that shows the exact document and fixed destination.                                                 | A local MCP save action writes only the approved text to the configured private-guidance location. It accepts no model-supplied path and never changes Etsy, credentials, or client settings. |
-| Finish       | Get a clear saved/not-saved result and the next step for using private guidance.                                                          | Saving does not activate private mode. The server keeps the current explicit opt-in and `get_review_guidance` call contract; it does not read the file on startup or status checks.           |
+| Step         | Seller experience                                                                                                                                  | Product behavior                                                                                                                                                                                                        |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Start        | Ask the connected assistant to help set up private seller guidance.                                                                                | The assistant retrieves a generic setup prompt from the local server. Nothing is loaded automatically at startup.                                                                                                       |
+| Disclosure   | Before asking questions, learn that answers and any existing guidance shown to the assistant are sent to the selected AI client/provider.          | The assistant explains that the setup conversation makes no Etsy requests, asks for no credentials or customer records, and can be stopped or skipped at any time.                                                      |
+| Interview    | Answer one short question at a time; skip anything or say “not sure.”                                                                              | The assistant adapts follow-up questions to the answers and asks only for information that could materially change its recommendations.                                                                                 |
+| Check facts  | Review and correct a short recap before research.                                                                                                  | The recap separates owner-confirmed facts, preferences, and unanswered or uncertain points. The assistant does not fill gaps with guesses.                                                                              |
+| Research     | See a short research plan based on the interview; remove or edit topics before external research.                                                  | The assistant researches a few relevant topics using generalized, non-identifying queries and current, credible sources. It returns dated sources, useful findings, limits, and practical options.                      |
+| Review draft | Read and edit the complete proposed document, including the research notes. Confirm facts and decide whether it reflects the seller's preferences. | The assistant produces a concise private file, distinguishes evidence from recommendations, keeps unknowns explicit, and makes no local changes yet. The seller can revise, restart, or cancel.                         |
+| Save         | Choose Save in one host confirmation that shows the exact document and fixed destination.                                                          | A local MCP save action writes only the approved text to the configured private-guidance location. It accepts no model-supplied path and never changes Etsy, credentials, or client settings.                           |
+| Turn on      | After saving, separately choose “Turn on private guidance” or “Keep it off” in chat.                                                               | Only a clear affirmative choice enables private guidance for this installation. This does not retrieve the file; later content is sent to the selected AI provider only when the owner explicitly requests it.          |
+| Finish       | Get a clear saved/on or saved/off result and know how to change the choice later.                                                                  | Saving and activation are separate actions. The server does not read the file on startup or status checks; the existing explicit `get_review_guidance` call contract remains. Turning it off is also available in chat. |
 
 ## Interview outline
 
 Ask these as optional topics, one at a time, with skip and “unknown” answers supported:
 
-1. Store focus and the kinds of products the owner wants help with.
-2. How products are made, what materials or features are confirmed, and what claims should never be assumed.
+1. Store focus, the kinds of products sold, and what help the owner wants when developing a new item.
+2. How products are made, what details can be confirmed from photos, what materials/features need
+   owner confirmation, and what claims should never be assumed.
 3. Intended buyers or uses, expressed as general audience descriptions rather than customer records.
 4. Preferred writing voice, terms to use or avoid, and how much editing the owner wants.
-5. Current marketing activities, what the owner has observed, and what they would like help improving.
-6. Business priorities, practical constraints, and any owner-defined boundaries for recommendations.
+5. How the owner wants new listing drafts to feel: a conversational, form-like flow; useful field
+   suggestions; how to handle skips, corrections and feedback; and how much detail to show at once.
+6. How the owner wants existing listings reviewed, including whether multiple listings should be
+   handled one at a time with separate recommendations.
+7. Current marketing activities, seasonal opportunities, and interest in video, timely themes,
+   trend research or comparable-product pricing.
+8. Business priorities, practical constraints, and any owner-defined boundaries for recommendations.
 
 The assistant should not request passwords, tokens, buyer identities, order details, or other
 customer records. It may ask for broad, optional context, but must label unsupported claims and
 leave missing facts blank rather than generating them.
+
+The goal is a reusable guide for those workflows, not a list of mandatory questions to ask on every
+future request. The assistant should ask only for facts that materially affect a specific listing
+or recommendation, preserve the owner's review of each listing separately, and do pricing/trend
+research when requested. Photo observations do not establish hidden product details. A new-listing
+draft remains a proposal; the current server does not create or publish listings.
+
+## Required research stage
+
+After the owner corrects the interview recap, the assistant must propose a short research plan for
+the private guidance, show it to the owner, and research the selected topics before drafting. The
+plan should reflect the owner's goals and may cover listing presentation/search guidance,
+comparable-product pricing across Etsy, eBay and other legitimate online sellers, seasonal sales
+planning, or marketing ideas such as video and timely themes. Explain why each topic may help; let
+the owner remove, add or defer topics. Do not force a topic that does not fit the owner's answers.
+The private guidance should also tell the future assistant to perform deeper market or trend
+research only when the owner asks for it, unless the owner chooses another preference. If useful
+evidence is unavailable, say so and leave the topic open rather than filling the gap with generic
+advice.
+
+Use current primary sources where available and reputable specialist sources for broader strategy.
+For pricing research, compare genuinely similar public offers and describe material differences
+such as product type, materials, size, condition and included components when the source shows
+them; distinguish asking prices from completed sales. Never imply access to private sales,
+conversion or competitor-performance data. For trends and seasonal suggestions, state when the
+source was checked and whether the idea is a current observation or a general planning option.
+Record each source's title, link, publication/update date when available, and the date checked.
+Separate sourced facts, the assistant's interpretation, and optional recommendations; note
+conflicts, uncertainty, and limits. Do not invent benchmarks or promise results. Keep research
+queries generic: do not send the shop name, location, listing details, customer information,
+private-document text, or other identifying facts to search services.
+
+Keep the research useful and high-level by default: explain why a finding may matter, outline a
+small number of options and trade-offs, and flag any decision the owner may want to make. Do not
+turn research into business-specific operating instructions, settings, commitments, or finished
+copy unless the owner asks for that. If deeper work would require choosing operational details,
+ask whether the owner wants to explore it before drafting those details.
 
 ## Private document structure
 
@@ -43,10 +92,19 @@ The draft should use generic headings that make later review easy:
 
 - Business and product overview — only owner-confirmed facts.
 - Product facts and claim boundaries — confirmed details, plus what needs checking.
+- New-listing workflow — how to combine owner-provided photos with confirmed details, ask about
+  facts that photos cannot establish, and guide the seller through suggestions, feedback and revision.
+- Existing-listing reviews — how to make separate recommendations for each selected listing.
 - Intended audiences and uses — owner preferences, not individual customer data.
 - Writing preferences — tone, terminology, and editing preferences.
 - Current marketing context — channels and observations supplied by the owner; no invented
   benchmarks or performance conclusions.
+- Requested research — preferences for when to explore comparable prices, seasonal opportunities,
+  marketing ideas, video and timely themes; cite sources and explain limits when research is asked
+  for. Use dated research findings in this private setup draft only, not as permanently current facts.
+- Research-informed opportunities — a few concise findings, options, trade-offs, and open decisions,
+  with dated sources, evidence limits, and a note to verify time-sensitive advice before relying on
+  it. This is not a business-specific operations manual.
 - Priorities, constraints, and open questions.
 - Review note — owner should revisit the file when products or priorities change.
 
@@ -55,13 +113,18 @@ or instructions that grant permission to change listings or weaken server safegu
 
 ## Save and update behavior
 
-The proposed MCP interface has two parts:
+The proposed MCP interface has three parts:
 
 - A read-only, empty-input setup-prompt tool returns the generic interview instructions. It contains
   no seller-specific content and can be used before private mode is enabled.
 - A local save tool accepts the final document and a closed operation choice (`create` or
   `replace`). It has no path, filename, Etsy, or settings argument. The host confirmation displays
   the exact document and uses one Accept/Deny choice; host acceptance is required before any write.
+- A separate in-chat activation action records the owner's explicit “Turn on private guidance”
+  choice for this installation. “Keep it off” leaves the saved file inactive. Activation does not
+  fetch the file, and future delivery still requires an explicit `get_review_guidance` request. The
+  owner can turn guidance off through a separate in-chat request. This action must not silently
+  alter MCP client configuration or broaden Etsy access.
 
 For `create`, the server uses the existing fixed private filename and refuses to overwrite any
 existing file. For `replace`, the owner must first choose to use their existing guidance in the AI
@@ -71,9 +134,10 @@ be handled safely, it leaves the current file unchanged and reports failure. No 
 to logs, audits, tests, or project tracking.
 
 Use the existing configured private directory and size/content rules. Do not create an arbitrary
-path option. The default mode remains generic; after saving, the assistant explains how the owner
-can explicitly opt into private mode and call `get_review_guidance`. It must not silently enable
-private use or alter the MCP client's configuration.
+path option. The default remains off. After saving, the assistant asks separately whether to turn
+private guidance on, explains that later explicit retrieval sends the file to the selected AI
+provider, and records only an affirmative choice. It must not enable private use as a side effect of
+saving or alter the MCP client's configuration.
 
 ## Failure and privacy behavior
 
@@ -86,26 +150,40 @@ private use or alter the MCP client's configuration.
 - The setup conversation and any existing private document deliberately shown to the assistant are
   visible to the selected AI provider. Local saving does not make that conversation private from
   the provider.
+- Research queries use generalized topics only; do not expose identifying seller information or
+  private guidance to search services. Research findings and source links are part of the private
+  draft and stay out of project records.
 - This flow does not contact Etsy, change OAuth scopes, make listing edits, or publish anything.
 
 ## Proposed acceptance criteria
 
 - An owner can start from a plain-language request without locating or editing a file manually.
-- The provider disclosure appears before private questions or an existing private document is read.
+- The provider and external-research disclosure appears before private questions, external searches,
+  or an existing private document is read.
 - Questions are optional, focused, and adaptive; the owner can skip, mark unknown, revise, or stop.
+- After the recap is corrected, the assistant researches a few relevant topics and cites dated,
+  credible sources; queries contain no identifying seller details.
+- Research is concise decision support, not prescriptive business-specific setup or finished
+  operational copy. The assistant explores detailed operational choices only at the owner's
+  request.
 - The draft distinguishes confirmed facts, preferences, and open questions and contains no invented
   store/product claims.
+- The draft includes a concise research section that distinguishes source evidence from
+  recommendations and states uncertainty and freshness limits.
 - The owner reviews the complete exact document before the host asks for one final save decision.
 - Save uses only the fixed private location, preserves existing content unless an explicit reviewed
   replacement is accepted, and fails closed on unsafe or uncertain file operations.
-- Startup and status remain unchanged; private guidance is returned only through explicit opt-in and
-  an explicit `get_review_guidance` call.
+- After saving, the owner separately opts in or keeps guidance off in chat. Activation itself does
+  not read the file; private guidance is returned only through a later explicit
+  `get_review_guidance` call. The owner can turn it off in chat.
 - Automated tests use fabricated content and temporary directories only. A Mac acceptance check
-  verifies the prompt, host confirmation, create behavior, and a no-overwrite/update recovery case.
+  verifies interview/research disclosure, source presentation, save confirmation, create behavior,
+  no-overwrite/update recovery, and separate in-chat activation/deactivation.
 
-## Owner decision before implementation
+## Implementation gate
 
-The design keeps the existing one-time private-mode setting as an explicit user action and does not
-change MCP client configuration from the server. If that setup step should also be handled from the
-chat, scope a separate explicit local opt-in design before implementation. No code or tool changes
-should start until the owner reviews this flow and resolves that choice.
+The owner has requested a separate explicit in-chat opt-in after saving; it must not be bundled with
+the save confirmation or trigger automatic retrieval. The exact local activation mechanism is an
+implementation-design question. No code or tool changes should start until the owner reviews this
+revised flow, especially the research stage and the distinction between saving, turning guidance
+on, and explicitly retrieving it.
