@@ -48,17 +48,19 @@ resuming; historical evidence is valid only within its stated scope.
   `6b22cc707af2e141b2d05fee5ce495877da16c5f`. Their CI runs 42137972888 and 42139113603 each
   passed all five checks, including macOS and Windows on Node 24 and 26 and the secret scan. The
   owner approved a separate explicit in-chat opt-in after save and requested tailored research based
-  on topics in the private guidance. T-034 proposal updates are in progress: add an owner-reviewed
-  research plan, cite current sources, keep identifying details out of search queries, append dated
-  findings to the proposed private document, and separate saving from turning guidance on and
-  explicitly retrieving it. No implementation has started. Exact next action: finish the revised
-  proposal, synchronize the tracker, open a review PR and run CI; then review the revised flow with
-  the owner before implementation. T-025 remains deferred and is not a current release gate.
-- Security scan review: the CI secret scan and dependency audit are in place, and weekly Dependabot
-  updates are configured. No CodeQL workflow was found; GitHub's repo-level secret-scanning,
-  push-protection, and Dependabot-alert switches could not be verified through the connected API.
-  T-036 tracks adding code scanning and verifying these settings before v1. Do not describe the
-  existing controls as complete security coverage.
+  on topics in the private guidance. Revised proposal is in PR #48 from
+  `codex/t034-research-activation`, head `163b7c204aa9c151c991ddcc8b47e9608abff40a`. It adds an
+  owner-approved research plan, dated citations, generalized non-identifying queries, findings in
+  the private draft, and separate save / turn-on / explicit retrieval steps. No implementation has
+  started. T-034 remains In Review pending owner review of this revised flow. T-025 remains deferred.
+- T-036 tracks the separate pre-v1 security follow-up. Current CI scans Git history for secrets and
+  runs `npm audit`; weekly Dependabot updates are configured. No CodeQL workflow was found, and
+  GitHub's repo-level secret-scanning, push-protection, and Dependabot-alert switches could not be
+  verified through the connected API. Add code scanning and verify those settings before v1; do not
+  describe the existing controls as complete security coverage.
+- The PR #48 tracker updates, including T-034's new design scope and T-036, were read back. Exact
+  next action: finish CI on PR #48 and merge if all checks pass; then review the revised design with
+  the owner before implementation.
 
 ## Required replacement at each checkpoint
 
