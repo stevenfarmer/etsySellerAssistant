@@ -80,15 +80,17 @@ resuming; historical evidence is valid only within its stated scope.
 ## Current repository state
 
 - Live `main` includes T-040 PR #58 at `60d14a583422654dd828e66b6cba4f8673d965e0`. All five PR
-  checks passed in run 42288723599; all five post-merge main checks passed in run 42289062632.
-  The Google Drive worktree's Git metadata remains stale/read-only on the old
-  `codex/t034-guided-setup-design` branch. Closeout documentation is being synchronized on a fresh
-  branch from the merged main commit.
-- Tracker H41 was read back after adding PR #58/local/CI evidence. It remains In Review until the
-  owner verifies the connected Codex Desktop behavior. Next action: finish the docs-only closeout
-  PR, then ask the owner to restart the local MCP connection and check normal-language setup/update
-  selection, the read-consent question, a full replacement review/decline, and the separate on/off
-  choice. Do not ask the owner to save or replace real guidance as part of the check.
+  checks passed in run 42288723599; all five post-merge main checks passed in run 42289062632. PR
+  #59 synchronizes this task's closeout evidence and merged as `83abebd6d2acc29d2005f76fabb1df1cd950f7cf`;
+  its five PR checks passed in run 42289885741 and five post-merge checks passed in run 42290158944. The Google
+  Drive worktree's Git metadata remains stale/read-only on the old `codex/t034-guided-setup-design`
+  branch.
+- Tracker H41 was read back with status In Review and PR #58/local/CI evidence. The remaining task
+  is the owner verifying connected Codex Desktop behavior. Restart the local MCP connection, then
+  check normal-language setup/update selection and confirm an update request first asks whether to
+  share existing guidance before reading. The owner can stop there or choose Don't replace after
+  reviewing a test proposal; do not save or replace real guidance as part of this check. Separately
+  confirm the in-chat on/off choice if desired; activation itself does not retrieve the file.
 
 ## Required replacement at each checkpoint
 
