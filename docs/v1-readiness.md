@@ -37,8 +37,8 @@ release recommendation. T-023 (intelligent review), T-011 (guarded-write design/
 and T-024 (guarded edits) are complete for their stated criteria. T-025 measurement design was moved to the
 backlog by the owner on 5 November 2026; its method does not fit unique, one-off handmade items
 yet and it is not a current release gate. T-031 Mac usefulness and guarded-edit acceptance passed
-on 5 November 2026. T-035 is a confirmation-copy and follow-through refinement; T-034 will then
-design the first-run private-guidance setup.
+on 5 November 2026. T-035's revised confirmation also passed Mac owner review and merged in PR #44;
+T-034 will then design the first-run private-guidance setup.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
@@ -56,12 +56,14 @@ full validation now passes 222 offline tests with actual STDIO coverage. After a
 manual review and 12 new regressions; full validation passed 234 offline tests. Chunk 2B delivers the [evaluation suite/rubric and private strategy baseline](review-evaluation.md):
 full validation passed 242 offline tests; eight fabricated reviews passed declared checks and
 same-assistant self-assessment. The private file was created/loaded outside Git without changing
-client settings. T-023 Done is scoped to those development criteria; no independent benchmark,
-advanced owner usefulness, private-mode client, live-edit or sales-uplift acceptance is inferred. Other listed capabilities remain planned.
+client settings. T-023 Done is scoped to those development criteria; T-031 usefulness/edit
+acceptance and T-035 confirmation review are complete. Independent model benchmarking, other-client
+validation and sales uplift are not established. Other listed capabilities remain planned.
 Their [requirements](intelligent-listing-review.md) distinguish planned capabilities from the
 existing deployed alpha.1 read-only implementation. The unpublished development alpha contains
-guarded edit tools; the scoped Mac acceptance edit was completed under T-031. T-035 refines the
-confirmation copy without changing the approval, audit, or apply boundaries.
+guarded edit tools; the scoped Mac acceptance edit was completed under T-031. T-035's revised
+confirmation copy passed Mac review and merged in PR #44 without changing the approval, audit, or
+apply boundaries.
 
 T-007 remains Done; accepted read/setup/recovery evidence is retained. T-008 remains In Review
 for disclosed recovery limits. T-012 is In Progress, pending the expanded features and final

@@ -76,8 +76,8 @@ Owner usefulness acceptance remains distinct from those checks and from observed
 
 The 3 November 2026 technical baseline is in [the guarded-edit design review](guarded-edit-design-review.md).
 Phase 4A–4C implementation, offline verification and review are complete; the unpublished
-development alpha has the guarded apply path. T-031 Mac acceptance is complete; T-035 refines the
-confirmation wording and assistant follow-through. The published alpha.1 remains read-only.
+development alpha has the guarded apply path. T-031 Mac acceptance and T-035 confirmation-copy
+review are complete. The published alpha.1 remains read-only.
 
 Before implementing write access, review the exact tool contracts and threat/failure model:
 

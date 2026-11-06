@@ -31,26 +31,23 @@ resuming; historical evidence is valid only within its stated scope.
   authorized the edit grant and exact listing change. The host confirmation succeeded; the fixed
   apply flow reported success, a fresh read verified the approved fields, and the local audit
   outcome was recorded. No seller-specific content or audit record is retained in project files.
-- T-035 is the active follow-up from the owner's review of the confirmation screen. Its first draft
-  removes the model-safety warning from the seller-facing form and says that Accept approves the
-  exact displayed change, after which the assistant immediately applies it to Etsy and verifies it. The tool
-  description retains the untrusted-listing-text instruction and tells the assistant not to apply
-  after decline, cancellation, unavailable confirmation or stale data. Offline tests and the
-  revised Mac prompt review are still required; T-035 is not complete yet.
-- T-034 remains Open / Next and follows T-035. It covers design of a user-led first-run interview,
+- T-035 confirmation UX is complete. The seller form now says Accept approves the exact update and
+  the assistant will apply it to Etsy and verify the result; the untrusted-listing safety rule stays
+  in tool guidance. The owner reviewed and accepted the revised Mac prompt with a test-only proposal.
+  A fresh read confirmed the listing stayed unchanged because no apply call was made. PR #44 merged
+  as `333e6af9275c5af602bdee2e3e7112684a828ac9`; CI run 42132738820 passed all five checks.
+- T-034 is Open / Next. It covers design of a user-led first-run interview,
   fact checking, private-document review and safe save/update to the existing fixed location; no
   implementation has started. T-025 remains deferred and is not a current release gate.
-- Current branch: `codex/confirmation-copy-workflow`, based on `main` at
-  `11dc9732be517646f942cbc75b9d252f0d395698`. T-034/T-035 connected tracker rows were read back;
-  T-035 is In Progress and T-034 follows it. Formatting, `npm run validate` with loopback enabled
-  and `git diff --check` passed; all 287 offline tests passed. PR #44 is open at
-  `3ef8f5ef28bfe58de32a42044bee8399e8a539dd` for the T-035 source change; CI run 42132299095 passed
-  all five checks, including both macOS jobs. The connected local MCP session still advertises the old tool description, so
-  revised Mac prompt review requires restarting its server process and preparing a harmless
-  test-only proposal; do not apply it. T-035 remains incomplete until the owner has seen and
-  accepted the revised form. Exact next action: after the owner restarts the MCP client, verify the
-  updated tool description, present the test-only confirmation for review, then merge PR #44 if the
-  owner finds the wording clear. T-034 remains next after T-035.
+- Local `main` is synchronized to the PR #44 merge commit `333e6af9275c5af602bdee2e3e7112684a828ac9`.
+  `npm run validate` passed with loopback enabled (287/287 offline tests); CI run 42132738820 passed
+  all five checks on the merged code. The T-035 connected tracker row was read back after marking it
+  Done; T-034 remains Open / Next. Exact next action: begin T-034's guided private-
+  guidance setup design in the next continuation; do not start implementation until its functional
+  flow is reviewed.
+- T-035 acceptance closeout edits are being prepared on `codex/t035-acceptance-closeout`, based on
+  merged `main`; they update status/evidence only and do not change source code or tests. No PR exists
+  yet. Format/diff checks, a focused docs PR and its CI are the remaining repository closeout steps.
 
 ## Required replacement at each checkpoint
 
