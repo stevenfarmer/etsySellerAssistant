@@ -36,18 +36,21 @@ resuming; historical evidence is valid only within its stated scope.
   in tool guidance. The owner reviewed and accepted the revised Mac prompt with a test-only proposal.
   A fresh read confirmed the listing stayed unchanged because no apply call was made. PR #44 merged
   as `333e6af9275c5af602bdee2e3e7112684a828ac9`; CI run 42132738820 passed all five checks.
-- T-034 is Open / Next. It covers design of a user-led first-run interview,
-  fact checking, private-document review and safe save/update to the existing fixed location; no
-  implementation has started. T-025 remains deferred and is not a current release gate.
-- Local `main` is synchronized to the PR #44 merge commit `333e6af9275c5af602bdee2e3e7112684a828ac9`.
-  `npm run validate` passed with loopback enabled (287/287 offline tests); CI run 42132738820 passed
-  all five checks on the merged code. The T-035 connected tracker row was read back after marking it
-  Done; T-034 remains Open / Next. Exact next action: begin T-034's guided private-
-  guidance setup design in the next continuation; do not start implementation until its functional
-  flow is reviewed.
-- T-035 acceptance closeout edits are being prepared on `codex/t035-acceptance-closeout`, based on
-  merged `main`; they update status/evidence only and do not change source code or tests. No PR exists
-  yet. Format/diff checks, a focused docs PR and its CI are the remaining repository closeout steps.
+- T-034 is In Review / Now. The functional proposal is in
+  [private-guidance-setup-design.md](private-guidance-setup-design.md). It proposes a disclosed,
+  optional AI-led interview, owner-checked draft, exact host confirmation, fixed-path local save,
+  safe explicit replacement, and continued private-mode opt-in. The owner decision about whether
+  that one-time opt-in remains a client setting or gains a separate in-chat action is unresolved.
+  No code or file-writing tool has been implemented. T-025 remains deferred and is not a current
+  release gate.
+- Local `main` is synchronized through PR #45 at `559aee8e205bae802dddfcdfd5e367ca0107961e`.
+  Its CI passed all five checks on PR #45; the T-035 tracker row was read back as Done. T-034 is
+  proposed in PR #46 from `codex/t034-guided-setup-design`, head
+  `e3e7a486a432620b3fd8b28e703c9772a7ea0555`. Documentation formatting and diff checks passed;
+  no runtime tests were run. CI run 42137577093 passed all five checks, including macOS and Windows
+  on Node 24 and 26 and the secret scan. The T-034 tracker row and PR link were read back. Exact
+  next action: owner reviews PR #46 and decides whether private-mode setup remains a manual client
+  setting or needs a separate in-chat opt-in. Do not implement until the owner accepts the design.
 
 ## Required replacement at each checkpoint
 
