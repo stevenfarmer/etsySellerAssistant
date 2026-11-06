@@ -76,7 +76,9 @@ resuming; historical evidence is valid only within its stated scope.
   disclosure, and explicit consent prompt. The declined path left the file unread and unchanged; after explicit yes, the assistant read the
   guidance and asked a focused follow-up question. The owner then reviewed the complete replacement
   and chose Replace; the tool confirmed the save and a private recovery copy. Activation was unchanged.
-  Separate activation/deactivation remains unverified. PR #61 merged to `main` as `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; all five PR checks passed in run 42307541020 and all five post-merge checks passed in run 42307846832. All five PR CI checks passed in run
+  Separate activation/deactivation remains unverified. PR #61 merged to `main` as
+  `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; all five PR checks passed in run 42307541020 and
+  all five post-merge checks passed in run 42307846832. All five PR CI checks passed in run
   42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
   selects the tools from ordinary chat; the MCP server cannot inspect that chat. Tracker H41
   records the scope.
