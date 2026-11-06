@@ -76,23 +76,27 @@ resuming; historical evidence is valid only within its stated scope.
   disclosure, and explicit consent prompt. The declined path left the file unread and unchanged; after explicit yes, the assistant read the
   guidance and asked a focused follow-up question. The owner then reviewed the complete replacement
   and chose Replace; the tool confirmed the save and a private recovery copy. Activation was unchanged.
-  Separate activation/deactivation remains unverified. All five PR CI checks passed in run
+  Separate activation/deactivation remains unverified. PR #61 merged to `main` as `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; all five PR checks passed in run 42307541020 and all five post-merge checks passed in run 42307846832. All five PR CI checks passed in run
   42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
   selects the tools from ordinary chat; the MCP server cannot inspect that chat. Tracker H41
   records the scope.
 
 ## Current repository state
 
-- Live `main` includes T-040 PR #58 at `60d14a583422654dd828e66b6cba4f8673d965e0`. All five PR
-  checks passed in run 42288723599; all five post-merge main checks passed in run 42289062632. PR
-  #59 synchronizes this task's closeout evidence and merged as `83abebd6d2acc29d2005f76fabb1df1cd950f7cf`;
-  its five PR checks passed in run 42289885741 and five post-merge checks passed in run 42290158944. The Google
-  Drive worktree's Git metadata remains stale/read-only on the old `codex/t034-guided-setup-design`
-  branch. That checkout has unrelated uncommitted changes and was not used for this docs-only PR.
-- PR #61 is open from `codex/t040-consent-decline-acceptance` at head `d4dcca9bedc07d5519a6fe1fcb5f55adade122fa`; it contains documentation only. The prior head's CI run 42306816562 passed secret scanning and both macOS jobs; Windows checks were in progress when the replacement evidence update changed the head. CI is rerunning for the current head.
-- Tracker H41 was read back with status In Review and records the owner-provided Codex Desktop consent tests. Refusal, explicit-consent read, full replacement review, explicit Replace, successful save and private recovery-copy confirmation are verified. Keep T-040 In Review until the owner tests the separate activation/deactivation flow; the update tool confirmed activation remained unchanged. Next, verify activation/deactivation separately without reading the file.
-
-- The owner added T-041 (owner-approved updates to evolving private shop context) and T-042 (inventory unused Etsy API capabilities and define candidate features) to the backlog. Both are design/discovery only; no code or additional access is authorized by these tasks.
+- Live `main` includes T-040 PR #58 and the documentation closeout PRs #59, #60 and #61. PR #61's
+  reviewed head was `3422df714ff452345508a99d44660ea5886a2008`; it merged as
+  `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`. All five PR checks passed in run 42307541020 and
+  all five post-merge main checks passed in run 42307846832.
+- The Google Drive checkout remains on the stale `codex/t034-guided-setup-design` branch with
+  unrelated uncommitted changes. It was not used for these docs-only changes.
+- Tracker rows T-040–T-042 were read back. T-040 remains In Review: the owner tested refusal,
+  consented read, focused revision, full replacement review, explicit Replace, successful save and
+  private recovery-copy confirmation. Activation was unchanged; only the separate activation/
+  deactivation interaction remains untested. T-041 and T-042 are recorded as Backlog / P2 for
+  owner-approved evolving shop context and seller-neutral Etsy API capability discovery.
+- Next owner action for T-040: in Codex Desktop, ask to activate private guidance and review the
+  separate on/off choice. Activation must not read the file; do not report T-040 Done until the
+  owner confirms that interaction.
 
 ## Required replacement at each checkpoint
 
