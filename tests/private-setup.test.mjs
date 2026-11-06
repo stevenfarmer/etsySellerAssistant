@@ -38,6 +38,8 @@ test('setup prompt explains disclosure, tailored interview, research boundaries 
   assert.match(PRIVATE_SETUP_PROMPT, /Before asking any questions/);
   assert.match(PRIVATE_SETUP_PROMPT, /generic non-identifying queries/);
   assert.match(PRIVATE_SETUP_PROMPT, /asking prices from completed-sale evidence/);
+  assert.match(PRIVATE_SETUP_PROMPT, /Save this exact document\?/);
+  assert.match(PRIVATE_SETUP_PROMPT, /ownerConfirmed:true/);
   assert.match(PRIVATE_SETUP_PROMPT, /separately ask in chat/);
   const tools = registeredTools({ async create() {} });
   assert.equal(tools.has('get_private_guidance_setup'), true);
@@ -77,83 +79,45 @@ test('fixed writer rejects unsafe content and any destination inside the reposit
   });
 });
 
-test('save tool waits for exact host confirmation and writes only after acceptance', async () => {
+test('save tool requires an owner-confirmation assertion before creating the private file', async () => {
   await fixture(async ({ repositoryDirectory, directory }) => {
     const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
-    const tools = registeredTools(writer);
-    const save = tools.get('save_private_guidance').handler;
+    const save = registeredTools(writer).get('save_private_guidance').handler;
     const text = '# Fabricated owner-reviewed draft\n';
-    let confirmation;
-    const denied = await save(
-      { content: text },
-      {
-        mcpReq: {
-          async elicitInput(input) {
-            confirmation = input;
-            return { action: 'decline' };
-          },
-        },
-      },
-    );
-    assert.equal(denied.isError, true);
-    assert.match(confirmation.message, /# Fabricated owner-reviewed draft/);
+
+    const missing = await save({ content: text });
+    assert.equal(missing.isError, true);
+    assert.match(missing.content[0].text, /explicit Save choice/i);
+    const declined = await save({ content: text, ownerConfirmed: false });
+    assert.equal(declined.isError, true);
+    assert.match(declined.content[0].text, /explicit Save choice/i);
     await assert.rejects(fs.stat(path.join(directory, PRIVATE_PLAYBOOK_FILENAME)), {
       code: 'ENOENT',
     });
 
-    const accepted = await save(
-      { content: text },
-      {
-        mcpReq: {
-          async elicitInput(input) {
-            confirmation = input;
-            return { action: 'accept' };
-          },
-        },
-      },
-    );
-    assert.equal(accepted.isError, undefined);
+    const saved = await save({ content: text, ownerConfirmed: true });
+    assert.equal(saved.isError, undefined);
     assert.equal(await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'), text);
-    assert.match(confirmation.message, /Etsy is unchanged and private guidance stays off/);
-    assert.equal(JSON.stringify(accepted).includes(text), false);
+    assert.match(saved.content[0].text, /remains off/);
+    assert.equal(JSON.stringify(saved).includes(text), false);
+    await assert.rejects(writer.create('Replacement must not overwrite.'), {
+      code: 'already_exists',
+    });
+    assert.equal(await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'), text);
   });
 });
 
-test('save tool does not write when confirmation is unavailable and sanitizes failures', async () => {
+test('save tool sanitizes private-storage failures after owner confirmation', async () => {
   let createCalls = 0;
-  const tools = registeredTools({
+  const save = registeredTools({
     async create() {
       createCalls += 1;
       throw new PlaybookError('unsafe_path');
     },
-  });
-  const save = tools.get('save_private_guidance').handler;
-  const unavailable = await save(
-    { content: 'Fabricated.' },
-    {
-      mcpReq: {
-        async elicitInput() {
-          throw new Error('provider detail');
-        },
-      },
-    },
-  );
-  assert.equal(unavailable.isError, true);
-  assert.match(unavailable.content[0].text, /confirmation could not be opened/i);
-  assert.equal(JSON.stringify(unavailable).includes('provider detail'), false);
-  assert.equal(createCalls, 0);
-  const unsafe = await save(
-    { content: 'Fabricated.' },
-    {
-      mcpReq: {
-        async elicitInput() {
-          return { action: 'accept' };
-        },
-      },
-    },
-  );
-  assert.equal(unsafe.isError, true);
-  assert.match(unsafe.content[0].text, /not safe to use/);
-  assert.equal(JSON.stringify(unsafe).includes('Fabricated.'), false);
+  }).get('save_private_guidance').handler;
+  const result = await save({ content: 'Fabricated.', ownerConfirmed: true });
+  assert.equal(result.isError, true);
+  assert.match(result.content[0].text, /not safe to use/);
+  assert.equal(JSON.stringify(result).includes('Fabricated.'), false);
   assert.equal(createCalls, 1);
 });

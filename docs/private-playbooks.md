@@ -4,8 +4,10 @@ Chunk 1A implements a generic [starter template](../templates/playbook.example.m
 and safe private reader. Chunk 1B adds `get_review_guidance` to the opt-in alpha, with explicit
 source labels. Chunk 2B creates an initial private owner playbook outside Git using no-clobber
 creation and private permissions. T-039 adds the generic setup interview/research prompt and
-`save_private_guidance`, which shows the full draft in one host confirmation and creates the fixed
-file only when it does not already exist. It does not activate private mode. T-040 tracks reviewed
+`save_private_guidance`, which is called only after the assistant shows the full draft in chat and
+the owner chooses Save. The tool requires `ownerConfirmed: true` and creates the fixed file only
+when it does not already exist. The server cannot independently verify the chat reply. Saving does
+not activate private mode. T-040 tracks reviewed
 replacement and the separate in-chat activation/deactivation action. The default server remains
 status-only. Tests use fabricated temporary files and never read any actual owner playbook.
 Actual Codex discovery/default-generic invocation passed after restart on 1 November 2026,
@@ -29,9 +31,11 @@ Private use is opt-in through trusted MCP client environment settings:
 | `ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY` | Optional absolute private directory override in private mode. Otherwise use the Mac default below. Generic mode never resolves this value. |
 
 Only set private mode when you intend to share that file's contents with the selected AI
-application/provider. Keep credentials out of the file. T-039's save tool accepts no path and
-requires the host's explicit Accept action; it uses the fixed guidance filename, private
-permissions and create-only behavior. It never replaces existing content. The existing shop
+application/provider. Keep credentials out of the file. T-039's save tool accepts no path and requires `ownerConfirmed: true`; the assistant must first
+show the complete document in chat and wait for the owner's explicit Save choice. The server cannot
+verify the conversation, so this step depends on the AI client following the tool instructions. It
+uses the fixed guidance filename, private permissions and create-only behavior, and never replaces
+existing content. The existing shop
 configuration schema, Keychain, Etsy authorization and OAuth scopes are unchanged. Environment
 settings take effect in a newly started MCP process; file-content edits are reloaded on each
 explicit call. T-040 will replace the manual activation setting with the approved separate

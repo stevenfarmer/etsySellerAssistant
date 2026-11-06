@@ -56,15 +56,19 @@ resuming; historical evidence is valid only within its stated scope.
 - T-039 follow-up merged in PR #52 as `e849c1add5f2d976b7d1c4a762633540785d2a45`; all five CI
   checks passed in run 42256015866. Node 24 macOS passed after the original queued job was cancelled
   and retried. Loopback-enabled local validation passed 292/292 tests.
-- T-039 remains In Review for direct supported-client confirmation. T-040 tracks reviewed
-  replacement/recovery and separate in-chat activation/deactivation. Until T-040 is complete,
-  activation still uses the existing local configuration. After restart, both setup tools appeared
-  and the generic prompt returned, but two fabricated save attempts failed without displaying a
-  confirmation form. The merged fix reports host-confirmation failure separately from private-file
-  storage failure. No successful save response was returned; whether a file was created is not
-  verified. Next: restart the local alpha to load PR #52, then retry the fabricated save. If the form
-  appears, decline and verify that no file was written; if it does not, confirm the explicit
-  host-confirmation-unavailable response. Do not use real guidance until the confirmation flow works.
+- T-039 remains In Review for supported-client confirmation. The owner selected one in-chat
+  Save/Don't save choice after the host form failed to appear. The updated tool requires
+  `ownerConfirmed: true`, which records the assistant's assertion and cannot be independently
+  verified by the server. The fixed-path save remains create-only. No real guidance was saved.
+  Loopback-enabled `npm run validate` passed: formatting, lint, TypeScript, build and 292/292
+  tests. PR and CI for the in-chat flow are still pending. Next: open a PR from current main,
+  wait for all required checks, merge, restart the local alpha, then test the decline path without
+  calling the save tool. Use real guidance only after owner review and an explicit Save choice.
+- T-040 remains Open. The owner wants manual editing of the fixed-path file and agent-assisted
+  revisions. Agent replacement must be explicitly requested, shown in full, confirmed with one
+  Replace/Don't replace choice, and preserve a private recovery copy. The tracker records this
+  addition. Separate in-chat activation/deactivation remains in scope; activation must not read
+  the file.
 
 ## Required replacement at each checkpoint
 
