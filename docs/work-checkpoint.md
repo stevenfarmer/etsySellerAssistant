@@ -49,11 +49,11 @@ resuming; historical evidence is valid only within its stated scope.
   passed all five checks, including macOS and Windows on Node 24 and 26 and the secret scan. The
   owner approved a separate explicit in-chat opt-in after save and requested tailored research based
   on topics in the private guidance. Revised proposal is in PR #48 from
-  `codex/t034-research-activation`, head `a9b67752f031cbddd53e3f8497a9b0c8b511b02a`. It adds an
+  `codex/t034-research-activation`, head `6e2ba30ffeb016388be7e50c68fee15fde03ae7d`. It adds an
   owner-approved research plan, dated citations, generalized non-identifying queries, concise
-  options/trade-offs rather than operational instructions by default, findings in the private
-  draft, and separate save / turn-on / explicit retrieval steps. No implementation has started.
-  PR CI run 42141458665 passed all five checks, including Node 24/26 on macOS/Windows and the secret
+  concise findings/options/trade-offs rather than business-specific operating instructions or
+  finished copy unless requested, and separate save / turn-on / explicit retrieval steps. No
+  implementation has started. PR CI run 42142428469 passed all five checks, including Node 24/26 on macOS/Windows and the secret
   scan. T-034 remains In Review pending owner review of this revised flow. T-025 remains deferred.
 - T-036 tracks the separate pre-v1 security follow-up. Current CI scans Git history for secrets and
   runs `npm audit`; weekly Dependabot updates are configured. No CodeQL workflow was found, and
@@ -62,9 +62,9 @@ resuming; historical evidence is valid only within its stated scope.
   describe the existing controls as complete security coverage.
 - The PR #48 tracker updates, including T-034's new design scope and T-036, were read back. The
   owner clarified that research should provide concise decision support, not draft business-specific
-  operating procedures unless requested. Exact next action: update the proposal/checkpoint, run
-  CI, then review PR #48 with the owner. If accepted, merge the design update; implementation still
-  requires that acceptance and separate verification work.
+  operating procedures unless requested. Exact next action: review the revised proposal in PR #48
+  with the owner. If accepted, merge the design update; implementation still requires that
+  acceptance and separate verification work.
 
 ## Required replacement at each checkpoint
 
