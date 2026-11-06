@@ -89,7 +89,7 @@ resuming; historical evidence is valid only within its stated scope.
   its five PR checks passed in run 42289885741 and five post-merge checks passed in run 42290158944. The Google
   Drive worktree's Git metadata remains stale/read-only on the old `codex/t034-guided-setup-design`
   branch. That checkout has unrelated uncommitted changes and was not used for this docs-only PR.
-- PR #61 is open from `codex/t040-consent-decline-acceptance` at head `d3942562e8a60de68c8fd9282076bdf07d96b893`; it contains documentation only. CI run 42306816562 has passed secret scanning and both macOS jobs; Windows checks were running at this checkpoint. A follow-up evidence update may change the head and restart CI.
+- PR #61 is open from `codex/t040-consent-decline-acceptance` at head `d4dcca9bedc07d5519a6fe1fcb5f55adade122fa`; it contains documentation only. The prior head's CI run 42306816562 passed secret scanning and both macOS jobs; Windows checks were in progress when the replacement evidence update changed the head. CI is rerunning for the current head.
 - Tracker H41 was read back with status In Review and records the owner-provided Codex Desktop consent tests. Refusal, explicit-consent read, full replacement review, explicit Replace, successful save and private recovery-copy confirmation are verified. Keep T-040 In Review until the owner tests the separate activation/deactivation flow; the update tool confirmed activation remained unchanged. Next, verify activation/deactivation separately without reading the file.
 
 ## Required replacement at each checkpoint
