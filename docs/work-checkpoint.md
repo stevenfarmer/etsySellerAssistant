@@ -94,8 +94,7 @@ resuming; historical evidence is valid only within its stated scope.
 - Tracker rows T-040–T-042 were read back. T-040 remains In Review: the owner tested refusal,
   consented read, focused revision, full replacement review, explicit Replace, successful save and
   private recovery-copy confirmation. Activation was unchanged; only the separate activation/
-  deactivation interaction remains untested. T-041 and T-042 are recorded as Backlog / P2 for
-  owner-approved evolving shop context and seller-neutral Etsy API capability discovery.
+  deactivation interaction remains untested. T-041 and T-042 are Backlog / P2 design tasks. T-041 covers keeping advice aligned with owner-confirmed changes and proposing, not silently saving, durable context updates. T-042 covers a seller-neutral inventory of unused API capabilities and candidate features; it authorizes no code or new access.
 - Next owner action for T-040: in Codex Desktop, ask to activate private guidance and review the
   separate on/off choice. Activation must not read the file; do not report T-040 Done until the
   owner confirms that interaction.
