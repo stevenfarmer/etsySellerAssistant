@@ -46,12 +46,12 @@ See [guarded editing](docs/local-editing.md) for local setup and recovery.
 
 The development version still reads `1.0.0`, but the current build is **not a complete v1 candidate**. On 1 November 2026 the owner confirmed that v1 must include intelligent, sales-oriented listing recommendations and applying approved title, description and tag edits. Publication of the read-only build as stable v1 is on hold. See [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md) and the [review workflow requirements](docs/intelligent-listing-review.md). T-031 Mac usefulness and guarded-edit acceptance is complete; T-035's confirmation-copy refinement is also complete, and final product acceptance remains T-012. The published alpha remains read-only. Published alpha.1 installation remains below.
 
-For the small deliverables and gates to stable v1, see the [phase-gated plan](docs/v1-phase-gates.md) and [current checkpoint](docs/work-checkpoint.md). Work proceeds one chunk per continuation by default. The plan also separates a public generic guidance template from a private customizable playbook outside the repository; the storage foundation and [generic template](templates/playbook.example.md) are implemented in chunk 1A, and `get_review_guidance` delivery is implemented in chunk 1B. Guidance is generic by default; private files require explicit client settings and a tool call. Startup/status do not load guidance. See [the storage contract](docs/private-playbooks.md). See [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md).
+For the small deliverables and gates to stable v1, see the [phase-gated plan](docs/v1-phase-gates.md) and [current checkpoint](docs/work-checkpoint.md). The plan separates a public generic guidance template from a private customizable playbook outside the repository. In the alpha, MCP initialization tells the connected agent to retrieve guidance before shop assistance. The tool selects the private file when present and otherwise returns general guidance; the agent should say when advice is not customized and invite setup. Private text goes to the selected AI provider when retrieved. There is no separate enable setting; disabling the MCP server turns this behavior off. Startup and status do not read the file. See [the storage contract](docs/private-playbooks.md) and [ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md).
 
-In the unpublished development build, ask the assistant to call `get_review_guidance` for the
-generic starter. An already running MCP process needs a restart to discover the new tool.
-See [private guidance settings and disclosure](docs/private-playbooks.md) before opting into
-private text. The published alpha.1 tool inventory remains historical and unchanged.
+In the unpublished development build, restart an already running MCP process to receive its
+connection instructions. A connected client is asked to call `get_review_guidance` at the start of
+seller-assistance conversations. The published alpha.1 tool inventory remains historical and
+unchanged.
 
 Chunk 2A adds a [generic review workflow and blank buyer brief](docs/draft-review-workflow.md)
 and `validate_listing_draft` in the development alpha. It checks only title/description/tags
@@ -63,13 +63,13 @@ no extra real-client acceptance gate is added to this offline development chunk.
 Chunk 2B adds the [eight-case evaluation suite and manual rubric](docs/review-evaluation.md),
 with dated official sources and an offline declared-evidence checker. The development run used
 fabricated reviews generated and self-reviewed by the same client assistant; it is not an
-independent model benchmark or sales evidence. The initial private playbook and its evaluation
-outputs live outside Git. Private activation remains explicit; repository updates do not replace
-custom guidance. Owner usefulness and one guarded edit were accepted in T-031; T-035 then clarified the confirmation wording and apply follow-through.
+independent model benchmark or sales evidence. The initial private playbook and its evaluation outputs live outside Git. Repository updates do not
+replace custom guidance. Owner usefulness and one guarded edit were accepted in T-031; T-035 then
+clarified the confirmation wording and apply follow-through.
 
 ## Version roadmap
 
-- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. T-031 owner usefulness and edit acceptance and T-035 confirmation UX are complete. T-039 delivers first-time private-guidance setup and T-040 adds reviewed updates and separate activation; supported-client acceptance remains for T-040. Photo-based listing drafts and requested research remain T-037/T-038, followed by final T-012 acceptance.
+- **v1:** Owner-authorized listing reads, evidence-based recommendations, guarded title/description/tag edits, local audit history, Keychain storage and repeatable setup/recovery. The server uses local STDIO MCP; macOS with Codex Desktop is the current acceptance target. T-031 usefulness/edit acceptance and T-035 confirmation UX are complete. T-039 provides first-time private-guidance setup, T-040 reviewed updates, and T-043 automatic guidance use; supported-client acceptance remains for T-043. T-036 code scanning and repository security checks are a release gate. T-037 delivers complete photo-based listing drafts; requested research remains T-038, followed by final T-012 acceptance.
 - **Very low-priority backlog:** delegated access, with no target date; v1 uses owner authorization only.
 - **After v1:** package and document installation as a local STDIO MCP server for other agents, apps, and IDEs; verify each supported client on macOS.
 - **v2 or later:** Windows setup, Credential Manager, browser authorization, recovery, and client acceptance.

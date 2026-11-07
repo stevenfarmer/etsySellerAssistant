@@ -87,20 +87,33 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live `main` includes the T-040 private-guidance update flow, T-041/T-042 backlog and T-043
-  automatic-use direction. PR #65 merged as `010a473661464766890a7b0e2c203c6b51e8beff`; all five
-  PR checks passed in run 42315706768 and all five post-merge checks passed in run 42315952450.
-- The Google Drive checkout remains on stale branch `codex/t034-guided-setup-design` with unrelated
-  uncommitted changes. It was not used for these documentation changes.
-- Tracker rows T-040–T-043 were read back. T-040 is Done for the accepted consent-gated natural-
-  language update workflow. T-041 and T-042 remain Backlog / P2. T-043 is Open / Now.
-- Owner direction for T-043: saved private guidance applies automatically when the Etsy assistant
-  MCP server is invoked, without a separate enable step. If only general, uncustomized guidance is
-  available, use it, clearly say it is not personalized, and invite configuration. Disabling the
-  MCP server is the off switch. Make provider sharing clear; preserve Etsy access/write safeguards.
-- Next chunk: design and implement T-043, including how private guidance reaches the connected agent
-  on invocation and how the server distinguishes general from customized guidance. Verify in Codex
-  Desktop. No T-043 code is implemented yet.
+- Live `main` includes T-040 and the T-043 automatic-use direction through PR #65, commit
+  `010a473661464766890a7b0e2c203c6b51e8beff`.
+- Active isolated checkout: `/private/tmp/etsySellerAssistant-current`; branch
+  `codex/t043-t036-t037`; PR [#67](https://github.com/stevenfarmer/etsySellerAssistant/pull/67),
+  head `ce06041ec84557a849135c041f0fd1d0ed088426`. The PR contains the T-043 automatic-guidance
+  implementation, T-036 CodeQL job, and T-037 complete photo-to-listing-draft workflow. No local
+  uncommitted changes remain after this checkpoint commit.
+- Loopback-enabled `npm run validate` passed: Prettier, ESLint, TypeScript, build and **297/297
+  offline tests**. `git diff --check` passed. All seven GitHub PR checks passed on the current head:
+  GitHub Advanced Security CodeQL, the new CodeQL workflow, Gitleaks, and Node 24/26 validation
+  plus `npm audit` on macOS and Windows (workflow run 42320341869). No live Etsy
+  call, private guidance read, credential change, or listing change occurred.
+- T-043 behavior is implemented and awaits Codex Desktop acceptance. The initialization message
+  asks the client to retrieve guidance for each seller-assistance conversation. Private guidance is
+  selected when present; otherwise general guidance is returned and must be labeled uncustomized.
+  Disabling the MCP connection is the off switch. The MCP protocol cannot force clients to obey the
+  instructions, so client acceptance is still required.
+- T-036 CodeQL and PR CI are verified. On GitHub settings, secret scanning and push protection were
+  already enabled; the dependency graph and Dependabot alerts were enabled after owner approval.
+  Weekly Dependabot version updates are configured. Automatic security-update PRs remain off.
+- T-037 implements the one-question-at-a-time photo interview and complete, ready-to-enter listing
+  draft. Codex Desktop/owner acceptance remains. The workflow does not create or publish the listing.
+- Next: complete final PR review and merge PR #67 after its checkpoint/documentation update passes
+  CI. Then arrange supported-client acceptance for T-043 and T-037 using the merged local server.
+  The current connected `etsySellerAssistant` tool inventory still reflects the pre-PR version; do
+  not treat its behavior as acceptance evidence for this branch. T-036 is ready for merge; T-043
+  and T-037 remain incomplete until Codex Desktop/owner acceptance is recorded.
 
 ## Required replacement at each checkpoint
 

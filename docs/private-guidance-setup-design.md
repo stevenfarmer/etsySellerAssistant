@@ -1,5 +1,7 @@
 # Guided private-guidance setup: functional design proposal
 
+> **Current behavior update:** The owner later removed the separate activation step. T-043 now directs the alpha to use a saved playbook automatically for seller-assistance conversations, or return general guidance marked as not customized. Disabling the MCP server is the off switch. The interview and reviewed-save requirements below remain useful; activation-specific rows describe the earlier proposal, not current behavior.
+
 Status: approved by the owner on 6 November 2026. T-039 implements first-time setup and safe
 creation; T-040 implements natural-language update entry, reviewed replacement, manual edit
 instructions and separate activation/deactivation in PR #58. Local validation and all five PR/main

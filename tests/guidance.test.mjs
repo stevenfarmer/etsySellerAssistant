@@ -15,7 +15,6 @@ import {
 } from '../dist/src/guidance/review-guidance.js';
 import { GENERIC_PLAYBOOK } from '../dist/src/guidance/generic-playbook.js';
 import { createLocalGuidanceService } from '../dist/src/guidance/local-guidance-service.js';
-import { createPrivateGuidanceSettingsStore } from '../dist/src/local/private-guidance-settings.js';
 import { registerGuidanceTool } from '../dist/src/mcp/guidance-tool.js';
 import {
   PlaybookError,
@@ -61,57 +60,36 @@ test('compiled generic guidance matches the public template exactly', async () =
   );
 });
 
-test('generic is the default and does not access private configuration or its reader', async () => {
-  const environment = { ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: 'invalid/private/path' };
-  Object.defineProperty(environment, 'ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY', {
-    get() {
-      throw new Error('generic mode must not resolve a private directory');
-    },
-  });
-  const service = createLocalGuidanceService({ environment });
-  const result = await service.getGuidance();
-  assert.deepEqual(result, {
-    schemaVersion: 1,
-    source: 'generic',
-    selection: 'generic_mode',
-    guidance: GENERIC_PLAYBOOK,
-    notice: GUIDANCE_NOTICE,
-  });
-});
-
-test('saved in-chat activation gates private guidance until an explicit retrieval request', async () => {
-  await fixture(async ({ root, directory, repositoryDirectory, filename }) => {
-    const settings = createPrivateGuidanceSettingsStore({
-      repositoryDirectory,
-      directory: path.join(root, 'settings'),
-    });
-    await fs.writeFile(filename, 'Fabricated activated guidance.', { mode: 0o600 });
+test('generic guidance is returned when the configured private directory has no playbook', async () => {
+  await fixture(async ({ directory, repositoryDirectory }) => {
     const service = createLocalGuidanceService({
       repositoryDirectory,
-      settingsStore: settings,
-      environment: { ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: directory },
+      environment: {
+        ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: directory,
+        ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'generic',
+      },
     });
-
-    assert.equal((await service.getGuidance()).source, 'generic');
-    await settings.setEnabled(true);
-    assert.equal((await service.getGuidance()).guidance, 'Fabricated activated guidance.');
-    await settings.setEnabled(false);
-    const disabled = await service.getGuidance();
-    assert.equal(disabled.source, 'generic');
-    assert.equal(disabled.guidance, GENERIC_PLAYBOOK);
+    const result = await service.getGuidance();
+    assert.deepEqual(result, {
+      schemaVersion: 1,
+      source: 'generic',
+      selection: 'generic_default',
+      guidance: GENERIC_PLAYBOOK,
+      notice: GUIDANCE_NOTICE,
+    });
   });
 });
 
-test('private mode explicitly labels absence and reloads fabricated edits without Etsy access', async () => {
+test('automatically selects a private file even when legacy mode says generic', async () => {
   await fixture(async ({ directory, repositoryDirectory, filename }) => {
     const service = createLocalGuidanceService({
       repositoryDirectory,
       environment: {
-        ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'private',
         ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: directory,
+        ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'generic',
       },
     });
-    assert.equal((await service.getGuidance()).selection, 'private_file_missing');
+    assert.equal((await service.getGuidance()).selection, 'generic_default');
     await fs.writeFile(filename, 'Fabricated preferences: ask about dimensions.', { mode: 0o600 });
     const result = await service.getGuidance();
     assert.equal(result.source, 'private');
@@ -181,18 +159,14 @@ test('typed, spoofed and unexpected errors never leak private details or return 
   }
 });
 
-test('invalid environment and malformed or excessive service results fail closed', async () => {
-  for (const environment of [
-    { ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'invalid' },
-    {
-      ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'private',
-      ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: 'relative',
-    },
-  ]) {
-    const result = await tool(createLocalGuidanceService({ environment })).handler({});
-    assert.equal(result.isError, true);
-    assert.equal('structuredContent' in result, false);
-  }
+test('unsafe configured path and malformed or excessive service results fail closed', async () => {
+  const result = await tool(
+    createLocalGuidanceService({
+      environment: { ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: 'relative' },
+    }),
+  ).handler({});
+  assert.equal(result.isError, true);
+  assert.equal('structuredContent' in result, false);
   const base = await createReviewGuidanceService().getGuidance();
   for (const overrides of [
     { privatePath: '/fabricated' },
@@ -276,44 +250,50 @@ async function stdio(run, { script, environment = {} } = {}) {
 }
 
 test('real alpha STDIO advertises and returns generic guidance with unchanged status and no Etsy requests', async () => {
-  await stdio(async (request, stderr) => {
-    const inventory = (await request('tools/list', {})).result;
-    assert.deepEqual(inventory.tools.map((t) => t.name).sort(), [
-      'apply_listing_edit',
-      'get_listing',
-      'get_private_guidance_setup',
-      'get_private_guidance_update',
-      'get_review_guidance',
-      'get_setup_status',
-      'list_active_listings',
-      'prepare_listing_edit',
-      'read_private_guidance_for_update',
-      'replace_private_guidance',
-      'save_private_guidance',
-      'set_private_guidance_active',
-      'validate_listing_draft',
-    ]);
-    const meta = inventory.tools.find((t) => t.name === 'get_review_guidance');
-    assert.equal(meta.inputSchema.additionalProperties, false);
-    assert.ok(meta.outputSchema);
-    const before = (await request('tools/call', { name: 'get_setup_status', arguments: {} }))
-      .result;
-    const result = (await request('tools/call', { name: 'get_review_guidance', arguments: {} }))
-      .result;
-    assert.equal(result.isError, undefined);
-    assert.equal(result.structuredContent.source, 'generic');
-    assert.equal(result.structuredContent.selection, 'generic_mode');
-    assert.deepEqual(result.structuredContent, JSON.parse(result.content[0].text));
-    const after = (await request('tools/call', { name: 'get_setup_status', arguments: {} })).result;
-    assert.deepEqual(after, before);
-    assert.equal(stderr(), '');
-    const bad = await request('tools/call', {
-      name: 'get_review_guidance',
-      arguments: { path: '/fabricated-confidential' },
-    });
-    assert.ok(bad.error || bad.result?.isError);
-    assert.equal(JSON.stringify(bad).includes('/fabricated-confidential'), false);
-  });
+  await fixture(async ({ directory }) =>
+    stdio(
+      async (request, stderr) => {
+        const inventory = (await request('tools/list', {})).result;
+        assert.deepEqual(inventory.tools.map((t) => t.name).sort(), [
+          'apply_listing_edit',
+          'get_listing',
+          'get_private_guidance_setup',
+          'get_private_guidance_update',
+          'get_review_guidance',
+          'get_setup_status',
+          'list_active_listings',
+          'prepare_listing_edit',
+          'read_private_guidance_for_update',
+          'replace_private_guidance',
+          'save_private_guidance',
+          'start_new_listing_draft',
+          'validate_listing_draft',
+        ]);
+        const meta = inventory.tools.find((t) => t.name === 'get_review_guidance');
+        assert.equal(meta.inputSchema.additionalProperties, false);
+        assert.ok(meta.outputSchema);
+        const before = (await request('tools/call', { name: 'get_setup_status', arguments: {} }))
+          .result;
+        const result = (await request('tools/call', { name: 'get_review_guidance', arguments: {} }))
+          .result;
+        assert.equal(result.isError, undefined);
+        assert.equal(result.structuredContent.source, 'generic');
+        assert.equal(result.structuredContent.selection, 'generic_default');
+        assert.deepEqual(result.structuredContent, JSON.parse(result.content[0].text));
+        const after = (await request('tools/call', { name: 'get_setup_status', arguments: {} }))
+          .result;
+        assert.deepEqual(after, before);
+        assert.equal(stderr(), '');
+        const bad = await request('tools/call', {
+          name: 'get_review_guidance',
+          arguments: { path: '/fabricated-confidential' },
+        });
+        assert.ok(bad.error || bad.result?.isError);
+        assert.equal(JSON.stringify(bad).includes('/fabricated-confidential'), false);
+      },
+      { environment: { ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: directory } },
+    ),
+  );
 });
 
 test('discovery/status do not invoke a configured guidance provider', async () => {
@@ -336,7 +316,7 @@ test('real alpha private STDIO labels missing/private/error without leaking to s
     await stdio(
       async (request, stderr) => {
         const call = () => request('tools/call', { name: 'get_review_guidance', arguments: {} });
-        assert.equal((await call()).result.structuredContent.selection, 'private_file_missing');
+        assert.equal((await call()).result.structuredContent.selection, 'generic_default');
         await fs.writeFile(filename, 'Fabricated private fixture preferences.', { mode: 0o600 });
         const result = (await call()).result;
         assert.equal(result.structuredContent.source, 'private');
