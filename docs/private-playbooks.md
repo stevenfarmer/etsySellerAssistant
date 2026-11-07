@@ -2,7 +2,7 @@
 
 The MCP server provides general seller guidance and can use a private guidance file stored on the same computer. The connected AI client is instructed to retrieve the applicable guidance when beginning seller assistance.
 
-If a private file is present and valid, its text is returned; otherwise, general guidance is returned. When general guidance is used, the assistant should say that the advice is not customized and invite the seller to configure the installation. There is no separate activation toggle; disabling the MCP server turns this behavior off.
+If no private file is present, general guidance is returned. When general guidance is used, the assistant should say that the advice is not customized and invite the seller to configure the installation. An invalid or unsafe private file causes a clear failure; the server does not silently fall back to general guidance. There is no separate activation toggle; disabling the MCP server turns this behavior off.
 
 ## Create or update guidance
 
