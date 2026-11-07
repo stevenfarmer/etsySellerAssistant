@@ -87,33 +87,26 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live `main` includes T-040 and the T-043 automatic-use direction through PR #65, commit
-  `010a473661464766890a7b0e2c203c6b51e8beff`.
-- Active isolated checkout: `/private/tmp/etsySellerAssistant-current`; branch
-  `codex/t043-t036-t037`; PR [#67](https://github.com/stevenfarmer/etsySellerAssistant/pull/67),
-  head `ce06041ec84557a849135c041f0fd1d0ed088426`. The PR contains the T-043 automatic-guidance
-  implementation, T-036 CodeQL job, and T-037 complete photo-to-listing-draft workflow. No local
-  uncommitted changes remain after this checkpoint commit.
-- Loopback-enabled `npm run validate` passed: Prettier, ESLint, TypeScript, build and **297/297
-  offline tests**. `git diff --check` passed. All seven GitHub PR checks passed on the current head:
-  GitHub Advanced Security CodeQL, the new CodeQL workflow, Gitleaks, and Node 24/26 validation
-  plus `npm audit` on macOS and Windows (workflow run 42320341869). No live Etsy
-  call, private guidance read, credential change, or listing change occurred.
-- T-043 behavior is implemented and awaits Codex Desktop acceptance. The initialization message
-  asks the client to retrieve guidance for each seller-assistance conversation. Private guidance is
-  selected when present; otherwise general guidance is returned and must be labeled uncustomized.
-  Disabling the MCP connection is the off switch. The MCP protocol cannot force clients to obey the
-  instructions, so client acceptance is still required.
-- T-036 CodeQL and PR CI are verified. On GitHub settings, secret scanning and push protection were
-  already enabled; the dependency graph and Dependabot alerts were enabled after owner approval.
-  Weekly Dependabot version updates are configured. Automatic security-update PRs remain off.
-- T-037 implements the one-question-at-a-time photo interview and complete, ready-to-enter listing
-  draft. Codex Desktop/owner acceptance remains. The workflow does not create or publish the listing.
-- Next: complete final PR review and merge PR #67 after its checkpoint/documentation update passes
-  CI. Then arrange supported-client acceptance for T-043 and T-037 using the merged local server.
-  The current connected `etsySellerAssistant` tool inventory still reflects the pre-PR version; do
-  not treat its behavior as acceptance evidence for this branch. T-036 is ready for merge; T-043
-  and T-037 remain incomplete until Codex Desktop/owner acceptance is recorded.
+- PR #67 merged to `main` as `b62cea63495a91d8bb96f1db48c46c0e021f0d5e` from reviewed head
+  `9ebc41c5c67a70e8d00eabeb3c3355cf1de4ebb5`. It delivers T-043 automatic private/general
+  guidance selection, T-036 pinned CodeQL and security coverage, and T-037 complete photo-to-listing
+  drafts.
+- Loopback-enabled `npm run validate` passed formatting, lint, TypeScript, build and **297/297
+  offline tests**; `git diff --check` passed. All seven PR checks passed on reviewed head
+  (workflow run 42321404158), and all six post-merge checks passed on `main`
+  (run 42321872725). No Etsy API request, private guidance read, credential change or listing
+  change occurred.
+- T-036 is Done. Secret scanning and push protection were already enabled; the owner authorized
+  Dependency graph and Dependabot alerts. Weekly version updates are configured; automatic
+  security-update PRs remain off. One moderate development-only transitive `minimatch` advisory
+  (GHSA-g3hv-75wg-m249) is tracked separately in T-021.
+- T-043 and T-037 implementation are merged, but supported-client/owner acceptance is not complete.
+  The current connected MCP inventory is still from the older local installation. The Google Drive
+  checkout has unrelated uncommitted work; do not overwrite or reset it.
+- Next: prepare a safe updated local server installation that preserves the existing checkout, then
+  restart the connected MCP server and verify (a) automatic private/generic guidance behavior and
+  (b) the photo interview producing a complete, ready-to-enter draft. Keep T-043/T-037 In Review
+  until the owner observes the behavior.
 
 ## Required replacement at each checkpoint
 
