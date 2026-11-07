@@ -1,200 +1,71 @@
-# Development guide
+# Setup and recovery
 
-## Supported setup
+This guide configures the local alpha server. The published alpha.1 tag is read-only; current source includes guarded editing. Use only a source revision whose capabilities you have reviewed.
 
-Use Node.js 24 LTS for the baseline development environment. Node.js 26 LTS is also tested. The server speaks MCP over local STDIO. The current v1 acceptance target is macOS with Codex Desktop; other clients have not been verified. Windows runtime acceptance is deferred to v2 or later, and Linux remains exploratory.
+## Requirements
 
-Install Node.js using the official distribution or a trusted version manager for your operating system. Confirm that `node` and `npm` are available in the environment from which your MCP client will launch the server.
+- macOS is the verified runtime platform.
+- Node.js 24–26 and npm 10 or later.
+- An Etsy Seller App with the local callback address configured as described in [Seller App setup](etsy-registration-verification.md).
 
-## First run
+The server uses MCP over STDIO. Codex Desktop on macOS is the verified client configuration; other clients must support local STDIO MCP, and have not been verified with this installation.
+
+## Build
 
 ```sh
 npm ci
 npm run validate
-npm start
+npm run build
 ```
 
-`npm ci` uses the committed lockfile for a clean, reproducible dependency install. `npm run validate` checks formatting, lint, TypeScript types, and automated tests. `npm start` builds and launches the local MCP process.
+Validation uses offline tests and does not call Etsy. To run the status-only server manually, use `npm start`. The shop-connected alpha entry point is `dist/src/alpha.js`.
 
-## Codex Desktop setup (current v1 acceptance client)
+## Configure local Etsy access
 
-In the Codex Desktop custom MCP setup, choose STDIO and provide:
+Run setup in an interactive terminal:
 
-- Command: `node`, or the full path to the Node executable if the app has a limited PATH.
-- Argument: absolute path to `dist/src/index.js`.
-- Working directory: the repository root.
-- Environment variables: none for the current status-only scaffold.
+```sh
+npm run local -- guided
+npm run local -- connect
+```
 
-Use that machine's native path format. Do not copy a Windows path into the Mac configuration or vice versa. No Etsy credentials should be entered at this stage.
+The guided command asks for the shop and app details needed for local configuration. It masks sensitive entry. The connect command opens the Etsy authorization flow and verifies the selected shop. The connection uses the permissions needed for listing reads.
 
-## Change and test loop
+Configuration and credentials remain on this computer. macOS credentials are stored in Keychain; local settings are in the application's support directory. Do not copy credentials or callback URLs into chat, environment files, repository files, or logs.
 
-- Add tests with each behavior change. Prefer deterministic unit tests and mocked external responses.
-- Run `npm run validate` before opening a pull request.
-- Keep the test suite offline from Etsy.
-- Confirm the configured CI checks. Windows CI remains regression coverage, not Windows live acceptance or a v1 manual-test requirement.
-- If an environment prevents a check from running, say so explicitly in the pull request instead of claiming success.
+## Add the MCP server
 
-The default MCP server is status-only; the separate alpha entry point connects the read-client
-components to the local MCP server. A local setup and connection CLI exists, but live credential
-handling and Etsy access require separate explicit authorization for that specific step. Do not
-run the live flow as part of automated testing.
-Automated tests mock Etsy and the OS credential store; the test preload blocks external `fetch`
-requests and allows loopback HTTP only for callback tests. It is not a general socket firewall.
-Some sandboxed environments do not allow the callback tests to bind localhost; run validation in
-an environment where loopback binding is permitted and report the result.
+Configure a local STDIO server in the MCP client:
 
-To manually check the native protected-store dependency on a supported computer, run
-`node scripts/manual-os-store-smoke.mjs`. The script creates a unique test-only service and
-fabricated value, checks the round trip, and deletes it. It does not access the application's real
-credential slots. On Windows, local non-secret settings rely on inherited `%LOCALAPPDATA%` ACLs;
-POSIX mode bits alone do not enforce Windows ACLs. Windows native-store and Node-version coverage
-must be verified independently before claiming platform acceptance.
+- **Command:** `node`, or the full path to the Node executable.
+- **Argument:** the absolute path to `dist/src/alpha.js` in this checkout.
+- **Working directory:** the repository root.
+- **Environment:** leave empty unless intentionally configuring a private guidance directory.
 
-Once separately authorized for local credential setup, run `npm run local -- guided` in an
-interactive terminal. Enter the shop URL or name and app credentials at the hidden prompts; the command
-asks for confirmation before one read-only shop search. It uses the exact match to configure the
-shop, so the ID and credentials do not have to be entered again. Never put them in chat or command
-arguments. The CLI stores credentials in the OS credential store and the ID in the platform's local
-application-support directory. It refuses to overwrite an existing setup. Each Mac must be set up
-locally by an authorized operator; do not sync credentials or create additional seller apps for
-other sellers. `npm run local -- connect` is a separate live operation: it asks for
-local confirmation, opens a localhost start page, then requests `listings_r` consent and performs
-one shop identity check. Do not run it until the concrete live step is authorized and reviewed.
-The browser may retain the Etsy authorization URL in history or diagnostics; do not share it.
+For clients with separate command and argument fields, pass the script path as one argument. Restart the MCP client after changing the server configuration. A fresh conversation should discover `get_setup_status`, `list_active_listings`, `get_listing`, `get_review_guidance`, and the draft tools.
 
-### Local audit folder
+## Enable listing edits
 
-For guarded apply, configure the Drive-synced audit folder with
-`npm run local -- set-audit-directory`. Enter the absolute path ending in
-`github/etsySellerAssistant/auditTrail` at the hidden prompt. The setting is stored only in local
-application configuration; the command neither contacts Etsy nor writes audit records. The
-unpublished alpha requires this setting before applying an approved proposal. The edit grant is a
-separate explicit local authorization (`npm run local -- enable-edits`). To remove only that grant,
-stop all local server processes and run `npm run local -- disable-edits`; the read grant and audit
-records remain. See [guarded editing](local-editing.md) and [local audit records](local-audit.md)
-for the complete flow, record contents, file protections, and recovery steps.
+Listing reads do not grant write access. To use guarded title, description, or tag edits:
 
-All guided prompts hide input, including the shop URL and confirmation words. Paste or type once,
-then press Return even though nothing appears. Single-line bracketed paste is supported; multiline
-paste is rejected. Ctrl-C cancels the current attempt.
+1. Choose a private local audit folder and configure it with `npm run local -- set-audit-directory`.
+2. Run `npm run local -- enable-edits` and complete the separate Etsy authorization.
+3. Restart the MCP server so it uses the new local authorization.
 
-The separate `lookup` and `setup` commands remain available for troubleshooting or if the numeric
-ID is already known. A public search result does not prove ownership: the subsequent owner-consented
-OAuth flow verifies that the returned owner's shop matches the ID. If lookup fails or is ambiguous,
-do not guess. The lookup does not save the shop name.
+To remove only the edit authorization, stop the MCP server and run `npm run local -- disable-edits`. Listing-read authorization is separate.
 
-To retest from a clean local state or correct an incorrect shop selection, stop other local app
-instances and run `npm run local -- reset`. The command requires the hidden confirmation `RESET`;
-it removes this computer's stored app keystring, shared secret, OAuth tokens, shop ID setting,
-local audit-folder selection, and token state. It does not delete audit files, remove the Seller
-App or revoke Etsy-side authorization, and it affects only this computer. If removal fails, it
-reports failure and may have removed some local values;
-retry the reset before starting setup. Then run `npm run local -- guided` to identify the shop again,
-followed by `npm run local -- connect` for owner authorization. This is the current way to correct
-the shop ID: it deliberately requires a new identity check instead of silently changing a connected
-shop. For Etsy-side revocation, use the owner's connected-app settings when the app is listed, as
-described in [Etsy's API help](https://help.etsy.com/hc/en-us/articles/360025870013-How-to-Use-Etsy-s-API).
+## Configure private guidance
 
-Refresh coordination uses a per-user lock and a non-secret state file. If a process crashes, an
-incomplete lock requires manual recovery; never remove it while an owner process might be active.
-An interrupted refresh reports recovery required and is not retried automatically, because the
-server may already have rotated the token. Partial setup can leave credentials in protected storage;
-do not remove or overwrite them without deliberate recovery. The isolated Mac recovery/Keychain drill is accepted; final product/limits acceptance is tracked in the current requirements matrix. Live revocation/reauthorization and interactive terminal recovery remain explicitly untested by that drill. Windows native behavior and live acceptance are deferred; retained Windows guidance is for future development.
+The default private guidance file is stored at:
 
-For a stale lock, first stop every instance of the local CLI and MCP server on that computer and
-verify that none is still running. The app's local support folder is `~/Library/Application
-Support/etsySellerAssistant` on macOS or `%LOCALAPPDATA%\\etsySellerAssistant` on Windows. Only
-then may the owner remove the `refresh.lock` directory. Do not remove a lock based solely on its
-age or PID, since a slow process or a reused PID can make that unsafe. A `token-state.json` entry
-marked `refreshing` means the outcome of a refresh may be unknown; removing the lock does not fix
-it. Keep the state and credentials intact until the owner deliberately completes a reviewed
-reauthorization and cleanup procedure. Do not paste the support folder contents into chat.
+```text
+~/Library/Application Support/etsySellerAssistant/guidance/playbook.private.md
+```
 
-## Listing-read recovery
+Open it in Finder with **Go > Go to Folder…** and enter the path above. To use another private folder, set `ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY` in the MCP server environment. See [private guidance](private-playbooks.md).
 
-The alpha now distinguishes a busy local operation from a connection requiring recovery. Busy or timed-out lock acquisition means wait for the other operation to finish; never delete its lock. Other refresh-coordination failures stop listing retries and direct the operator here. These messages contain no token values, shop identifiers, or local paths. Unexpected errors retain the generic sanitized response.
+## Recovery
 
-For interrupted refresh, revoked authorization, partial credential writes, or an invalid token state:
+Use `npm run local -- reset` only when you intend to remove this computer's app credentials, tokens, token state, and selected shop. It does not delete audit records or revoke authorization in Etsy. After a reset, repeat the guided setup and connect steps.
 
-1. Stop every local MCP server and connection CLI instance. Keep existing credentials and state intact while investigating; do not retry a possibly rotated refresh token.
-2. If a stale `refresh.lock` prevents local commands, verify that no app instance remains before deliberately removing only that lock directory as described above. Removing the lock alone does not repair token state.
-3. If reauthorization is needed, deliberately run `npm run local -- reset` and confirm `RESET` locally. This removes app credentials, tokens, token state, and the shop setting on this computer. A partial reset reports failure; resolve protected-store access and repeat reset before setup. It does not revoke Etsy-side authorization.
-4. Run `npm run local -- guided` with locally entered credentials, then `npm run local -- connect` and complete owner consent. These steps require explicit authorization for the lookup, token exchange, and identity check. Restart the MCP server after recovery; a later listing-detail request requires listing the page again in that server session.
-
-Do not reset a healthy connection as an acceptance test. Use fabricated stores and temporary directories for automated failure drills. The failed Windows/Node 24 main run was traced to lock-directory rename during release; its underlying OS error was sanitized, so the cause is unconfirmed. A deterministic regression verifies that a failed release preserves ownership and keeps contenders blocked. That safety check does not establish Windows support or prove the CI issue fixed.
-
-## Troubleshooting
-
-- **Node is not found:** restart Codex Desktop after installing Node, or configure the full Node executable path.
-- **The MCP server does not start:** run `npm ci`, then `npm run build`; check that the configured argument points to `dist/src/index.js`.
-- **The server appears to hang in a terminal:** that is expected; an STDIO MCP server waits for its client. Stop it with Ctrl+C.
-
-## Refresh failure and cleanup diagnostics
-
-Lease-owning token, listing-read, and CLI operations preserve the primary failure if lock release
-also fails. If the operation succeeds but release fails, the request still fails; CLI success
-output is emitted only after release succeeds. Errors remain typed and sanitized. A failed release
-rename leaves the lock in place and blocks contenders. A successful rename ends ownership even
-when deletion of the resulting `.refresh-released-*` tombstone fails: that failure is reported,
-but a new lock can be acquired. Tombstones are not active locks; never interpret them as permission
-to remove a current `refresh.lock`.
-
-Missing, incomplete, malformed, or oversized owner metadata reports `recovery_required` once the
-bounded wait ends. Briefly incomplete metadata can occur during initialization. A valid owner
-still present at the deadline reports `timeout` (or `busy` for a non-waiting caller). None of these
-cases authorizes automatic lock removal.
-
-A wrong-owner or malformed refresh grant fails validation and leaves `token-state.json` marked
-`refreshing`. Later requests require recovery without another refresh attempt or reuse of the old
-refresh token. Follow the deliberate recovery procedure above; do not clear the marker to retry.
-
-Clock assessment: lock contention waits use a monotonic elapsed-time clock, so moving the system
-clock forward or backward does not change the wait budget. Owner metadata retains its wall-clock
-creation timestamp; age still never authorizes automatic lock stealing. This bounds retry waiting,
-not the duration of an individual stalled filesystem operation or suspension of the process.
-
-Persisted token expiry still uses wall-clock time and is calculated after refresh transport.
-Backward adjustments can extend apparent token freshness; forward adjustments can shorten it.
-The 60-second freshness margin and strict comparison cover ordinary boundaries, not arbitrary
-clock jumps. An offline fabricated 40-second transport delay produced an expiry 40 seconds later
-than anchoring the same lifetime before transport. That confirms the calculation's timing
-assumption, not a live Etsy expiry failure. Conservative expiry anchoring, short-lifetime grants
-and clock validation need a separate focused design and tests.
-
-## Isolated Mac recovery drill
-
-See [Mac recovery acceptance](mac-recovery-acceptance.md) for the offline drill and the exact, separately authorized test-only Keychain actions. Neither mode reads the healthy connection. Native mode is manual only; CI tests inject a fabricated backend.
-
-## Listing-read diagnostics
-
-The read tools now distinguish Etsy rejecting authorization (401), denying access (403), a missing
-resource (404), request timeout (408 or a cancelled/timed-out transport), rate limiting (429),
-temporary service failure (5xx), invalid response data, and network/other request failures.
-Authorization rejection can indicate expired or revoked authorization; the status alone does not
-establish which. Follow the recovery guide rather than repeatedly retrying or automatically resetting.
-
-Rate-limit and service-failure messages ask the operator to pause before retrying. This change adds
-no automatic retries or retry scheduling and does not interpret or echo Retry-After headers.
-Error bodies, status text, headers, tokens, identifiers and local paths are not copied into tool
-errors. Unexpected untyped exceptions keep the generic sanitized message. No settings or credentials
-are changed by these diagnostics.
-
-## Session connection confirmation
-
-In the development alpha, `get_setup_status` initially reports `etsyAccess: not_checked`. After
-a listing page or detail operation succeeds, including lock release, it reports
-`etsyAccess: verified_this_session` with `connection.ownerId`, `connection.shopId`, and
-`connection.lastVerifiedAt` (UTC). An empty successful listing page also verifies the connection.
-
-The snapshot is held only in memory. Reading it never contacts Etsy, reads settings/credentials,
-refreshes a token or acquires a lock. It remains evidence of the last successful read, not proof
-of current token validity. External reset, revocation or configuration changes are not detected
-until another read or restart. A new read clears the snapshot while pending; failure, including
-release failure, leaves `not_checked` with no identity object. An older request cannot overwrite
-the status of a newer pending/failed request. Restarting discards all confirmation.
-
-The default status-only server keeps its existing output. Tool names and input schemas are
-unchanged. Alpha output adds the `verified_this_session` state and allowlisted identity fields;
-clients consuming the JSON should handle that state. Use a listing read only when authorized
-to obtain fresh confirmation; status does not silently upgrade itself to a live probe.
+If a detail read fails after restart, list the active listings again first; details are limited to listings returned in the current server session. If the server does not start, verify the Node executable, working directory, and entry point, then run `npm ci` and `npm run build`.
