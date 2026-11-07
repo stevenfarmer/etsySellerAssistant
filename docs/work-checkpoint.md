@@ -76,7 +76,9 @@ resuming; historical evidence is valid only within its stated scope.
   disclosure, and explicit consent prompt. The declined path left the file unread and unchanged; after explicit yes, the assistant read the
   guidance and asked a focused follow-up question. The owner then reviewed the complete replacement
   and chose Replace; the tool confirmed the save and a private recovery copy. Activation was unchanged.
-  Separate activation/deactivation remains unverified. PR #61 merged to `main` as
+  A separate owner-provided Codex Desktop transcript confirms the enable action returned
+  `enabled=true` without reading guidance. The owner has since superseded the separate enable step;
+  T-043 now specifies automatic guidance use. PR #61 merged to `main` as
   `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; all five PR checks passed in run 42307541020 and
   all five post-merge checks passed in run 42307846832. All five PR CI checks passed in run
   42288723599, and all five post-merge main checks passed in run 42289062632. The connected agent
@@ -85,26 +87,22 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live `main` includes the T-040 implementation (PR #58) and documentation closeouts #59–#63.
-  PR #61 merged as `7a2edaa5b48a4ca1c1c695ea37a7ad537b9d587b`; its five PR checks passed in run
-  42307541020 and five post-merge checks passed in run 42307846832. PR #62 merged as
-  `50823d56774add12bd2933dbdbba2650684899aa`; its five PR checks passed in run 42308355341 and
-  five post-merge checks passed in run 42308587072. PR #63 merged as
-  `c48671768c8d30e481541e87ff79f1a92897b1d7`; its five PR checks passed in run 42309021600 and
-  five post-merge checks passed in run 42309266872.
+- Live `main` includes T-040 implementation PR #58 and documentation closeouts #59–#64. PR #64
+  merged as `e96a8b8c4b84e546d186bd858bd745345a0eb6fe`; all five PR checks passed in run
+  42309659311 and all five post-merge checks passed in run 42309908219.
 - The Google Drive checkout remains on stale branch `codex/t034-guided-setup-design` with unrelated
   uncommitted changes. It was not used for these documentation changes.
-- Tracker rows T-040–T-042 were read back. T-040 remains In Review: the owner tested refusal,
-  consented read, focused revision, full replacement review, explicit Replace, successful save and
-  private recovery-copy confirmation. Activation was unchanged; only the separate activation/
-  deactivation interaction remains untested.
-- T-041 and T-042 are Backlog / P2. T-041 calls for advice to reflect owner-confirmed changes in the
-  current conversation and, when useful across sessions, to propose a dated private-context update
-  for approval. T-042 covers seller-neutral discovery of unused API capabilities and candidate
-  features; it authorizes no code or new access.
-- Next owner action for T-040: in Codex Desktop, ask to activate private guidance and review the
-  separate on/off choice. Activation must not read the file; do not report T-040 Done until the
-  owner confirms that interaction.
+- Tracker rows T-040–T-043 were read back. T-040 is Done for the accepted natural-language update
+  workflow. T-041 and T-042 remain Backlog / P2. T-043 is Open / Now for automatic use of saved
+  guidance, a clear uncustomized-guidance reminder, and sharing disclosure. No code is implemented
+  for T-043 yet.
+- Owner decision on 6 November 2026: no separate enable/activation step. When the Etsy assistant MCP
+  server is invoked, saved guidance should apply automatically. If only the general guidance is
+  available, use it while saying it is not personalized and invite configuration. Disabling the MCP
+  server is the off switch. Make automatic provider sharing clear; keep existing Etsy access and write
+  safeguards.
+- Next action: design and implement T-043, including how the server supplies private guidance to the
+  connected agent and how the general/unconfigured state is identified. Verify in Codex Desktop.
 
 ## Required replacement at each checkpoint
 
