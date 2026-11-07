@@ -6,13 +6,15 @@ Records are append-only JSON Lines files grouped by month. An entry includes tim
 
 ## Configure the folder
 
-Choose a private local folder that is backed up only to a location you control. Then run:
+Choose a private folder on a local or synced drive. The configured path must end in `github/etsySellerAssistant/auditTrail`; the root of the path can differ by computer. Do not share the absolute path or audit files.
+
+Run:
 
 ```sh
 npm run local -- set-audit-directory
 ```
 
-Enter the folder path when prompted. The configuration is stored locally and is not written to the repository. Restrict access to the folder and avoid sharing its contents.
+Enter the full folder path when prompted. The configuration is stored locally and is not written to the repository. Restrict access to the folder and avoid sharing its contents.
 
 ## Recovery
 
