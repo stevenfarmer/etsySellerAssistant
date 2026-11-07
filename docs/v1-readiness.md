@@ -43,7 +43,8 @@ T-034's functional first-run private-guidance proposal was approved and merged i
 `52fde35efe36ff472b9511cd12a74f13f49437ea` (run 42146691927). T-039 implements the setup prompt
 and fixed-path create-only save. T-040 implements natural-language update entry, safe reviewed replacement and manual editing. T-043
 adds automatic private/generic guidance selection and is awaiting Codex Desktop acceptance. T-036
-adds CodeQL to CI; its settings review found secret scanning and push protection already on, and
+adds CodeQL to CI; PR #67 merged as `b62cea63495a91d8bb96f1db48c46c0e021f0d5e`, and all six post-merge
+checks passed (run 42321872725). Its settings review found secret scanning and push protection already on, and
 dependency graph plus Dependabot alerts are now enabled. Weekly version updates are configured;
 automatic security-update PRs remain off. T-037 now exposes the complete
 photo-to-ready-to-enter listing workflow and needs supported-client acceptance. T-038 tracks requested
