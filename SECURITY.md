@@ -15,4 +15,4 @@ CI includes dependency auditing, secret scanning, and JavaScript/TypeScript code
 
 ## Reporting a vulnerability
 
-Do not publish credentials, tokens, private shop data, or unpatched vulnerability details in a public issue. Use GitHub's private vulnerability reporting for this repository when available. Otherwise, contact the repository maintainer through GitHub and request a private channel.
+Do not publish credentials, tokens, private shop data, or unpatched vulnerability details in a public issue. Use GitHub's private vulnerability reporting for this repository when available. If that option is unavailable, contact the repository through GitHub to request a private channel.
