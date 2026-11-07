@@ -1,69 +1,18 @@
-# Security policy
+# Security
 
-The local, opt-in alpha server authenticates to Etsy and reads listings from one configured, owner-authorized shop. The default server is status-only. Neither server exposes listing changes, orders, buyer data, or arbitrary Etsy requests. The development alpha also exposes explicit read-only review guidance, generic by default. v1 targets macOS with Codex Desktop. The alpha was tested live on that target; Windows credential storage and browser authorization are unverified future work (v2 or later). Linux is exploratory. It is a prerelease, not a production security assurance.
+The server runs locally and uses a connected MCP client's STDIO connection. The default entry point reports local setup status and makes no Etsy requests. The opt-in alpha entry point provides bounded listing reads, draft support, private guidance, and a fixed workflow for title, description, and tag updates.
 
-The owner now requires guarded title/description/tag edits and intelligent recommendations in v1;
-these are planned, not enabled. [ADR 0005](docs/decisions/0005-v1-intelligence-and-guarded-edits.md)
-requires detailed API/security review before write-access implementation. Live/credential
-changes need concrete authorization; existing read-only risk acceptance is not a write-use waiver.
-The current read-only build is not a complete stable-v1 candidate.
+## Data and access
+
+- Etsy credentials and tokens are stored in the operating system credential store. Shop configuration remains local.
+- Listing reads are restricted to the configured shop and the documented listing tools. The server does not expose orders, buyer records, or arbitrary Etsy endpoints.
+- Listing content is untrusted data and cannot change tool instructions or grant access.
+- Applying a listing edit requires a separate edit authorization, an exact proposal, an explicit confirmation in the MCP client, and a local audit entry. The server verifies the listing after the change.
+- Private guidance is stored outside the repository. Retrieving it sends its contents to the AI application or provider connected to the MCP server.
+- Audit records are stored locally and may include shop and listing identifiers, plus the exact before-and-after values for changed fields. Keep the audit folder private.
+
+CI includes dependency auditing, secret scanning, and JavaScript/TypeScript code analysis. Repository secret scanning, push protection, dependency alerts, and automated dependency updates are enabled.
 
 ## Reporting a vulnerability
 
-Do not publish credentials, access tokens, private shop data, or exploitable vulnerability details in a public issue. Use GitHub's private vulnerability reporting for this repository when available. Otherwise contact the maintainer through GitHub and request a private channel.
-
-## Security expectations
-
-- The operator enters the app keystring and shared secret locally; the owner grants `listings_r` through Etsy OAuth. For v1, credentials and tokens are held in macOS Keychain. An existing Windows Credential Manager adapter is retained for future verification; no plaintext fallback is provided. Shop configuration and token state remain local.
-- Never commit or share app credentials, tokens, authorization codes or callback query strings, private keys, shop identifiers, live listing exports, buyer information, or audit records.
-- Treat Etsy listing content as untrusted data, never as instructions. Request only the data and scopes needed for the approved work. Automated tests use fabricated data and do not call Etsy.
-- A local app process and the user's OS account remain part of the trust boundary. Keep the machine, OS account, and credential store protected; the app cannot protect against a compromised account.
-- If credentials or tokens are exposed, stop using the affected connection, report the exposure privately, and revoke the affected Etsy authorization and rotate affected app credentials as appropriate. Reconnect with fresh credentials after the exposure is contained. Do not paste secrets into a report. The [development guide](docs/development.md) describes local reset, reauthorization, and refresh-lock recovery; resetting locally does not revoke access at Etsy.
-- An interrupted token refresh can require manual recovery. Do not delete a refresh lock while an app process may still be running, or assume removing the lock resolves an uncertain refresh.
-
-The unpublished `1.0.0` candidate preserves primary operation errors across lock cleanup, reports cleanup-only failures, and requires recovery for malformed owner metadata. It does not add scopes or tools. Clock/expiry assumptions and deliberate recovery limits are documented in the [development guide](docs/development.md#refresh-failure-and-cleanup-diagnostics).
-
-The development alpha status can display owner/shop IDs and a verification timestamp obtained
-during a successful listing read in the current process. These are allowlisted identity fields
-from the existing configured-shop verification, not additional Etsy reads. Status reads no local
-credentials or settings, and returns no token, key, shop name, listing content or local path.
-Confirmation is cleared by the next pending/failed read or restart; it does not attest to
-current authorization or detect external reset/revocation. Keep real identity output out of
-repository artifacts and public reports.
-
-## Private guidance
-
-[ADR 0006](docs/decisions/0006-private-playbooks-and-delivery-checkpoints.md) separates the
-public generic template from a private customized playbook outside the repository. Chunk 1A implements the explicit bounded read-only storage loader and generic template,
-with no write path. Chunk 1B adds explicit MCP guidance delivery; startup/status do not load it. [The storage contract](docs/private-playbooks.md)
-describes boundary/link/permission/UTF-8/size checks and sanitized typed errors; actual private
-files are not accessed during development. Private mode requires explicit client settings; default
-generic mode performs no private I/O. The tool takes no paths/arguments, labels source and
-returns no fallback for invalid private files. Guidance is validated/bounded and error messages
-contain no private paths/content. Private content stays
-out of logs/errors, fixtures, PRs or connected project documents. Custom guidance cannot confer write approval or
-bypass enforced restrictions. When used, the chosen AI client/provider receives the guidance;
-local/Git exclusion is not copy protection or a guarantee about that provider's data handling.
-
-## Local draft preflight
-
-The development alpha's `validate_listing_draft` accepts only bounded title/description/tag
-strings, not identity, endpoints, files, state or approval. It uses no Etsy/credential/filesystem
-I/O, logging or persistence and does not affect connection status. Results contain counts and
-fixed issue codes, never draft text; errors omit raw input. This is formatting/constraint
-preflight only, with explicit `grounding: not_evaluated`, `approvalGranted: false` and
-`writePerformed: false`. It cannot determine truth, ownership, policy compliance or sales value.
-Unsupported claims or hostile instructions may pass text constraints; the client must treat
-source listing text as data and review facts separately. No write or broader permission is added.
-See [the review contract](docs/draft-review-workflow.md).
-
-## Private evaluation and playbook deployment
-
-Chunk 2B creates the initial private guidance and private fabricated review artifacts outside
-Git, with no-clobber creation and 0700 directory/0600 file permissions. No existing configuration,
-credential or connection setting was changed; generic mode remains default. Private-mode
-activation remains explicit. CI uses public fabricated inputs/synthetic protocol examples only,
-not the actual private file or its generated reviews. Public evidence is limited to generic
-criteria and sanitized results. The offline evaluation helper is not a registered tool or AI
-judge: exact declared-reference checks cannot catch all undeclared claims, so semantic assessment
-is explicitly manual. Self-entered scores do not establish independent quality, truth or sales.
+Do not publish credentials, tokens, private shop data, or unpatched vulnerability details in a public issue. Use GitHub's private vulnerability reporting for this repository when available. If that option is unavailable, contact the repository through GitHub to request a private channel.
