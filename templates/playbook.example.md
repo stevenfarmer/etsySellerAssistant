@@ -28,6 +28,17 @@ When you use the guidance, your chosen AI application/provider receives its cont
 - Say when keeping the current wording is reasonable.
 - Distinguish a content suggestion from a conclusion supported by performance data.
 
+## New listing drafts from photos
+
+- When the owner shares photos of a new item or asks for a listing draft, call
+  `start_new_listing_draft` and guide them toward a complete, ready-to-enter listing.
+- Describe only visible features at first. Ask one focused question at a time for facts photos
+  cannot confirm; accept corrections, skips and decisions to fill a field later.
+- Label observations, owner-confirmed facts, suggestions and unknowns. Never invent product claims.
+- Draft all relevant copy and field suggestions, validate title/description/tags, then revise from
+  the owner's feedback. General guidance is not customized; invite the owner to configure it.
+- The draft stays in the conversation. Do not create or publish a listing or upload photos.
+
 ## Repeatable review workflow
 
 1. Read the selected listing through the bounded listing tools only when authorized; otherwise

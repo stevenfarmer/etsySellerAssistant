@@ -27,7 +27,7 @@ const messages: Record<PlaybookErrorCode, string> = {
     'Private guidance could not be read safely. Check the local file and storage guide; no generic fallback was returned.',
 };
 const generalMessage =
-  'Review guidance could not be loaded safely. Check guidance mode/directory and the storage guide. No private content or generic fallback was returned.';
+  'Review guidance could not be loaded safely. Check the configured guidance directory and storage guide. No private content or generic fallback was returned.';
 
 export function registerGuidanceTool(
   server: Pick<McpServer, 'registerTool'>,
@@ -37,7 +37,7 @@ export function registerGuidanceTool(
     'get_review_guidance',
     {
       description:
-        'Explicitly retrieve generic or opted-in private listing-review guidance. The selected AI client/provider receives its text. This reads no Etsy/credentials, accepts no paths, and grants no edit approval. Startup/status never loads guidance.',
+        'Retrieve the installation guidance for the current Etsy seller-assistance conversation. Server instructions require calling this before helping with the shop. It returns the private guidance file when present, otherwise general guidance. The selected AI client/provider receives the returned text. It reads no Etsy/credentials, accepts no paths, and grants no edit approval.',
       inputSchema: input,
       outputSchema: guidanceOutputSchema,
       annotations: {

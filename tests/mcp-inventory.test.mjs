@@ -35,6 +35,14 @@ async function readInventory(entry) {
       clientInfo: { name: 'offline-test', version: '1.0.0' },
     });
     assert.ok(initialized.result);
+    if (entry.endsWith('/alpha.js')) {
+      assert.match(initialized.result.instructions, /call get_review_guidance/);
+      assert.match(initialized.result.instructions, /not customized/);
+      assert.match(initialized.result.instructions, /disabling this MCP server turns it off/);
+      assert.equal(initialized.result.instructions.includes('owner private guidance text'), false);
+    } else {
+      assert.equal(initialized.result.instructions, undefined);
+    }
     const manifest = JSON.parse(
       await readFile(new URL('../package.json', import.meta.url), 'utf8'),
     );
@@ -78,7 +86,7 @@ test('the explicit alpha entry point exposes read and proposal tools without sta
     'read_private_guidance_for_update',
     'replace_private_guidance',
     'save_private_guidance',
-    'set_private_guidance_active',
+    'start_new_listing_draft',
     'validate_listing_draft',
   ]);
 });

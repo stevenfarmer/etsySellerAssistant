@@ -29,8 +29,8 @@ and M8: tracked generic template plus separate private local file outside the re
 custom-content overwrite, arbitrary-path tool or safety override. Guidance is sent to the chosen
 AI client/provider when used; Git exclusion is not DRM or a provider-privacy guarantee. T-026/T-027
 map to storage (T-026 implemented in chunk 1A) and client-neutral MCP access (T-027 Done; real Codex discovery/default-generic invocation passed after restart).
-See [the guidance contract](private-playbooks.md): generic default, explicit private opt-in and
-invocation, no startup/status read, labeled fallback only for absence. Private content never enters public fixtures or
+See [the guidance contract](private-playbooks.md): generic default when no private file exists,
+automatic private selection when one is present, and no startup/status file read. Private content never enters public fixtures or
 connected project records. It is not automatically an audit record.
 
 ## Chunk 2A implementation
@@ -68,21 +68,23 @@ recommendations and proposed copy distinct from every other listing:
 
 ## New listing drafts from photos (M9, T-037)
 
-For a new item, the owner may provide a few photos and answer focused questions in a conversational,
-form-like flow. The assistant should work through applicable listing fields in manageable groups,
-offer clearly labeled suggestions, let the seller correct, skip or add feedback, and revise the
-complete draft before presenting it for final review. The field set must be defined before
-implementation. At minimum, cover title, description and tags; consider category and category
-attributes, materials and maker/era facts, price and quantity, variations/personalization, and
-shipping or processing details where relevant. Distinguish content the assistant can draft from
-seller choices and shop settings such as shipping profiles.
+When the owner shares photos of a new item or asks for help making a listing, call
+`start_new_listing_draft`. The connected agent can inspect photos supplied in chat; the MCP server
+does not receive or upload image files. The workflow is intended to help the owner finish a complete,
+Etsy-ready draft, not just comment on the pictures.
 
-The connected AI client interprets the photos and distinguishes visual observations, owner-confirmed
-facts, suggestions and unanswered questions. Never guess materials, dimensions, construction,
-origin, condition, benefits or claims. Ask targeted follow-ups where an unknown materially affects
-the draft; allow the seller to leave it unanswered and mark it for completion. Photos are inputs to
-the conversation, not automatically uploaded listing images. Drafting does not create, publish or
-change an Etsy listing; guarded edits remain a separate approved workflow.
+Ask one focused question at a time for important facts the photos cannot establish. Work through
+only applicable fields: title, description and tags; suggested category/taxonomy and attributes;
+materials and styles; maker, era and supply/tool status; dimensions, weight, contents and care; price,
+currency, quantity and variations/personalization; and relevant processing and shipping-profile
+choices. Suggestions must be labeled, and owner decisions and existing shop settings must be clear.
+The owner may correct, skip or leave a field for later.
+
+Distinguish visible observations, owner-confirmed facts, suggestions and unresolved details. Never
+guess materials, dimensions, construction, origin, condition, safety or claims. Revise the full draft
+from owner feedback, validate title/description/tags locally, and show unresolved Etsy entry steps.
+The result is ready for the owner to enter on Etsy. The tool does not create a listing, upload photos,
+change shop settings or publish; guarded edits remain a separate approved workflow.
 
 ## Requested pricing and marketing research (M10, T-038)
 

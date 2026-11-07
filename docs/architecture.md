@@ -4,8 +4,8 @@
 
 The default entry point is a local MCP server over STDIO with one status tool and no Etsy network
 calls. The separate `dist/src/alpha.js` entry point exposes bounded read-only listing tools for one
-locally configured, owner-authorized shop, plus explicit review guidance (generic by default,
-private only by opt-in client configuration) and local bounded title/description/tag preflight.
+locally configured, owner-authorized shop, plus review guidance (automatically selected from a
+private file when present, otherwise generic) and local bounded title/description/tag preflight.
 The current v1 client acceptance target is Codex Desktop on macOS. Windows remains deferred to v2
 or later; Linux is exploratory.
 
@@ -49,13 +49,15 @@ flowchart LR
   allowlist --> client
   mcp --> guidance[get_review_guidance]
   guidance --> generic[Compiled generic template]
-  guidance -->|Only if private mode explicitly selected| private[Bounded private file reader]
+  guidance -->|If a private file exists| private[Bounded private file reader]
   generic --> labeled[Labeled guidance and fixed safety notice]
   private --> labeled
   labeled --> client
   mcp --> preflight[validate_listing_draft]
   preflight --> checks[Pure copy constraints: counts and fixed issue codes]
   checks --> client
+  mcp --> photoDraft[start_new_listing_draft]
+  photoDraft -->|Conversation instructions| client
   mcp -. "Opt-in alpha" .-> preview[Exact change proposal]
   preview -.-> confirm[One host Accept/Deny choice]
   confirm -. "Later explicit tool call" .-> stale[Identity and stale-state recheck]
@@ -99,7 +101,7 @@ flowchart LR
   change[Change on a feature branch] --> tests[Automated tests and quality checks]
   tests --> pr[Pull request]
   pr --> ci[GitHub Actions: Windows and macOS<br/>Node.js 24 and 26]
-  ci --> security[Dependency and secret scanning]
+  ci --> security[CodeQL, dependency and secret scanning]
   security --> review[Maintainer and product-owner review]
   review -->|approved and checks pass| merge[Merge]
   review -->|changes requested| change

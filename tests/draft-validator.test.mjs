@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
+import { tmpdir } from 'node:os';
 import { spawn } from 'node:child_process';
 import process from 'node:process';
 import { createInterface } from 'node:readline';
@@ -208,10 +211,17 @@ test('MCP registration exposes a bounded read-only contract and sanitized failur
 });
 
 test('actual alpha STDIO checks a draft without status changes, network or content in diagnostics', async () => {
+  const guidanceDirectory = await fs.mkdtemp(path.join(tmpdir(), 'etsy-draft-guidance-'));
   const child = spawn(
     process.execPath,
     ['--import', './tests/offline-network.mjs', './dist/src/alpha.js'],
-    { env: { ...process.env, ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'generic' } },
+    {
+      env: {
+        ...process.env,
+        ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'generic',
+        ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: guidanceDirectory,
+      },
+    },
   );
   const lines = createInterface({ input: child.stdout });
   const replies = new Map();
@@ -284,5 +294,6 @@ test('actual alpha STDIO checks a draft without status changes, network or conte
     clearTimeout(timer);
     lines.close();
     child.kill();
+    await fs.rm(guidanceDirectory, { recursive: true, force: true });
   }
 });

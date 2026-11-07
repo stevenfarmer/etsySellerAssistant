@@ -11,7 +11,6 @@ import {
 } from '../dist/src/mcp/private-setup-tools.js';
 import { createPrivatePlaybookWriter } from '../dist/src/local/private-playbook-writer.js';
 import { PRIVATE_PLAYBOOK_FILENAME, PlaybookError } from '../dist/src/local/private-playbook.js';
-import { createPrivateGuidanceSettingsStore } from '../dist/src/local/private-guidance-settings.js';
 
 async function fixture(run) {
   const root = await fs.mkdtemp(path.join(tmpdir(), 'etsy-private-setup-'));
@@ -25,18 +24,7 @@ async function fixture(run) {
   }
 }
 
-function registeredTools(
-  writer,
-  settings = {
-    async getEnabled() {
-      return undefined;
-    },
-    async isEnabled() {
-      return false;
-    },
-    async setEnabled() {},
-  },
-) {
+function registeredTools(writer) {
   const tools = new Map();
   registerPrivateSetupTools(
     {
@@ -45,18 +33,20 @@ function registeredTools(
       },
     },
     writer,
-    settings,
   );
   return tools;
 }
 
-test('setup prompt explains disclosure, tailored interview, research boundaries and explicit save/activation steps', () => {
+test('setup prompt explains disclosure, tailored interview, research boundaries and explicit save', () => {
   assert.match(PRIVATE_SETUP_PROMPT, /Before asking any questions/);
   assert.match(PRIVATE_SETUP_PROMPT, /generic non-identifying queries/);
   assert.match(PRIVATE_SETUP_PROMPT, /asking prices from completed-sale evidence/);
   assert.match(PRIVATE_SETUP_PROMPT, /Save this exact document\?/);
   assert.match(PRIVATE_SETUP_PROMPT, /ownerConfirmed:true/);
-  assert.match(PRIVATE_SETUP_PROMPT, /separately ask in chat/);
+  assert.match(
+    PRIVATE_SETUP_PROMPT,
+    /automatically selected for future Etsy seller-assistance conversations/,
+  );
   assert.match(PRIVATE_SETUP_PROMPT, /configure, set up, or personalize/);
   assert.match(PRIVATE_SETUP_PROMPT, /stop and wait for the owner's answer/);
   assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /update, edit, refine, or improve/);
@@ -68,7 +58,7 @@ test('setup prompt explains disclosure, tailored interview, research boundaries 
   assert.equal(tools.has('read_private_guidance_for_update'), true);
   assert.equal(tools.has('save_private_guidance'), true);
   assert.equal(tools.has('replace_private_guidance'), true);
-  assert.equal(tools.has('set_private_guidance_active'), true);
+  assert.equal(tools.has('set_private_guidance_active'), false);
 });
 
 test('writer reads only for an update request and replaces only the reviewed revision with a recovery copy', async () => {
@@ -151,7 +141,7 @@ test('save tool requires an owner-confirmation assertion before creating the pri
     const saved = await save({ content: text, ownerConfirmed: true });
     assert.equal(saved.isError, undefined);
     assert.equal(await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'), text);
-    assert.match(saved.content[0].text, /remains off/);
+    assert.match(saved.content[0].text, /selected automatically/);
     assert.equal(JSON.stringify(saved).includes(text), false);
     await assert.rejects(writer.create('Replacement must not overwrite.'), {
       code: 'already_exists',
@@ -176,13 +166,9 @@ test('save tool sanitizes private-storage failures after owner confirmation', as
 });
 
 test('update tools require read consent, bind replacement to the revision, and preserve the old text', async () => {
-  await fixture(async ({ root, repositoryDirectory, directory }) => {
+  await fixture(async ({ repositoryDirectory, directory }) => {
     const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
-    const settings = createPrivateGuidanceSettingsStore({
-      repositoryDirectory,
-      directory: path.join(root, 'settings'),
-    });
-    const tools = registeredTools(writer, settings);
+    const tools = registeredTools(writer);
     const oldText = '# Fabricated current guidance\n';
     const newText = '# Fabricated revised guidance\n';
     await writer.create(oldText);
@@ -227,40 +213,5 @@ test('update tools require read consent, bind replacement to the revision, and p
       await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
       newText,
     );
-    assert.equal(await settings.isEnabled(), false);
-  });
-});
-
-test('activation is a separate local setting and never reads or changes guidance text', async () => {
-  await fixture(async ({ root, repositoryDirectory }) => {
-    const settings = createPrivateGuidanceSettingsStore({
-      repositoryDirectory,
-      directory: path.join(root, 'settings'),
-    });
-    const writer = {
-      async create() {
-        throw new Error('activation must not call create');
-      },
-      async readForUpdate() {
-        throw new Error('activation must not read guidance');
-      },
-      async replace() {
-        throw new Error('activation must not replace guidance');
-      },
-    };
-    const activate = registeredTools(writer, settings).get('set_private_guidance_active').handler;
-
-    const unconfirmed = await activate({ enabled: true });
-    assert.equal(unconfirmed.isError, true);
-    assert.equal(await settings.isEnabled(), false);
-
-    const on = await activate({ enabled: true, ownerConfirmed: true });
-    assert.equal(on.isError, undefined);
-    assert.match(on.content[0].text, /did not read its contents/);
-    assert.equal(await settings.isEnabled(), true);
-
-    const off = await activate({ enabled: false, ownerConfirmed: true });
-    assert.equal(off.isError, undefined);
-    assert.equal(await settings.isEnabled(), false);
   });
 });
