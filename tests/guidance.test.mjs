@@ -80,12 +80,13 @@ test('generic guidance is returned when the configured private directory has no 
   });
 });
 
-test('automatically selects the private file when present and returns general guidance if absent', async () => {
+test('automatically selects a private file even when legacy mode says generic', async () => {
   await fixture(async ({ directory, repositoryDirectory, filename }) => {
     const service = createLocalGuidanceService({
       repositoryDirectory,
       environment: {
         ETSY_SELLER_ASSISTANT_GUIDANCE_DIRECTORY: directory,
+        ETSY_SELLER_ASSISTANT_GUIDANCE_MODE: 'generic',
       },
     });
     assert.equal((await service.getGuidance()).selection, 'generic_default');

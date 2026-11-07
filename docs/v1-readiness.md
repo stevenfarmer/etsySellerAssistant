@@ -43,14 +43,16 @@ T-034's functional first-run private-guidance proposal was approved and merged i
 `52fde35efe36ff472b9511cd12a74f13f49437ea` (run 42146691927). T-039 implements the setup prompt
 and fixed-path create-only save. T-040 implements natural-language update entry, safe reviewed replacement and manual editing. T-043
 adds automatic private/generic guidance selection and is awaiting Codex Desktop acceptance. T-036
-adds CodeQL to CI; repository security-setting verification remains. T-037 now exposes the complete
+adds CodeQL to CI; its settings review found secret scanning and push protection already on, and
+dependency graph plus Dependabot alerts are now enabled. Weekly version updates are configured;
+automatic security-update PRs remain off. T-037 now exposes the complete
 photo-to-ready-to-enter listing workflow and needs supported-client acceptance. T-038 tracks requested
 price/marketing research;
 broader listing/pricing management remains longer-term vision.
 The CI workflow scans Git history for secrets and runs `npm audit` across its Node/OS matrix;
 Dependabot weekly dependency updates are configured. A pinned CodeQL JavaScript/TypeScript job has been added to pull-request and main CI. GitHub
-secret scanning, push protection, and Dependabot alerts still need direct verification. T-036 tracks closing this
-coverage gap before the v1 release candidate.
+secret scanning and push protection were already enabled; the dependency graph and Dependabot alerts
+were enabled on 6 November 2026. Automatic Dependabot security-update PRs remain off.
 ADR 0006 adds M8/T-026/T-027 private customizable guidance. The
 [phase-gated plan](v1-phase-gates.md) breaks delivery into one resumable chunk per continuation;
 [the checkpoint](work-checkpoint.md) records T-028's successful Mac confirmation check and T-032's
