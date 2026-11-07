@@ -1,26 +1,19 @@
 ## Summary
 
-Describe the change and the reason for it.
+Describe the change and why it is useful.
 
-## Requirements and impact
+## User-facing impact
 
-- [ ] Affected task IDs and requirement/use-case IDs are listed; tracker tasks were added/updated/retired as needed.
-- [ ] Current local requirements, use cases, acceptance criteria and delivery/status docs agree with tracker edits; connected changes were read back.
-- [ ] Requirements or acceptance criteria are reflected in the change.
-- [ ] No shop-specific names, IDs, URLs, credentials, customer data, or live exports are included.
-- [ ] Windows and macOS behavior is covered or unaffected.
-- [ ] Security, privacy, and Etsy permissions were considered.
-- [ ] Affected README, security policy, documentation, diagrams, and recovery instructions are updated, or no changes are needed (explain).
+- [ ] Current behavior and any setup or recovery changes are documented.
+- [ ] No shop-specific information, credentials, customer data, or audit records are included.
+- [ ] Security and privacy implications are addressed.
 
 ## Verification
 
-- [ ] Automated tests were added or updated.
-- [ ] `npm run validate` passes locally.
-- [ ] CI passes on Windows and macOS.
-- [ ] No live Etsy calls or mutations were used in tests.
+- [ ] Automated tests cover code changes.
+- [ ] `npm run validate` passes for code changes.
+- [ ] Automated checks do not call Etsy or change a shop.
 
 ## Notes
 
-List any remaining risks, follow-ups, or documentation changes.
-
-For a release, complete the [release checklist](../docs/release-checklist.md), including tracker, steering document, version and release notes, against the exact release candidate.
+Mention any limits or details needed to review the change.
