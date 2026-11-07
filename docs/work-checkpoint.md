@@ -87,22 +87,20 @@ resuming; historical evidence is valid only within its stated scope.
 
 ## Current repository state
 
-- Live `main` includes T-040 implementation PR #58 and documentation closeouts #59–#64. PR #64
-  merged as `e96a8b8c4b84e546d186bd858bd745345a0eb6fe`; all five PR checks passed in run
-  42309659311 and all five post-merge checks passed in run 42309908219.
+- Live `main` includes the T-040 private-guidance update flow, T-041/T-042 backlog and T-043
+  automatic-use direction. PR #65 merged as `010a473661464766890a7b0e2c203c6b51e8beff`; all five
+  PR checks passed in run 42315706768 and all five post-merge checks passed in run 42315952450.
 - The Google Drive checkout remains on stale branch `codex/t034-guided-setup-design` with unrelated
   uncommitted changes. It was not used for these documentation changes.
-- Tracker rows T-040–T-043 were read back. T-040 is Done for the accepted natural-language update
-  workflow. T-041 and T-042 remain Backlog / P2. T-043 is Open / Now for automatic use of saved
-  guidance, a clear uncustomized-guidance reminder, and sharing disclosure. No code is implemented
-  for T-043 yet.
-- Owner decision on 6 November 2026: no separate enable/activation step. When the Etsy assistant MCP
-  server is invoked, saved guidance should apply automatically. If only the general guidance is
-  available, use it while saying it is not personalized and invite configuration. Disabling the MCP
-  server is the off switch. Make automatic provider sharing clear; keep existing Etsy access and write
-  safeguards.
-- Next action: design and implement T-043, including how the server supplies private guidance to the
-  connected agent and how the general/unconfigured state is identified. Verify in Codex Desktop.
+- Tracker rows T-040–T-043 were read back. T-040 is Done for the accepted consent-gated natural-
+  language update workflow. T-041 and T-042 remain Backlog / P2. T-043 is Open / Now.
+- Owner direction for T-043: saved private guidance applies automatically when the Etsy assistant
+  MCP server is invoked, without a separate enable step. If only general, uncustomized guidance is
+  available, use it, clearly say it is not personalized, and invite configuration. Disabling the
+  MCP server is the off switch. Make provider sharing clear; preserve Etsy access/write safeguards.
+- Next chunk: design and implement T-043, including how private guidance reaches the connected agent
+  on invocation and how the server distinguishes general from customized guidance. Verify in Codex
+  Desktop. No T-043 code is implemented yet.
 
 ## Required replacement at each checkpoint
 
