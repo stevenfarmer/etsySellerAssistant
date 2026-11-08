@@ -18,7 +18,11 @@ The MCP server does not receive, upload, or store the photos. The draft remains 
 
 ## Research
 
-When requested, the connected AI application may research comparable public prices or timely marketing ideas if it has web access. It should cite sources and dates, explain how close the comparisons are, and distinguish asking prices from evidence of completed sales. The MCP server itself does not retrieve external marketplace data.
+Research is optional and happens only when requested. Ask for pricing comparisons, seasonal ideas, or marketing research directly; a listing draft does not start research by itself. The connected AI application uses `get_market_research_guidance` and performs any web search. The MCP server does not browse marketplaces, read seller analytics, or change listings or campaigns.
+
+For pricing, research public offers from Etsy, eBay, and relevant independent sellers. Cite direct links, displayed prices and the date checked. Explain how each example compares in materials, size, construction, handmade status, and other meaningful details. Label asking prices, sale prices, and completed-sale evidence accurately; never imply that asking prices prove what buyers paid. If close comparables or completed-sale evidence are unavailable, say so and show the uncertainty rather than presenting a precise market value.
+
+For marketing research, cite dated sources for time-sensitive observations and distinguish specific examples from broader trends. Offer a few relevant options, such as seasonal timing or a short video concept, with reasons and uncertainty. Research can inform the owner’s decision; it does not promise results or launch a campaign.
 
 ## Existing listings
 
