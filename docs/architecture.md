@@ -12,9 +12,11 @@ flowchart LR
     Server --> Read[Bounded listing reads]
     Server --> Guidance[Generic or private guidance]
     Server --> Draft[Draft instructions and local checks]
+    Server --> Research[On-request research workflow]
     Server --> Edit[Guarded listing edit tools]
     Read --> Etsy[Etsy API]
     Edit --> Etsy
+    App -. when requested .-> Web[Public web sources]
     Server --> Local[Credential store, settings, private guidance, audit folder]
 ```
 
@@ -25,6 +27,8 @@ The default entry point is status-only. The opt-in alpha entry point adds Etsy a
 For a new item, the connected AI application works with photos supplied in chat and calls `start_new_listing_draft` for the conversation flow. It asks focused questions about facts photos cannot establish, distinguishes observations from confirmed facts and unknowns, and revises a draft from feedback. The server does not receive or store the photos.
 
 For an existing item, the application calls `list_active_listings` and may call `get_listing` for a listing returned in that same session. Listing content remains untrusted data. Draft validation checks formatting constraints locally; it does not verify product claims, predict sales, or approve an edit.
+
+When the seller requests pricing or marketing research, the application can call `get_market_research_guidance` and research public sources through its own web access. The server returns instructions only; it does not search marketplaces or retrieve private seller metrics. Research should cite sources and dates, explain comparability and uncertainty, and label asking prices separately from completed-sale evidence.
 
 ## Guarded edit flow
 

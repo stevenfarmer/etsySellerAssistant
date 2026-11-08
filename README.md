@@ -11,11 +11,12 @@ AI tools have assisted with development. The project is a seller-assistance tool
 - Guides a photo-based conversation to prepare a complete listing draft, asking for missing product facts and revising from feedback.
 - Checks draft title, description, and tags against local format limits.
 - Prepares recommendations for existing listings.
+- Provides an on-request research workflow for public price comparisons and timely marketing ideas; the connected AI application performs any web search.
 - Can apply an explicitly accepted change to a listing's title, description, or tags, then verify the result and record a local audit entry.
 
 The photo conversation stays in the connected AI application. The MCP server does not upload or save photos, create a listing, or publish a draft. Listing edits require separate edit access and an exact host confirmation. The server does not expose orders, buyer records, or arbitrary Etsy API calls.
 
-An AI application's web research may help with current market comparisons or marketing ideas when requested. The MCP server itself does not search other marketplaces.
+An AI application's web research may help with current market comparisons or marketing ideas when requested. Research should cite dated sources, explain how examples compare, distinguish asking prices from completed-sale evidence, and state uncertainty. The MCP server itself does not search other marketplaces.
 
 ## Releases
 
