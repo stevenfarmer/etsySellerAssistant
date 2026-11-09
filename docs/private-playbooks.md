@@ -10,6 +10,24 @@ Ask the connected assistant to configure or update the Etsy seller-assistant gui
 
 Saving a new file requires an explicit Save/Don't save choice. Updating an existing file first requires permission to read it, because its contents will be shared with the connected AI provider. The assistant should show the complete replacement and wait for an explicit Replace/Don't replace choice. A decline or uncertain response must leave the file unchanged. Guidance never grants Etsy access or permission to change a listing.
 
+### Keep confirmed context current
+
+During ordinary shop conversations, the assistant may notice a durable change that the seller
+explicitly confirms, such as starting a marketing activity discussed earlier. It should distinguish
+completed changes from suggestions, plans, or assumptions. If the change is likely to affect future
+advice, the assistant can propose one short note and ask **Save** or **Don't save** in chat. The
+proposal identifies the confirmed fact; if saved, the server adds an owner-confirmed label and the
+UTC date. A decline leaves the note out of saved guidance, though the assistant can still use the
+fact in the current conversation.
+
+An approved note is appended to the private file. The previous version is kept in a private recovery
+copy. In later conversations, the assistant treats a dated owner-confirmed note as newer than older
+guidance about the same fact, without extending it to other facts; it asks if the notes conflict or
+the current situation is unclear. The tool does not return the rest of the file, contact Etsy, or
+change a listing. When general guidance is in use, the assistant will not offer to save private
+updates; it will explain that advice is not customized and invite the seller to configure the
+installation. For a broader rewrite, use the full update flow above.
+
 Manual editing is also supported. The default macOS file is:
 
 ```text

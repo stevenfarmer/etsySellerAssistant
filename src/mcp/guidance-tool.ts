@@ -37,7 +37,7 @@ export function registerGuidanceTool(
     'get_review_guidance',
     {
       description:
-        'Retrieve the installation guidance for the current Etsy seller-assistance conversation. Server instructions require calling this before helping with the shop. It returns the private guidance file when present, otherwise general guidance. The selected AI client/provider receives the returned text. It reads no Etsy/credentials, accepts no paths, and grants no edit approval.',
+        'Retrieve the installation guidance for the current Etsy seller-assistance conversation. Server instructions require calling this before helping with the shop. It returns the private guidance file when present, otherwise general guidance. The selected AI client/provider receives the returned text. It reads no Etsy/credentials, accepts no paths, and grants no edit approval. Follow the server instructions for offering owner-approved updates to durable, owner-confirmed context; never infer or save one silently.',
       inputSchema: input,
       outputSchema: guidanceOutputSchema,
       annotations: {

@@ -41,6 +41,9 @@ async function readInventory(entry) {
       assert.match(initialized.result.instructions, /disabling this MCP server turns it off/);
       assert.match(initialized.result.instructions, /get_market_research_guidance/);
       assert.match(initialized.result.instructions, /Research is on request/);
+      assert.match(initialized.result.instructions, /owner-confirmed changes/);
+      assert.match(initialized.result.instructions, /append_private_guidance_update/);
+      assert.match(initialized.result.instructions, /Do not treat your recommendations/);
       assert.equal(initialized.result.instructions.includes('owner private guidance text'), false);
     } else {
       assert.equal(initialized.result.instructions, undefined);
@@ -77,6 +80,7 @@ test('the default STDIO server remains status-only', async () => {
 
 test('the explicit alpha entry point exposes read and proposal tools without starting a read', async () => {
   assert.deepEqual(await readInventory('./dist/src/alpha.js'), [
+    'append_private_guidance_update',
     'apply_listing_edit',
     'get_listing',
     'get_market_research_guidance',
