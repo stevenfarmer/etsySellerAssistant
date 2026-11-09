@@ -20,7 +20,7 @@ An AI application's web research may help with current market comparisons or mar
 
 ## Releases
 
-The published [v0.1.0-alpha.1 release](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is an earlier read-only build. The current source includes the additional capabilities described above. Check the release notes and source revision you install before using an installation for live shop access.
+The current stable release is [v1.0.0](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v1.0.0). The earlier [v0.1.0-alpha.1 release](https://github.com/stevenfarmer/etsySellerAssistant/releases/tag/v0.1.0-alpha.1) is a read-only build. For the features described above, install the v1.0.0 release and follow its release notes and setup guide.
 
 ## Install and connect
 
@@ -29,6 +29,7 @@ The server requires Node.js 24, 25, or 26 and npm 10 or later. The verified desk
 ```sh
 git clone https://github.com/stevenfarmer/etsySellerAssistant.git
 cd etsySellerAssistant
+git checkout v1.0.0
 npm ci
 npm run validate
 npm run build
