@@ -21,12 +21,14 @@ UTC date. A decline leaves the note out of saved guidance, though the assistant 
 fact in the current conversation.
 
 An approved note is appended to the private file. The previous version is kept in a private recovery
-copy. In later conversations, the assistant treats a dated owner-confirmed note as newer than older
-guidance about the same fact, without extending it to other facts; it asks if the notes conflict or
-the current situation is unclear. The tool does not return the rest of the file, contact Etsy, or
-change a listing. When general guidance is in use, the assistant will not offer to save private
-updates; it will explain that advice is not customized and invite the seller to configure the
-installation. For a broader rewrite, use the full update flow above.
+copy. This can be repeated whenever another durable fact changes; each note gets its own Save/Don't
+save choice. The existing 65,536-byte file limit still applies. In later conversations, the
+assistant treats a dated owner-confirmed note as newer than older guidance about the same fact,
+without extending it to other facts; it asks if the notes conflict or the current situation is
+unclear. The tool does not return the rest of the file, contact Etsy, or change a listing. When
+general guidance is in use, the assistant will not offer to save private updates; it will explain
+that advice is not customized and invite the seller to configure the installation. For a broader
+rewrite or to consolidate older notes, use the full update flow above.
 
 Manual editing is also supported. The default macOS file is:
 

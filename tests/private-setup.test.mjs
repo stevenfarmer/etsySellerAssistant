@@ -63,6 +63,8 @@ test('setup prompt explains disclosure, tailored interview, research boundaries 
     PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS,
     /treat a dated owner-confirmed update as newer/,
   );
+  assert.match(PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS, /This process is repeatable/);
+  assert.match(PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS, /no one-time update limit/);
   assert.match(PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS, /source is generic/);
   const tools = registeredTools({ async create() {} });
   assert.equal(tools.has('get_private_guidance_setup'), true);
@@ -189,6 +191,38 @@ test('context update requires explicit Save and never echoes the private update 
       await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
       /Owner confirmed: The owner confirmed that ads are now running\./,
     );
+  });
+});
+
+test('separate confirmed changes can be appended repeatedly with a recovery copy each time', async () => {
+  await fixture(async ({ repositoryDirectory, directory }) => {
+    const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
+    await writer.create('# Fabricated test guidance\n');
+    const append = registeredTools(writer).get('append_private_guidance_update').handler;
+
+    const first = await append({
+      update: 'The owner confirmed that ads began running.',
+      ownerConfirmed: true,
+    });
+    assert.equal(first.isError, undefined);
+    const afterFirst = await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8');
+
+    const second = await append({
+      update: 'The owner confirmed that ads were paused.',
+      ownerConfirmed: true,
+    });
+    assert.equal(second.isError, undefined);
+    const current = await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8');
+    assert.equal((current.match(/## Owner-confirmed context update/g) ?? []).length, 2);
+    assert.match(current, /Owner confirmed: The owner confirmed that ads began running\./);
+    assert.match(current, /Owner confirmed: The owner confirmed that ads were paused\./);
+
+    const backups = (await fs.readdir(directory)).filter((name) => name.includes('.backup-'));
+    assert.equal(backups.length, 2);
+    const backupContents = await Promise.all(
+      backups.map((name) => fs.readFile(path.join(directory, name), 'utf8')),
+    );
+    assert.ok(backupContents.includes(afterFirst));
   });
 });
 
