@@ -22,6 +22,7 @@ export interface PrivatePlaybookWriter {
   create(content: string): Promise<void>;
   readForUpdate(): Promise<{ content: string; revision: string } | undefined>;
   replace(content: string, expectedRevision: string): Promise<string>;
+  appendOwnerConfirmedUpdate(update: string): Promise<{ recordedOn: string; recoveryCopy: string }>;
 }
 
 function validateContent(content: string): void {
@@ -32,6 +33,21 @@ function validateContent(content: string): void {
     Array.from(content).some((character) => {
       const code = character.codePointAt(0)!;
       return code === 127 || (code < 32 && code !== 9 && code !== 10 && code !== 13);
+    })
+  ) {
+    throw new PlaybookError('invalid_content');
+  }
+}
+
+function validateOwnerUpdate(update: string): void {
+  if (
+    typeof update !== 'string' ||
+    update.trim().length === 0 ||
+    Buffer.byteLength(update, 'utf8') > 4_096 ||
+    /[\r\n]/.test(update) ||
+    Array.from(update).some((character) => {
+      const code = character.codePointAt(0)!;
+      return code === 127 || (code < 32 && code !== 9);
     })
   ) {
     throw new PlaybookError('invalid_content');
@@ -250,6 +266,26 @@ export function createPrivatePlaybookWriter(
             /* absent or already renamed */
           }
         }
+      }
+    },
+
+    async appendOwnerConfirmedUpdate(update: string): Promise<{
+      recordedOn: string;
+      recoveryCopy: string;
+    }> {
+      validateOwnerUpdate(update);
+      try {
+        const before = await reader().read();
+        if (before === undefined) throw new PlaybookError('missing_file');
+        const recordedOn = new Date().toISOString().slice(0, 10);
+        const after = `${before.trimEnd()}\n\n## Owner-confirmed context update (${recordedOn} UTC)\n\nOwner confirmed: ${update.trim()}\n`;
+        if (Buffer.byteLength(after, 'utf8') > MAX_PLAYBOOK_BYTES) {
+          throw new PlaybookError('too_large');
+        }
+        const recoveryCopy = await this.replace(after, revision(before));
+        return { recordedOn, recoveryCopy };
+      } catch (error) {
+        throw safeError(error);
       }
     },
   };

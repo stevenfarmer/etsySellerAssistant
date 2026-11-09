@@ -6,6 +6,7 @@ import process from 'node:process';
 import test from 'node:test';
 import { PRIVATE_SETUP_PROMPT } from '../dist/src/guidance/private-setup-prompt.js';
 import {
+  PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS,
   PRIVATE_GUIDANCE_UPDATE_PROMPT,
   registerPrivateSetupTools,
 } from '../dist/src/mcp/private-setup-tools.js';
@@ -52,12 +53,24 @@ test('setup prompt explains disclosure, tailored interview, research boundaries 
   assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /update, edit, refine, or improve/);
   assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /Wait for a clear yes/);
   assert.match(PRIVATE_GUIDANCE_UPDATE_PROMPT, /complete replacement in chat/);
+  assert.match(PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS, /owner-confirmed changes/);
+  assert.match(
+    PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS,
+    /plans, possibilities, or unverified assumptions/,
+  );
+  assert.match(PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS, /one clear in-chat/);
+  assert.match(
+    PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS,
+    /treat a dated owner-confirmed update as newer/,
+  );
+  assert.match(PRIVATE_GUIDANCE_MAINTENANCE_INSTRUCTIONS, /source is generic/);
   const tools = registeredTools({ async create() {} });
   assert.equal(tools.has('get_private_guidance_setup'), true);
   assert.equal(tools.has('get_private_guidance_update'), true);
   assert.equal(tools.has('read_private_guidance_for_update'), true);
   assert.equal(tools.has('save_private_guidance'), true);
   assert.equal(tools.has('replace_private_guidance'), true);
+  assert.equal(tools.has('append_private_guidance_update'), true);
   assert.equal(tools.has('set_private_guidance_active'), false);
 });
 
@@ -119,6 +132,81 @@ test('fixed writer rejects unsafe content and any destination inside the reposit
       directory: path.join(repositoryDirectory, 'private'),
     });
     await assert.rejects(insideRepo.create('Fabricated.'), { code: 'unsafe_path' });
+  });
+});
+
+test('owner-confirmed context update appends a dated entry and keeps a private recovery copy', async () => {
+  await fixture(async ({ repositoryDirectory, directory }) => {
+    const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
+    const original = '# Fabricated shop context\n\nNo ads are running.\n';
+    await writer.create(original);
+
+    const saved = await writer.appendOwnerConfirmedUpdate(
+      'The owner confirmed they started Etsy Ads on 2026-11-08.',
+    );
+    assert.match(saved.recordedOn, /^\d{4}-\d{2}-\d{2}$/);
+    const current = await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8');
+    assert.match(
+      current,
+      new RegExp(`Owner-confirmed context update \\(${saved.recordedOn} UTC\\)`),
+    );
+    assert.match(
+      current,
+      /Owner confirmed: The owner confirmed they started Etsy Ads on 2026-11-08\./,
+    );
+    assert.equal(await fs.readFile(path.join(directory, saved.recoveryCopy), 'utf8'), original);
+    if (process.platform !== 'win32') {
+      assert.equal(
+        (await fs.stat(path.join(directory, saved.recoveryCopy)).then((s) => s.mode)) & 0o777,
+        0o600,
+      );
+    }
+  });
+});
+
+test('context update requires explicit Save and never echoes the private update in its response', async () => {
+  await fixture(async ({ repositoryDirectory, directory }) => {
+    const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
+    const oldText = '# Fabricated current guidance\n';
+    const update = 'The owner confirmed that ads are now running.';
+    await writer.create(oldText);
+    const append = registeredTools(writer).get('append_private_guidance_update').handler;
+
+    const declinedOrMissing = await append({ update, ownerConfirmed: false });
+    assert.equal(declinedOrMissing.isError, true);
+    assert.match(declinedOrMissing.content[0].text, /explicit Save reply/i);
+    assert.equal(
+      await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
+      oldText,
+    );
+
+    const saved = await append({ update, ownerConfirmed: true });
+    assert.equal(saved.isError, undefined);
+    assert.match(saved.content[0].text, /owner-confirmed label and UTC date/);
+    assert.match(saved.content[0].text, /private recovery copy/);
+    assert.equal(JSON.stringify(saved).includes(update), false);
+    assert.match(
+      await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8'),
+      /Owner confirmed: The owner confirmed that ads are now running\./,
+    );
+  });
+});
+
+test('context update fails closed when guidance is missing, malformed, or too large', async () => {
+  await fixture(async ({ repositoryDirectory, directory }) => {
+    const writer = createPrivatePlaybookWriter({ repositoryDirectory, directory });
+    await assert.rejects(writer.appendOwnerConfirmedUpdate('No real seller data.'), {
+      code: 'missing_file',
+    });
+    await assert.rejects(writer.appendOwnerConfirmedUpdate('A line one\nand line two'), {
+      code: 'invalid_content',
+    });
+    await writer.create('# Existing private note\n');
+    await assert.rejects(writer.appendOwnerConfirmedUpdate('x'.repeat(4_097)), {
+      code: 'invalid_content',
+    });
+    const current = await fs.readFile(path.join(directory, PRIVATE_PLAYBOOK_FILENAME), 'utf8');
+    assert.equal(current, '# Existing private note\n');
   });
 });
 

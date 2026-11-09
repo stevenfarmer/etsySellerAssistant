@@ -22,6 +22,11 @@ flowchart LR
 
 The default entry point is status-only. The opt-in alpha entry point adds Etsy and guidance tools. Starting the process does not itself read credentials or contact Etsy.
 
+When private guidance is in use, the AI application can offer to record a durable, owner-confirmed
+change from the conversation. The seller reviews the exact note and explicitly chooses whether to
+save it. The server appends approved notes with a UTC date and keeps a private recovery copy; it
+does not infer that recommendations or plans were carried out.
+
 ## Listing assistance
 
 For a new item, the connected AI application works with photos supplied in chat and calls `start_new_listing_draft` for the conversation flow. It asks focused questions about facts photos cannot establish, distinguishes observations from confirmed facts and unknowns, and revises a draft from feedback. The server does not receive or store the photos.

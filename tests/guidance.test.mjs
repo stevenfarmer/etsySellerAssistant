@@ -255,6 +255,7 @@ test('real alpha STDIO advertises and returns generic guidance with unchanged st
       async (request, stderr) => {
         const inventory = (await request('tools/list', {})).result;
         assert.deepEqual(inventory.tools.map((t) => t.name).sort(), [
+          'append_private_guidance_update',
           'apply_listing_edit',
           'get_listing',
           'get_market_research_guidance',
