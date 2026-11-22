@@ -7,7 +7,7 @@ export function registerNewListingDraftTool(server: Pick<McpServer, 'registerToo
     'start_new_listing_draft',
     {
       description:
-        'Natural-language entry point for creating a complete new Etsy listing draft. Call when the owner shares new-product photos or asks for help making a listing. Then guide the owner through the photo observations and one-question-at-a-time fact interview, and revise a complete ready-to-enter draft. The connected AI client handles photos from chat; this tool does not create or publish on Etsy.',
+        'Natural-language entry point for preparing a new Etsy listing draft. Call when the owner shares new-product photos or asks for help making a listing. Guide the owner through photo observations and a category-aware fact interview, keeping unresolved requirements visible. The connected AI client handles photos from chat; this tool does not fetch category data or create or publish on Etsy.',
       inputSchema: {},
       outputSchema: undefined,
       annotations: {
