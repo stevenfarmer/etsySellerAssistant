@@ -53,8 +53,26 @@ test('new listing workflow covers photo interview, applicable Etsy fields, and f
   );
   assert.match(
     NEW_LISTING_DRAFT_WORKFLOW.conversation.at(-1),
-    /complete, ready-to-enter listing draft/,
+    /ready to enter only after required fields and category requirements are resolved/,
   );
+});
+
+test('draft tool returns category and fulfillment rules with a fallback for unknown requirements', async () => {
+  const { structuredContent: workflow } = await tool().handler({});
+  const instructions = workflow.instructions.join(' ');
+  assert.match(instructions, /confirm the Etsy category path before asking/);
+  assert.match(
+    instructions,
+    /Ask required properties first and offer only supported values and units/,
+  );
+  assert.match(instructions, /metadata is unavailable or unverified.*unresolved/);
+  assert.match(instructions, /category changes, discard the previous category/);
+  assert.match(instructions, /skipped required fields visible/);
+  assert.match(instructions, /partial draft.*remaining Etsy entry steps/);
+  const fulfillment = workflow.listingFields.find((group) =>
+    group.fields.includes('existing shipping profile'),
+  );
+  assert.match(fulfillment.handling, /digital items skip package and shipping questions/);
 });
 
 test('natural-language start tool returns the fixed workflow without taking Etsy or file actions', async () => {

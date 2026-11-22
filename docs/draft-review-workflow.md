@@ -14,6 +14,16 @@ The assistant should:
 4. Keep confirmed facts, suggestions, and unknowns distinct.
 5. Prepare the relevant listing fields and revise the draft until it is ready for review.
 
+Confirm the category and whether the item is physical or digital early. When current Etsy
+category options are available from an identified source, use the required attributes and
+supported values or units to guide the questions. Recheck the attributes if the category changes.
+For a digital item, skip package and shipping questions. The seller still chooses the files and
+sets up delivery in Etsy.
+
+The draft tool does not retrieve Etsy category metadata. If the category requirements cannot
+be verified, or any required answer is skipped, show a partial draft with the outstanding Etsy
+entry steps. Keep suggestions separate from facts the seller has confirmed.
+
 The MCP server does not receive, upload, or store the photos. The draft remains in the conversation; no Etsy listing is created or published.
 
 ## Research
